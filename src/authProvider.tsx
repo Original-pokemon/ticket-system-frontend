@@ -1,15 +1,19 @@
 import { AuthProvider, fetchUtils } from "react-admin";
-import jsonServerProvider from 'ra-data-json-server'
+import { config } from "./config";
+
+const baseUrl = config.VITE_BACKEND_URL
 
 export const authProvider: AuthProvider = {
   login: async ({ username, password }) => {
+    const options: fetchUtils.Options = {
+      method: 'POST',
+      body: JSON.stringify({ username, password }),
+      credentials: 'include',
+      headers: new Headers({ 'Content-Type': 'application/json; charset=utf-8' }),
+    }
+
     try {
-      // const response = await fetch(request)
-      const response = await fetchUtils.fetchJson('http://localhost/login', {
-        method: 'POST',
-        body: JSON.stringify({ username, password }),
-        headers: new Headers({ 'Content-Type': 'application/json; charset=utf-8' }),
-      });
+      const response = await fetchUtils.fetchJson(baseUrl + '/login', options);
       if (response.status < 200 || response.status >= 300) {
         throw new Error(response.body);
       }
@@ -19,11 +23,14 @@ export const authProvider: AuthProvider = {
     }
   },
   logout: async () => {
+    const options: fetchUtils.Options = {
+      method: 'DELETE',
+      credentials: 'include',
+      headers: new Headers({ 'Content-Type': 'application/json; charset=utf-8' }),
+    }
+
     try {
-      const response = await fetchUtils.fetchJson('http://localhost/logout', {
-        method: 'DELETE',
-        headers: new Headers({ 'Content-Type': 'application/json; charset=utf-8' }),
-      });
+      const response = await fetchUtils.fetchJson(baseUrl + '/logout', options);
       if (response.status < 200 || response.status >= 300) {
         throw new Error(response.body);
       }
