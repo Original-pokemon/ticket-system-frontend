@@ -26,8 +26,6 @@ const AttachmentImageField = (props: AttachmentImageFieldProps) => {
   const record = useRecordContext<AttachmentType>();
   const [isLightboxOpen, setLightboxOpen] = useState(false)
   if (!record) return null;
-  console.log('record :>> ', record);
-
   const handleOpenLightbox = useCallback(() => setLightboxOpen(true), [])
   const handleCloseLightbox = useCallback(
     () => setLightboxOpen(false),

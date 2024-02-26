@@ -52,7 +52,6 @@ export const ManagerField = () => {
   if (!petrolStation?.managers) {
     return <Loading />
   } else {
-    console.log('petrolStation :>> ', petrolStation);
     return (<ReferenceArrayField record={petrolStation} source='managers' reference="manager" resource="user.name" />)
   }
 
