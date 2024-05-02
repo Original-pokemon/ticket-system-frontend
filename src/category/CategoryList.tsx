@@ -18,7 +18,7 @@ export const CategoryList = () => (
       <ReferenceManyCount
         label="Исполнители"
         reference="task-performer"
-        target="id"
+        target="category_id"
       />
       <ReferenceManyCount
         label="Задачи"
