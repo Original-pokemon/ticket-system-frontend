@@ -11,7 +11,7 @@ import {
 
 const filters = [
   <ReferenceInput source="ticket_category" reference="category" alwaysOn />,
-  <ReferenceInput source="ticket_status" reference="status" alwaysOn />,
+  <ReferenceInput source="status_id" reference="status" alwaysOn />,
   <ReferenceInput source="ticket_priority" reference="priority" alwaysOn />,
 ];
 
