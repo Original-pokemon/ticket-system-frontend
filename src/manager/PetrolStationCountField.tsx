@@ -1,12 +1,9 @@
-import { ArrayField, ChipField, Count, Labeled, Link, Loading, ReferenceArrayField, ReferenceManyCount, SingleFieldList, TextField, useGetOne, useRecordContext, useReference, useReferenceOneFieldController } from "react-admin";
-import { dataProvider } from "../dataProvider";
-import tickets from "../tickets";
-import { useEffect } from "react";
+import { Loading, ReferenceManyCount, useGetOne, useRecordContext, } from "react-admin";
 import { ManagerType } from "../types";
 
 export const PetrolStationCountField = () => {
   const record = useRecordContext();
-  const { data: manager, error, refetch } = useGetOne<ManagerType>(
+  const { data: manager } = useGetOne<ManagerType>(
     'manager',
     { id: record.id.toString() }
   );
