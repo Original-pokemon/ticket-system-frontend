@@ -1,7 +1,4 @@
-import { ArrayField, ChipField, Count, Labeled, Link, Loading, ReferenceArrayField, ReferenceManyCount, SingleFieldList, TextField, useGetOne, useRecordContext, useReference, useReferenceOneFieldController } from "react-admin";
-import { dataProvider } from "../dataProvider";
-import tickets from "../tickets";
-import { useEffect } from "react";
+import { Loading, ReferenceArrayField, useGetOne, useRecordContext } from "react-admin";
 import { PetrolStationType } from "../types";
 
 export const ManagerField = () => {
@@ -14,7 +11,7 @@ export const ManagerField = () => {
   if (!petrolStation?.managers) {
     return <Loading />
   } else {
-    return (<ReferenceArrayField record={petrolStation} source='managers' reference="manager" resource="user.name" />)
+    return <ReferenceArrayField record={petrolStation} source='managers' reference="manager" />
   }
 
 
