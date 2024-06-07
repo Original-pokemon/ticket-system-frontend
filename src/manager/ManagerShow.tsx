@@ -19,8 +19,7 @@ import {
 import { Box } from "@mui/material";
 
 const filters = [
-  <ReferenceInput source="petrol_stations" reference="petrol-station" alwaysOn />,
-  <ReferenceInput source="ticket_status" reference="status" alwaysOn />,
+  <ReferenceInput source="status_id" reference="status" alwaysOn />,
   <ReferenceInput source="ticket_priority" reference="priority" alwaysOn />,
 ];
 
