@@ -3,7 +3,6 @@ import {
   Datagrid,
   List,
   ReferenceManyCount,
-  TextField,
 } from "react-admin";
 
 export const CategoryList = () => (
