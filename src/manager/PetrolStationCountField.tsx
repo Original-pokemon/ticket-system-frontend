@@ -1,4 +1,4 @@
-import { Loading, ReferenceManyCount, useGetOne, useRecordContext, } from "react-admin";
+import { Loading, NumberField, useGetOne, useRecordContext, } from "react-admin";
 import { ManagerType } from "../types";
 
 export const PetrolStationCountField = () => {
@@ -11,8 +11,11 @@ export const PetrolStationCountField = () => {
   if (!manager?.petrol_stations) {
     return <Loading />
   } else {
-
-    return (<ReferenceManyCount record={manager} source='petrol_stations' target='id' reference="petrol-station" link />)
+    return (
+      <NumberField source="count" record={{
+        count: manager.petrol_stations.length
+      }} />
+    )
   }
 
 
