@@ -20,10 +20,9 @@ export const PetrolStationList = () => (
     perPage={25}
   >
     <Datagrid rowClick="show" bulkActionButtons={false}>
-      <TextField source="user.user_name" label="АЗС">
-      </TextField>
+      <TextField source="user.user_name" label="АЗС" />
       <ReferenceField resource="description" source="bush_id" reference="bush" label="Куст" />
-      <WrapperField label='Менеджер'>
+      <WrapperField label='Менеджер' >
         <ManagerField />
       </WrapperField>
       <ReferenceManyCount reference="ticket" target="petrol_station_id" label="Задачи" />
