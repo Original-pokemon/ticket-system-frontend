@@ -14,6 +14,15 @@ import { authProvider } from "./authProvider";
 import { dataProvider } from "./dataProvider";
 import manager from "./manager";
 import petrolStation from "./petrol-station";
+import { QueryClient } from "react-query";
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 5 * 60 * 1000, // 5 min
+    },
+  },
+});
 
 const MyLayout = (props: any) => (
   <>
@@ -34,6 +43,7 @@ const App = () => (
   <Admin
     dataProvider={dataProvider}
     authProvider={authProvider}
+    queryClient={queryClient}
     store={localStorageStore(undefined, "HelpDesk")}
     layout={MyLayout}
     disableTelemetry
