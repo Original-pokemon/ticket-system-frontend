@@ -7,21 +7,16 @@ import {
   SimpleShowLayout,
   useRecordContext,
   ReferenceArrayField,
-  ImageField,
-  Resource,
   Datagrid,
   SingleFieldList,
-  WrapperField,
   ArrayField,
   ChipField,
-  useShowContext,
 } from "react-admin";
 import { Box } from "@mui/material";
 import { CommentList } from "./CommentList";
 import AttachmentImageField from "./AttachmentImageField";
 
 export const TicketShow = () => {
-  const record = useRecordContext();
   return (
     <Show aside={<ShowAside />}>
       <SimpleShowLayout spacing={2} >

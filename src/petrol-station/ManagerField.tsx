@@ -3,16 +3,18 @@ import { PetrolStationType } from "../types";
 
 export const ManagerField = () => {
   const record = useRecordContext();
-  const { data: petrolStation, error, refetch } = useGetOne<PetrolStationType>(
+  const { data: petrolStation, isLoading, refetch, error } = useGetOne<PetrolStationType>(
     'petrol-station',
-    { id: record.id.toString() }
+    { id: record.id.toString() },
   );
 
+  if (isLoading) return <Loading />
+  if (error || !petrolStation) return null
   if (!petrolStation?.managers) {
-    return <Loading />
-  } else {
-    return <ReferenceArrayField record={petrolStation} source='managers' reference="manager" />
+    refetch()
+    return null
   }
+  return <ReferenceArrayField record={petrolStation} source='managers' reference="manager" />
 
 
 }
