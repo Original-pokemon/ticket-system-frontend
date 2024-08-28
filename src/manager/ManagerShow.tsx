@@ -1,7 +1,6 @@
 import {
   Show,
   TextField,
-  ReferenceManyField,
   DateField,
   ReferenceField,
   SimpleShowLayout,
@@ -10,17 +9,12 @@ import {
   ReferenceArrayField,
   ReferenceInput,
   List,
-  useShowContext,
-  FilterListItem,
-  FilterList,
-  useListContext,
   useShowController,
 } from "react-admin";
 import { Box } from "@mui/material";
 
 const filters = [
   <ReferenceInput source="status_id" reference="status" alwaysOn />,
-  <ReferenceInput source="ticket_priority" reference="priority" alwaysOn />,
 ];
 
 
@@ -36,7 +30,7 @@ export const ManagerShow = () => {
           <Datagrid bulkActionButtons={false} rowClick="show" title="Задачи"  >
             <TextField source="title" label="Название" />
             <ReferenceField source="status_id" reference="status" label="Статус" />
-            <ReferenceField source="ticket_priority" reference="priority" label="Приоритет" />
+            <DateField source="deadline" label="Заявленная дата исполнения" />
             <ReferenceField source="petrol_station_id" reference="petrol-station" label="АЗС" />
             <DateField source="created_at" label="Создан" />
           </Datagrid>

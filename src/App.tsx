@@ -58,10 +58,8 @@ const App = () => (
     <Resource name="bush" recordRepresentation="description" />
     <Resource name="status" recordRepresentation="description" />
     <Resource name="status-history" />
-    <Resource name="priority" recordRepresentation="description" />
     <Resource name="attachment" />
     <Resource name="comment" />
-
   </Admin>
 );
 

@@ -12,7 +12,6 @@ import {
 const filters = [
   <ReferenceInput source="ticket_category" reference="category" alwaysOn />,
   <ReferenceInput source="status_id" reference="status" alwaysOn />,
-  <ReferenceInput source="ticket_priority" reference="priority" alwaysOn />,
 ];
 
 export const TicketList = () => {
@@ -40,12 +39,10 @@ export const TicketList = () => {
         <ReferenceField source="ticket_category" reference="category" label="Категория">
           <ChipField source="description" />
         </ReferenceField>
-        <ReferenceField source="ticket_priority" reference="priority" label="Приоритет" >
-          <ChipField source="description" />
-        </ReferenceField>
+        <DateField source="deadline" label="Заявленная дата исполнения" />
         <ReferenceManyCount label="Вложений" target="ticket_id" reference="attachment" />
         <ReferenceManyCount label="Комментариев" target="ticket_id" reference="comment" />
-        <DateField source="created_at" label="Создан" />
+        <DateField source="created_at" label="Создана" />
       </Datagrid>
     </List>
   );

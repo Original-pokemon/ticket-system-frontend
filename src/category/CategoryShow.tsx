@@ -6,24 +6,17 @@ import {
   ReferenceField,
   SimpleShowLayout,
   useRecordContext,
-  Count,
-  FieldTitle,
   Datagrid,
   List,
   ReferenceInput,
   ChipField,
-  useShowContext,
-  useShowController,
-  DatagridBody,
   useGetRecordId,
 } from "react-admin";
 import { Box } from "@mui/material";
 
 
 const filters = [
-  <ReferenceInput source="petrol_stations" reference="petrol-station" alwaysOn />,
-  <ReferenceInput source="ticket_status" reference="status" alwaysOn />,
-  <ReferenceInput source="ticket_priority" reference="priority" alwaysOn />,
+  <ReferenceInput source="status_id" reference="status" alwaysOn />,
 ];
 
 export const CategoryShow = () => (
@@ -36,9 +29,7 @@ export const CategoryShow = () => (
           <ReferenceField source="status_id" reference="status" label="Статус" >
             <ChipField source="description" />
           </ReferenceField>
-          <ReferenceField source="ticket_priority" reference="priority" label="Приоритет" >
-            <ChipField source="description" />
-          </ReferenceField>
+          <DateField source="deadline" label="Заявленная дата исполнения" />
           <DateField source="created_at" label="Создан" />
         </Datagrid>
       </List>

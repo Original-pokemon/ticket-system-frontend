@@ -1,9 +1,8 @@
-import { Datagrid, DateField, FieldTitle, List, ReferenceArrayField, ReferenceField, ReferenceInput, ReferenceManyField, Show, SimpleShowLayout, TextField, Title, useGetRecordId, useRecordContext } from "react-admin";
+import { Datagrid, DateField, List, ReferenceArrayField, ReferenceField, ReferenceInput, Show, SimpleShowLayout, TextField, useGetRecordId, useRecordContext } from "react-admin";
 import { Box } from "@mui/material";
 
 const filters = [
-  <ReferenceInput source="ticket_status" reference="status" alwaysOn />,
-  <ReferenceInput source="ticket_priority" reference="priority" alwaysOn />,
+  <ReferenceInput source="status_id" reference="status" alwaysOn />,
 ];
 
 export const PetrolStationShow = () => {
@@ -14,7 +13,7 @@ export const PetrolStationShow = () => {
           <Datagrid bulkActionButtons={false} rowClick="show">
             <TextField source="title" label="Название" />
             <ReferenceField source="status_id" reference="status" label="Статус" />
-            <ReferenceField source="ticket_priority" reference="priority" label="Приоритет" />
+            <DateField source="deadline" label="Заявленная дата исполнения" />
             <ReferenceField source="petrol_station_id" reference="petrol-station" label="АЗС" />
             <DateField source="created_at" label="Создан" />
           </Datagrid>

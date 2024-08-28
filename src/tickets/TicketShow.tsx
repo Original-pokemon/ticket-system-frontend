@@ -28,9 +28,9 @@ export const TicketShow = () => {
         <ReferenceField source="ticket_category" reference="category" label="Категория">
           <ChipField source="description" />
         </ReferenceField>
-        <ReferenceField source="ticket_priority" reference="priority" label="Приоритет" >
-          <ChipField source="description" />
-        </ReferenceField>
+
+        <DateField source="deadline" label="Заявленная дата исполнения" />
+
         <ReferenceArrayField source='attachments' reference="attachment" sort={{ field: "created_at", order: "ASC" }} label="Вложения">
           <SingleFieldList linkType={false}>
             <AttachmentImageField imagSize={{ width: 200, height: 200 }} />
