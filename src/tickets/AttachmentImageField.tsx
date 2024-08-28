@@ -1,8 +1,7 @@
 import { useRecordContext } from "react-admin";
 import { Card, CardMedia, Modal } from "@mui/material";
 import { AttachmentType } from "../types";
-import { config } from "../config";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -32,7 +31,7 @@ const AttachmentImageField = (props: AttachmentImageFieldProps) => {
     [],
   )
 
-  const imagePath = config.VITE_BACKEND_URL + record.path;
+  const imagePath = record.path;
   return (
     <>
       <Card sx={{ display: 'inline-block', margin: '0.6vw' }}>
