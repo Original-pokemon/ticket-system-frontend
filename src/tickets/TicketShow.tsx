@@ -18,7 +18,7 @@ import AttachmentImageField from "./AttachmentImageField";
 
 export const TicketShow = () => {
   return (
-    <Show aside={<ShowAside />}>
+    <Show aside={<ShowAside />} queryOptions={{ refetchOnMount: "always" }}>
       <SimpleShowLayout spacing={2} >
         <TextField source="title" label={false} variant="h5" />
         <TextField source="description" label="Описание" variant="body1" />
