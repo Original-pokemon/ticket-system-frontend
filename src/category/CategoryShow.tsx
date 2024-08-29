@@ -42,7 +42,7 @@ const TaskPerformersSidebar = () => {
   if (!record) return <Box minWidth={200} flexShrink={0} />;
   return (
     <SimpleShowLayout >
-      <ReferenceManyField label='Исполнители для катигории' reference="task-performer" target="category_id">
+      <ReferenceManyField label='Исполнители для категории' reference="task-performer" target="category_id">
         <Datagrid bulkActionButtons={false} sort={{ field: "user.created_at", order: "DESC" }}>
           <TextField source="user.user_name" label="Исполнитель" />
           <ReferenceField source="bush_id" reference="bush" label="Куст" >
