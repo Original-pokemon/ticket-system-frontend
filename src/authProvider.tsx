@@ -18,7 +18,10 @@ export const authProvider: AuthProvider = {
         throw new Error(response.body);
       }
       localStorage.setItem('auth', username);
-    } catch {
+    } catch (error) {
+      if (error instanceof Error) {
+        throw new Error(error.message);
+      }
       throw new Error('Network error');
     }
   },
