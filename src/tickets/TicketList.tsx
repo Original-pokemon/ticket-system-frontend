@@ -1,27 +1,95 @@
 import {
-  ChipField,
-  Datagrid,
+  DatagridConfigurable,
   DateField,
+  ExportButton,
+  Exporter,
   List,
-  ReferenceField,
-  ReferenceInput,
-  ReferenceManyCount,
+  SelectColumnsButton,
   TextField,
+  TopToolbar,
+  downloadCSV,
+  useStore,
+  FunctionField,
 } from "react-admin";
+import { Card, CardContent, Chip } from '@mui/material';
+import LabelImportantIcon from '@mui/icons-material/LabelImportant';
+import ClassIcon from '@mui/icons-material/Class';
+import { FilterSection } from "../filter-section/filter-section";
+import { CategoryType, PetrolStationType, StatusType, TicketType } from "../types";
+import jsonExport from 'jsonexport/dist';
+import { StoreKey } from "../preload-data/preload-data";
 
-const filters = [
-  <ReferenceInput source="ticket_category" reference="category" alwaysOn />,
-  <ReferenceInput source="status_id" reference="status" alwaysOn />,
-];
+const getDescription = (id: string, data: (CategoryType | StatusType)[]) => {
+  const item = data.find((entry) => entry.id === id);
+  return item ? item.description : 'Неизвестно';
+};
+
+const TicketFilterSidebar = () => {
+  const [categoryData] = useStore<CategoryType[]>(StoreKey.CATEGORY_DATA, []);
+  const [statusData] = useStore<CategoryType[]>(StoreKey.STATUS_DATA, []);
+
+  const statusesOptions = statusData.map((status) => ({ label: status.description, value: status.id }))
+  const categoriesOptions = categoryData?.map((category) => ({ label: category.description, value: category.id }))
+
+  return (
+    <Card sx={{ order: -1, mr: 2, mt: 9, width: 220 }}>
+      <CardContent>
+        <FilterSection
+          label="Категория"
+          icon={<ClassIcon />}
+          filterKey="ticket_category"
+          filterOptions={categoriesOptions}
+        />
+
+        <FilterSection
+          label="Статус"
+          icon={<LabelImportantIcon />}
+          filterKey="status_id"
+          filterOptions={statusesOptions}
+        />
+
+      </CardContent>
+    </Card>
+  )
+};
+
+const exporter: Exporter = (tickets: TicketType[]) => {
+  const ticketsForExport = tickets.map(ticket => {
+    const { id, ...ticketForExport } = ticket;
+
+    return ticketForExport;
+  });
+
+  jsonExport(ticketsForExport, {
+    rowDelimiter: ';',
+  }, (err, csv) => {
+    downloadCSV(csv, 'tickets'); // download as 'posts.csv` file
+  });
+}
+
+const TicketListActions = () => {
+  return (
+    <TopToolbar>
+      <SelectColumnsButton />
+      <ExportButton />
+    </TopToolbar>
+  )
+}
 
 export const TicketList = () => {
+  const [categoryData] = useStore<CategoryType[]>(StoreKey.CATEGORY_DATA, []);
+  const [statusData] = useStore<CategoryType[]>(StoreKey.STATUS_DATA, []);
+  const [petrolStationData] = useStore<PetrolStationType[]>(StoreKey.PETROL_STATION_DATA, []);
+
   return (
     <List
+      aside={<TicketFilterSidebar />}
+      exporter={exporter}
       sort={{ field: "created_at", order: "DESC" }}
       perPage={25}
-      filters={filters}
-    >
-      <Datagrid
+      actions={<TicketListActions />}
+    > 
+      <DatagridConfigurable
         rowClick="show"
         sx={{
           "& .column-lock": {
@@ -32,18 +100,35 @@ export const TicketList = () => {
         bulkActionButtons={false}
       >
         <TextField source="title" label="Название" />
-        <ReferenceField source="petrol_station_id" reference="petrol-station" label="АЗС" />
-        <ReferenceField source="status_id" reference="status" label="Статуc">
-          <ChipField source="description" />
-        </ReferenceField>
-        <ReferenceField source="ticket_category" reference="category" label="Категория">
-          <ChipField source="description" />
-        </ReferenceField>
+
+        <FunctionField
+          label="АЗС"
+          render={(record) => {
+            const item = petrolStationData.find((entry) => entry.id === record.petrol_station_id);
+            return item?.user ? item.user?.user_name : 'Неизвестно';
+          }}
+        />
+
+        <FunctionField
+          label="Статуc"
+          render={(record) => (
+            <Chip label={getDescription(record.status_id, statusData)} />
+          )}
+        />
+
+        <FunctionField
+          label="Категория"
+          render={(record) => (
+            <Chip label={getDescription(record.ticket_category, categoryData)} />
+          )}
+        />
+
+
         <DateField source="deadline" label="Заявленная дата исполнения" />
-        <ReferenceManyCount label="Вложений" target="ticket_id" reference="attachment" />
-        <ReferenceManyCount label="Комментариев" target="ticket_id" reference="comment" />
         <DateField source="created_at" label="Создана" />
-      </Datagrid>
+      </DatagridConfigurable>
     </List>
   );
 };
+
+

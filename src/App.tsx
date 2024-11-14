@@ -15,6 +15,7 @@ import { dataProvider } from "./dataProvider";
 import manager from "./manager";
 import petrolStation from "./petrol-station";
 import { QueryClient } from "react-query";
+import PreloadData from "./preload-data/preload-data";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -25,7 +26,8 @@ const queryClient = new QueryClient({
 });
 
 const MyLayout = (props: any) => (
-  <>
+  <>  
+    <PreloadData />
     <Layout
       {...props}
       maxWidth="xl"

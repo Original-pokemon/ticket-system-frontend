@@ -12,6 +12,7 @@
   "dependencies": {
     "@types/node": "^20.11.19",
     "dotenv": "16.4.5",
+    "jsonexport": "^3.2.0",
     "lodash": "^4.17.21",
     "ra-data-json-server": "4.16.11",
     "react": "^18.2.0",
