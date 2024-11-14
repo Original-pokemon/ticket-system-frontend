@@ -1,7 +1,4 @@
-import { ArrayField, ChipField, Count, Labeled, Link, Loading, ReferenceArrayField, ReferenceManyCount, SingleFieldList, TextField, useGetOne, useRecordContext, useReference, useReferenceOneFieldController } from "react-admin";
-import { dataProvider } from "../dataProvider";
-import tickets from "../tickets";
-import { useEffect } from "react";
+import { Loading, ReferenceArrayField, useGetOne, useRecordContext } from "react-admin";
 
 export type UserType = {
   id: string;
@@ -44,7 +41,7 @@ type StatusHistoryType = {
 
 export const ManagerField = () => {
   const record = useRecordContext<TicketType>();
-  const { data: petrolStation, error, refetch } = useGetOne<PetrolStationType>(
+  const { data: petrolStation } = useGetOne<PetrolStationType>(
     'petrol-station',
     { id: record.petrol_station_id.toString() }
   );

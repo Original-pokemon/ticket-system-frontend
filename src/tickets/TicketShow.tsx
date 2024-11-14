@@ -14,7 +14,7 @@ import {
 } from "react-admin";
 import { Box } from "@mui/material";
 import { CommentList } from "./CommentList";
-import AttachmentImageField from "./AttachmentImageField";
+import AttachmentImageField from "./fields/AttachmentImageField";
 
 export const TicketShow = () => {
   return (

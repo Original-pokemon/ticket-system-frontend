@@ -1,5 +1,5 @@
 import { DateField, SingleFieldList, ReferenceManyField, Datagrid, TextField, ArrayField } from "react-admin";
-import AttachmentImageField from "./AttachmentImageField";
+import AttachmentImageField from "./fields/AttachmentImageField";
 
 
 export const CommentList = () => {

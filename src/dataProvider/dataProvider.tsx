@@ -1,4 +1,4 @@
-import { fetchUtils, withLifecycleCallbacks, Options } from "react-admin";
+import { fetchUtils } from "react-admin";
 import jsonServerProvider from 'ra-data-json-server';
 import { config } from "../config";
 
@@ -14,6 +14,7 @@ const httpClient: (url: any, options?: fetchUtils.Options | undefined) => Promis
     });
   }
   options.credentials = 'include';
+
   return fetchUtils.fetchJson(url, options);
 }
 

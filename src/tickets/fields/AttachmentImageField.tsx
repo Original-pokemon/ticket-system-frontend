@@ -1,7 +1,7 @@
 import { useRecordContext } from "react-admin";
 import { Card, CardMedia, Modal } from "@mui/material";
-import { AttachmentType } from "../types";
 import { useCallback, useState } from "react";
+import { AttachmentType } from "../../types";
 
 const style = {
   position: 'absolute' as 'absolute',

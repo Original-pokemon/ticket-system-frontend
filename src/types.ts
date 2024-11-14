@@ -44,8 +44,23 @@ export type AttachmentType = {
   path: string;
 };
 
+export type StatusType = {
+  id: string;
+  description: string;
+}
+
+export type CategoryType = {
+  id: string;
+  description: string;
+}
+
+export type BushType = {
+  id: string;
+  description: string;
+}
+
 export type TicketType = {
-  id?: string;
+  id: string;
   title: string;
   description: string;
   user_id?: string;
