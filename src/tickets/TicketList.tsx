@@ -18,8 +18,9 @@ import { FilterSection } from "../filter-section/filter-section";
 import { CategoryType, PetrolStationType, StatusType, TicketType } from "../types";
 import jsonExport from 'jsonexport/dist';
 import { StoreKey } from "../preload-data/preload-data";
+import { RecordType } from "zod";
 
-const getDescription = (id: string, data: (CategoryType | StatusType)[]) => {
+const getDescription = (id: string | undefined, data: (CategoryType | StatusType)[]) => {
   const item = data.find((entry) => entry.id === id);
   return item ? item.description : 'Неизвестно';
 };
@@ -103,7 +104,7 @@ export const TicketList = () => {
 
         <FunctionField
           label="АЗС"
-          render={(record) => {
+          render={(record: TicketType) => {
             const item = petrolStationData.find((entry) => entry.id === record.petrol_station_id);
             return item?.user ? item.user?.user_name : 'Неизвестно';
           }}
@@ -111,14 +112,14 @@ export const TicketList = () => {
 
         <FunctionField
           label="Статуc"
-          render={(record) => (
+          render={(record: TicketType) => (
             <Chip label={getDescription(record.status_id, statusData)} />
           )}
         />
 
         <FunctionField
           label="Категория"
-          render={(record) => (
+          render={(record: TicketType) => (
             <Chip label={getDescription(record.ticket_category, categoryData)} />
           )}
         />
