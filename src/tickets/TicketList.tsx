@@ -10,6 +10,7 @@ import {
   downloadCSV,
   useStore,
   FunctionField,
+  InfiniteList,
 } from "react-admin";
 import { Card, CardContent, Chip } from '@mui/material';
 import LabelImportantIcon from '@mui/icons-material/LabelImportant';
@@ -18,7 +19,6 @@ import { FilterSection } from "../filter-section/filter-section";
 import { CategoryType, PetrolStationType, StatusType, TicketType } from "../types";
 import jsonExport from 'jsonexport/dist';
 import { StoreKey } from "../preload-data/preload-data";
-import { RecordType } from "zod";
 
 const getDescription = (id: string | undefined, data: (CategoryType | StatusType)[]) => {
   const item = data.find((entry) => entry.id === id);
@@ -28,8 +28,10 @@ const getDescription = (id: string | undefined, data: (CategoryType | StatusType
 const TicketFilterSidebar = () => {
   const [categoryData] = useStore<CategoryType[]>(StoreKey.CATEGORY_DATA, []);
   const [statusData] = useStore<CategoryType[]>(StoreKey.STATUS_DATA, []);
+  const [bushData] = useStore<CategoryType[]>(StoreKey.BUSH_DATA, []);
 
   const statusesOptions = statusData.map((status) => ({ label: status.description, value: status.id }))
+  const bushListOptions = bushData.map((bush) => ({ label: bush.description, value: bush.id }))
   const categoriesOptions = categoryData?.map((category) => ({ label: category.description, value: category.id }))
 
   return (
@@ -83,11 +85,11 @@ export const TicketList = () => {
   const [petrolStationData] = useStore<PetrolStationType[]>(StoreKey.PETROL_STATION_DATA, []);
 
   return (
-    <List
+    <InfiniteList
       aside={<TicketFilterSidebar />}
       exporter={exporter}
       sort={{ field: "created_at", order: "DESC" }}
-      perPage={25}
+      perPage={50}
       actions={<TicketListActions />}
     > 
       <DatagridConfigurable
@@ -128,7 +130,7 @@ export const TicketList = () => {
         <DateField source="deadline" label="Заявленная дата исполнения" />
         <DateField source="created_at" label="Создана" />
       </DatagridConfigurable>
-    </List>
+    </InfiniteList>
   );
 };
 

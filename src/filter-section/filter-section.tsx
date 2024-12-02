@@ -1,7 +1,6 @@
 import React from 'react';
 import { FilterList, FilterListItem } from 'react-admin';
 import { SvgIconComponent } from '@mui/icons-material';
-import { Chip, Card, CardContent } from '@mui/material';
 
 type FilterOption = {
   label: string;
