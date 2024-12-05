@@ -1,6 +1,6 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useStore, useDataProvider } from 'react-admin';
-import { BushType, CategoryType, PetrolStationType, StatusType } from '../types';
+import type { BushType, CategoryType, PetrolStationType, TicketStatusType } from '../types';
 
 export const StoreKey = {
   STATUS_DATA: 'statusData',
@@ -13,10 +13,14 @@ const PreloadData = () => {
   const dataProvider = useDataProvider();
   const [bushData, setBushData] = useStore<BushType[]>(StoreKey.BUSH_DATA, []);
   const [petrolStationData, setPetrolStationData] = useStore<PetrolStationType[]>(StoreKey.PETROL_STATION_DATA, []);
-  const [statusData, setStatusData] = useStore<StatusType[]>(StoreKey.STATUS_DATA, []);
+  const [statusData, setStatusData] = useStore<TicketStatusType[]>(StoreKey.STATUS_DATA, []);
   const [categoryData, setCategoryData] = useStore<CategoryType[]>(StoreKey.CATEGORY_DATA, []);
 
+
+  const [mounted, setMounted] = useState(false);
+
   useEffect(() => {
+
     const fetchData = async () => {
       if (bushData.length === 0) {
         const { data } = await dataProvider.getList('bush', { pagination: { page: 1, perPage: 100 }, sort: { field: 'id', order: 'ASC' }, filter: {} });
@@ -36,7 +40,8 @@ const PreloadData = () => {
       }
     };
 
-    fetchData();
+    fetchData().then(() => setMounted(true));
+
   }, [dataProvider, bushData, statusData, categoryData, setBushData, setStatusData, setCategoryData]);
 
   return null;
