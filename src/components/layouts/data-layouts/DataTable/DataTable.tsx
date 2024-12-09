@@ -6,11 +6,12 @@ type Properties = {
   pageSizeOptions?: (number | { value: number; label: string })[];
   pageSize?: number;
   disableColumnSorting?: boolean;
+  onClick?: (id: GridRowId) => void;
 } & DataGridProps;
 
 function DataTable({
   name,
-  onRowClick,
+  onClick,
   density = 'comfortable',
   columns,
   rows,
@@ -23,7 +24,7 @@ function DataTable({
 }: Properties) {
   return (
     <DataGridStyled
-      onRowClick={({ id }) => onRowClick && onRowClick(id)}
+      onRowClick={({ id }) => onClick && onClick(id)}
       rows={rows}
       columns={[...columns]}
       filterModel={filterModel}

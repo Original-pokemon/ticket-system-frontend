@@ -1,8 +1,9 @@
 import { Drawer, SxProps, Theme, useMediaQuery, Box } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
-import DrawerHeader, { DrawerHeaderType } from './DrawerHeader';
-import DrawerActions, { DrawerActionsType } from './DrawerActions';
-import DrawerBody, { DrawerBodyType } from './DrawerBody';
+import DrawerHeader from './DrawerHeader';
+import DrawerActions from './DrawerActions';
+import DrawerBody from './DrawerBody';
+import { ReactElement } from 'react';
 
 type DataDrawerProperties = {
   open: boolean;
@@ -11,7 +12,7 @@ type DataDrawerProperties = {
   fullScreen?: boolean;
   sx?: SxProps<Theme>;
   maxSize: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | number;
-  children: DrawerHeaderType | DrawerBodyType | DrawerActionsType;
+  children: ReactElement | ReactElement[];
 };
 
 function DataDrawer({

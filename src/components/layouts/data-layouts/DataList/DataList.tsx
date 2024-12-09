@@ -1,10 +1,10 @@
 import { Box, Stack } from '@mui/material';
-import Spinner from '#root/components/Spinner/Spinner';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   DataListItem,
   DataListItemProps as DataListItemProperties,
 } from './DataListItem/DataListItem';
+import Spinner from '../../../Spinner/Spinner';
 
 type DataListProperties = {
   items: DataListItemProperties[];

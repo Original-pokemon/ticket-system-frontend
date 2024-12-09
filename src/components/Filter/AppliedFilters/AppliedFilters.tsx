@@ -24,8 +24,7 @@ function AppliedFilters() {
     });
   };
 
-  return (
-    hasSelectedFilters && (
+  return hasSelectedFilters ? (
       <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mt: 2 }}>
         {Object.entries(selectedFilters).map(
           ([categoryId, { title, options }]) =>
@@ -47,8 +46,7 @@ function AppliedFilters() {
           Очистить
         </Button>
       </Box>
-    )
-  );
+  ) : null;
 }
 
 export default AppliedFilters;

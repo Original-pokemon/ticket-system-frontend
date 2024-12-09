@@ -1,11 +1,6 @@
 import { GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
 import { Chip } from '@mui/material';
-import { format } from 'date-fns';
-import { AzsChip, TicketStatusChip } from '../../components/сhips';
-import CategoryChip from '../../components/сhips/CategoryChip/CategoryChip';
 import { CategoryType, PetrolStationType, TicketStatusType } from '../../types';
-import { useAppSelector } from '../../hooks/state';
-import { selectPetrolStationById } from '../../store';
 import dayjs from 'dayjs';
 
 type TicketColumnProperties = {
