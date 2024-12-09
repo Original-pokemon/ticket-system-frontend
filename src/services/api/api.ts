@@ -58,7 +58,6 @@ const createAPI = (): AxiosInstance => {
     },
   );
 
-
   return api;
 };
 

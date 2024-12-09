@@ -8,7 +8,8 @@ export type TicketType = {
   ticket_category?: string;
   ticket_priority?: string;
   status_id: string;
-  created_at?: Date;
+  created_at: string;
+  deadline?: Date;
   status_history?: string[];
   comments: string[];
 };
