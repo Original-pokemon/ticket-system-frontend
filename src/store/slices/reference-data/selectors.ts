@@ -1,5 +1,5 @@
 import { createSelector } from "@reduxjs/toolkit";
-import { NameSpace } from "../..";
+import { NameSpace } from "../../const";
 import { InitialStateType } from "../../reducer";
 import { categoriesAdapter, statusesAdapter } from "./reference-data";
 import { Status } from "../../../const";

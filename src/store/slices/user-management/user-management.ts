@@ -12,7 +12,7 @@ import {
 import { ManagerType, StatusType, UserType } from '../../../types';
 import { TaskPerformerType } from '../../../types/task-performer';
 import { Status } from '../../../const';
-import { NameSpace } from '../..';
+import { NameSpace } from '../../const';
 
 export const usersAdapter = createEntityAdapter<UserType, string>({
   selectId: (user) => user.id,

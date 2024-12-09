@@ -4,7 +4,7 @@ import type { EntityState } from '@reduxjs/toolkit';
 import { fetchCategoriesData, fetchStatusesData } from './thunk';
 import { CategoryType, StatusType, TicketStatusType } from '../../../types';
 import { Status } from '../../../const';
-import { NameSpace } from '../..';
+import { NameSpace } from '../../const';
 
 export const categoriesAdapter = createEntityAdapter<CategoryType, string>({
   selectId: (category) => category.id,

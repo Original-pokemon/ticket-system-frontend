@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AsyncThunkConfig, AttachmentType, BushType, CategoryType, CommentType, ManagerType, PetrolStationType, TicketType, UserType } from '../../../types';
-import { NameSpace } from '../..';
+import { NameSpace } from '../../const';
 import { APIRoute } from '../../../const';
 import { TaskPerformerType } from '../../../types/task-performer';
 

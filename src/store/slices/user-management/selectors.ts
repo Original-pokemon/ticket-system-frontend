@@ -1,9 +1,9 @@
 import { createSelector } from "@reduxjs/toolkit";
-import { NameSpace } from "../..";
 import { InitialStateType } from "../../reducer";
 import { managersAdapter, taskPerformersAdapter, usersAdapter } from "./user-management";
 import { Status } from "../../../const";
 import { StatusType } from "../../../types";
+import { NameSpace } from "../../const";
 
 type UserManagementStateType = Pick<
   InitialStateType,

@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AsyncThunkConfig, BushType, CategoryType, PetrolStationType } from '../../../types';
-import { NameSpace } from '../..';
+import { NameSpace } from '../../const';
 import { APIRoute } from '../../../const';
 
 export const fetchCategoriesData = createAsyncThunk<

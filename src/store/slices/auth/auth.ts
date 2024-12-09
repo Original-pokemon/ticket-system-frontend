@@ -2,9 +2,9 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { Status } from '../../../const';
 import { StatusType } from '../../../types';
-import { dropToken } from '../../../services/api';
 import * as _ from '.';
-import { AuthDataType, NameSpace } from '../..';
+import { NameSpace } from '../../const';
+import { AuthDataType } from '.';
 
 
 type InitialStateType = {

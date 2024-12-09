@@ -1,9 +1,9 @@
 import { createSelector } from "@reduxjs/toolkit";
-import { NameSpace } from "../..";
 import { Status } from "../../../const";
 import { StatusType } from "../../../types";
 import { InitialStateType } from "../../reducer";
 import { attachmentsAdapter, commentsAdapter, ticketsAdapter } from "./ticket";
+import { NameSpace } from "../../const";
 
 type TicketStateType = Pick<
   InitialStateType,

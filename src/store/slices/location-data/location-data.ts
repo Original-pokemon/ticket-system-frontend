@@ -4,7 +4,7 @@ import type { EntityState } from '@reduxjs/toolkit';
 import { fetchPetrolStationData, fetchBushData } from './thunk';
 import { BushType, PetrolStationType, StatusType } from '../../../types';
 import { Status } from '../../../const';
-import { NameSpace } from '../..';
+import { NameSpace } from '../../const';
 
 export const petrolStationsAdapter = createEntityAdapter<PetrolStationType, string>({
   selectId: (petrolStation) => petrolStation.id,

@@ -1,7 +1,8 @@
 import { combineReducers } from '@reduxjs/toolkit';
 
-import { authReducer, locationDataReducer, NameSpace, referenceDataReducer, userManagementReducer } from '.';
+import { authReducer, locationDataReducer, referenceDataReducer, userManagementReducer } from '.';
 import { ticketReducer } from './slices/ticket';
+import { NameSpace } from './const';
 
 const reducer = combineReducers({
   [NameSpace.LocationData]: locationDataReducer,

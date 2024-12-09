@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { AsyncThunkConfig, AttachmentType, BushType, CategoryType, CommentType, PetrolStationType, TicketType } from '../../../types';
-import { NameSpace } from '../..';
+import { AsyncThunkConfig, AttachmentType, CommentType, TicketType } from '../../../types';
+import { NameSpace } from '../../const';
 import { APIRoute } from '../../../const';
 
 export const fetchTicketsData = createAsyncThunk<

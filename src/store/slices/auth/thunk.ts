@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AsyncThunkConfig } from '../../../types';
-import { NameSpace } from '../..';
+import { NameSpace } from '../../const';
 import { APIRoute } from '../../../const';
 import { AxiosError } from 'axios';
 import { toast } from 'react-toastify';

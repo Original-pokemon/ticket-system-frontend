@@ -9,10 +9,11 @@ import {
 } from './thunk';
 import type { AttachmentType, CommentType, StatusType, TicketType } from '../../../types';
 import { Status } from '../../../const';
-import { NameSpace } from '../..';
+import { NameSpace } from '../../const';
 
 export const ticketsAdapter = createEntityAdapter<TicketType, string>({
   selectId: (ticket) => ticket.id,
+  sortComparer: (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime(),
 });
 
 export const attachmentsAdapter = createEntityAdapter<AttachmentType, string>({
