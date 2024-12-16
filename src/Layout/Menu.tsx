@@ -9,7 +9,7 @@ import {
 } from 'react-admin';
 
 import SubMenu from './SubMenu';
-import category from '../category';
+import category from '../components/category';
 import tickets from '../components/tickets';
 import manager from '../components/manager';
 
