@@ -20,7 +20,7 @@ export const postAuthData = createAsyncThunk<
   try {
     const { data } = await api.post<AuthDataType>(APIRoute.LOGIN, authData);
 
-    saveToken(token, rememberMe);
+    // saveToken(token, rememberMe);
 
     return data.username;
   } catch (error) {

@@ -12,10 +12,10 @@ import category from "./category";
 import tickets from "./components/tickets";
 import { authProvider } from "./authProvider";
 import { dataProvider } from "./dataProvider";
-import manager from "./manager";
-import petrolStation from "./petrol-station";
 import { QueryClient } from "react-query";
 import PreloadData from "./preload-data/preload-data";
+import manager from "./components/manager";
+import petrolStation from "./components/petrol-station";
 
 const queryClient = new QueryClient({
   defaultOptions: {
