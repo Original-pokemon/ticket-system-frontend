@@ -150,7 +150,7 @@ const Category = () => {
                         </Typography>
                       </TableCell>
                       <TableCell>
-                        <Chip label={bushesEntities[bush_id || ''].description || 'Не указано'} />
+                        <Chip label={bushesEntities[bush_id || '']?.description || 'Не указано'} />
                       </TableCell>
                       <TableCell>
                         <Typography variant="body2">
