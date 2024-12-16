@@ -1,11 +1,10 @@
 import Person2Icon from "@mui/icons-material/Person2";
-import { ManagerList } from "./ManagerList";
-import { ManagerShow } from "./ManagerShow";
-// import { CustomerShow } from "./CustomerShow";
+import ManagersList from "../../pages/ManagersList/ManagersList";
+import Manager from "../../pages/Manager/Manager";
 
 export default {
-  list: ManagerList,
-  show: ManagerShow,
+  list: ManagersList,
+  show: Manager,
   icon: Person2Icon,
   options: { label: "Менеджеры" },
   label: {

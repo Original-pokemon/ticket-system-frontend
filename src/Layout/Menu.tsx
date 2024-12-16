@@ -1,7 +1,5 @@
-import * as React from 'react';
 import { useState } from 'react';
 import Box from '@mui/material/Box';
-import LabelIcon from '@mui/icons-material/Label';
 
 import {
   useTranslate,
@@ -12,8 +10,8 @@ import {
 
 import SubMenu from './SubMenu';
 import category from '../category';
-import manager from '../manager';
-import tickets from '../tickets';
+import tickets from '../components/tickets';
+import manager from '../components/manager';
 
 type MenuName = 'menuCatalog' | 'menuManager' | 'menuCategory';
 

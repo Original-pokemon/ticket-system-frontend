@@ -9,7 +9,7 @@ import {
 } from "react-admin";
 import { ReactQueryDevtools } from "react-query/devtools";
 import category from "./category";
-import tickets from "./tickets";
+import tickets from "./components/tickets";
 import { authProvider } from "./authProvider";
 import { dataProvider } from "./dataProvider";
 import manager from "./manager";
