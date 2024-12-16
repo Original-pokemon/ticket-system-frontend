@@ -17,7 +17,7 @@ const getPetrolStationColumns = (): GridColDef[] => [
     field: 'totalTasks',
     headerName: 'Задачи',
     type: 'number',
-    width: 120,
+    width: 170,
   },
   {
     field: 'managers',

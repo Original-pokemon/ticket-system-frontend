@@ -8,7 +8,7 @@ import {
   localStorageStore,
 } from "react-admin";
 import { ReactQueryDevtools } from "react-query/devtools";
-import category from "./category";
+import category from "./components/category";
 import tickets from "./components/tickets";
 import { authProvider } from "./authProvider";
 import { dataProvider } from "./dataProvider";
