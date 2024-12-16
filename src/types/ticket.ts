@@ -1,3 +1,5 @@
+import type { ticketHistoryType } from "./ticket-history";
+
 export type TicketType = {
   id: string;
   title: string;
@@ -10,6 +12,6 @@ export type TicketType = {
   status_id: string;
   created_at: string;
   deadline?: Date;
-  status_history?: string[];
+  status_history?: ticketHistoryType[];
   comments: string[];
 };

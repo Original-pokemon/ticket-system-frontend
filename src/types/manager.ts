@@ -1,9 +1,8 @@
-import { ManagerTicketType, UserType } from ".";
+import { ManagerTicketType, PetrolStationType, TicketType, UserType } from ".";
 
 export type ManagerType = {
   id: string;
   bush_id?: string;
-  tickets: ManagerTicketType[];
-  petrol_stations?: string[];
+  petrol_stations?: (PetrolStationType & { tickets: TicketType[] })[];
   user?: UserType;
 };

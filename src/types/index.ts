@@ -10,3 +10,4 @@ export * from './ticket';
 export * from './user';
 export * from './thunk-config'
 export * from './state'
+export * from './ticket-history'

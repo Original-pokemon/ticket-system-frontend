@@ -39,14 +39,16 @@ export const fetchTicketAttachmentData = createAsyncThunk<
   if (attachmentsId.length === 0) {
     return [];
   }
+
   const searchParameters = attachmentsId.map((id) => ["id", id]);
   const parameters = new URLSearchParams(searchParameters);
 
   try {
-    const { data } = await api.get<AttachmentType[]>(APIRoute.ATTACHMENT, { params: parameters.toString() });
+    const { data } = await api.get<AttachmentType[]>(APIRoute.ATTACHMENT, { params: parameters });
 
     return data;
   } catch (error) {
+    console.log('error :>> ', error);
     throw error;
   }
 });

@@ -1,7 +1,7 @@
 import { useRecordContext } from "react-admin";
 import { Card, CardMedia, Modal } from "@mui/material";
 import { useCallback, useState } from "react";
-import { AttachmentType } from "../../types";
+import { AttachmentType } from "../../../types";
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -14,33 +14,31 @@ const style = {
 };
 
 type AttachmentImageFieldProps = {
+  id: string,
+  path: string,
   imagSize: {
     width: number;
     height: number;
   },
 }
 
-const AttachmentImageField = (props: AttachmentImageFieldProps) => {
-  const { imagSize } = props
-  const record = useRecordContext<AttachmentType>();
+const AttachmentImageField = ({ id, imagSize, path }: AttachmentImageFieldProps) => {
   const [isLightboxOpen, setLightboxOpen] = useState(false)
-  if (!record) return null;
   const handleOpenLightbox = useCallback(() => setLightboxOpen(true), [])
   const handleCloseLightbox = useCallback(
     () => setLightboxOpen(false),
     [],
   )
 
-  const imagePath = record.path;
   return (
     <>
       <Card sx={{ display: 'inline-block', margin: '0.6vw' }}>
         <CardMedia
           component="img"
-          image={imagePath}
+          image={path}
           width={imagSize.width}
           height={imagSize.height}
-          alt={record.id}
+          alt={id}
           sx={{ maxWidth: '42em', maxHeight: '15em' }}
           onClick={handleOpenLightbox}
         />
@@ -54,8 +52,8 @@ const AttachmentImageField = (props: AttachmentImageFieldProps) => {
             <Card sx={style}>
               <CardMedia
                 component="img"
-                image={imagePath}
-                alt={record.id}
+                image={path}
+                alt={id}
                 sx={{ maxWidth: '50vh', maxHeight: '50vh' }}
                 onClick={handleCloseLightbox}
               />

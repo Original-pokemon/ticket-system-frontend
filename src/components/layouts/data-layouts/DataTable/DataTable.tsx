@@ -6,6 +6,8 @@ type Properties = {
   pageSizeOptions?: (number | { value: number; label: string })[];
   pageSize?: number;
   disableColumnSorting?: boolean;
+  disableToolBar?: boolean;
+  disableFooter?: boolean;
   onClick?: (id: GridRowId) => void;
 } & DataGridProps;
 
@@ -18,6 +20,8 @@ function DataTable({
   filterModel,
   loading,
   disableColumnSorting = false,
+  disableToolBar = false,
+  disableFooter = false,
   pageSize,
   pageSizeOptions = [10, 25, 50],
   ...rest
@@ -30,8 +34,8 @@ function DataTable({
       filterModel={filterModel}
       density={density}
       slots={{
-        toolbar: GridToolbar,
-        // footer:
+        toolbar: disableToolBar ? null : GridToolbar,
+        footer: disableFooter ? () => null : undefined,
       }}
       slotProps={{
         toolbar: {

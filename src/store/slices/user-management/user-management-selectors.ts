@@ -13,6 +13,7 @@ type UserManagementStateType = Pick<
 export const {
   selectAll: selectAllUsers,
   selectById: selectUserById,
+  selectEntities: selectUsersEntities,
 } = usersAdapter.getSelectors(
   (state: UserManagementStateType) => state[NameSpace.UserManagement].users
 );
@@ -20,6 +21,7 @@ export const {
 export const {
   selectAll: selectAllManagers,
   selectById: selectManagerById,
+  selectEntities: selectManagersEntities,
 } = managersAdapter.getSelectors(
   (state: UserManagementStateType) => state[NameSpace.UserManagement].managers
 );
@@ -27,6 +29,7 @@ export const {
 export const {
   selectAll: selectAllTaskPerformers,
   selectById: selectTaskPerformerById,
+  selectEntities: selectTaskPerformersEntities,
 } = taskPerformersAdapter.getSelectors(
   (state: UserManagementStateType) => state[NameSpace.UserManagement].taskPerformers
 );

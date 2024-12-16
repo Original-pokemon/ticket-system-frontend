@@ -1,11 +1,11 @@
 import { useRedirect } from "react-admin";
-import type { TicketType } from "../../types";
+import type { TicketType } from "../../../types";
 import { useEffect } from "react";
-import { fetchCategoriesData, fetchPetrolStationData, fetchStatusesData, getCategoriesStatus, getPetrolStationsStatus, getReferenceDataStatus, getTicketsStatus, selectAllCategories, selectAllPetrolStations, selectAllStatuses, selectAllTickets } from "../../store";
-import { useAppDispatch, useAppSelector } from "../../hooks/state";
-import DataTable from "../../components/layouts/data-layouts/DataTable/DataTable";
+import { fetchCategoriesData, fetchPetrolStationData, fetchStatusesData, getPetrolStationsStatus, getReferenceDataStatus, getTicketsStatus, selectAllCategories, selectAllPetrolStations, selectAllStatuses, selectAllTickets, selectCategoriesEntities, selectPetrolStationsEntities, selectStatusesEntities } from "../../../store";
+import { useAppDispatch, useAppSelector } from "../../../hooks/state";
+import DataTable from "../../layouts/data-layouts/DataTable/DataTable";
 import ticketColumns from "./TicketColumns";
-import Spinner from "../../components/Spinner/Spinner";
+import Spinner from "../../Spinner/Spinner";
 
 type TicketTableProps = {
   name: string,
@@ -13,12 +13,12 @@ type TicketTableProps = {
   isLoading: boolean,
 }
 
-export const TicketTable = ({ name, tickets, isLoading }: TicketTableProps) => {
+const TicketTable = ({ name, tickets, isLoading }: TicketTableProps) => {
   const redirect = useRedirect();
   const dispatch = useAppDispatch();
-  const petrolStationsData = useAppSelector(selectAllPetrolStations);
-  const categoriesData = useAppSelector(selectAllCategories);
-  const ticketStatusesData = useAppSelector(selectAllStatuses);
+  const petrolStationsEntities = useAppSelector(selectPetrolStationsEntities);
+  const categoriesEntities = useAppSelector(selectCategoriesEntities);
+  const ticketStatusesEntities = useAppSelector(selectStatusesEntities);
 
   const { isIdle: isReferenceDataStatusIdle } = useAppSelector(getReferenceDataStatus)
   const { isIdle: isPetrolStationsStatusIdle } = useAppSelector(getPetrolStationsStatus)
@@ -26,13 +26,12 @@ export const TicketTable = ({ name, tickets, isLoading }: TicketTableProps) => {
   const isIdle = isReferenceDataStatusIdle || isPetrolStationsStatusIdle
 
   const columns = ticketColumns({
-    categories: categoriesData,
-    statuses: ticketStatusesData,
-    petrolStations: petrolStationsData
+    categories: categoriesEntities,
+    statuses: ticketStatusesEntities,
+    petrolStations: petrolStationsEntities
   })
 
   const handleRowClick = (id: string | number) => {
-    console.log('id :>> ', id);
     // const path = generatePath(AppRoute.Ticket, { id: String(id) });
     redirect('show', 'ticket', id);
   }
@@ -59,3 +58,5 @@ export const TicketTable = ({ name, tickets, isLoading }: TicketTableProps) => {
     />
   )
 }
+
+export default TicketTable

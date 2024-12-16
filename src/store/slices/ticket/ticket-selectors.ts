@@ -13,6 +13,7 @@ type TicketStateType = Pick<
 export const {
   selectAll: selectAllTickets,
   selectById: selectTicketById,
+  selectEntities: selectTicketsEntities,
 } = ticketsAdapter.getSelectors(
   (state: TicketStateType) => state[NameSpace.Ticket].tickets
 );
@@ -20,13 +21,28 @@ export const {
 export const {
   selectAll: selectAllAttachments,
   selectById: selectAttachmentById,
+  selectEntities: selectAttachmentsEntities,
 } = attachmentsAdapter.getSelectors(
   (state: TicketStateType) => state[NameSpace.Ticket].attachments
 );
 
+export const getUniqTicketStatus = createSelector(
+  (state: TicketStateType) => state[NameSpace.Ticket].uniqTicket.status,
+  (status) => ({
+    status,
+    isIdle: status === Status.Idle,
+    isLoading: status === Status.Loading,
+    isError: status === Status.Error,
+    isSuccess: status === Status.Success,
+  }),
+);
+
+export const getUniqTicket = (state: TicketStateType) => state[NameSpace.Ticket].uniqTicket.data
+
 export const {
   selectAll: selectAllComments,
   selectById: selectCommentById,
+  selectEntities: selectCommentsEntities,
 } = commentsAdapter.getSelectors(
   (state: TicketStateType) => state[NameSpace.Ticket].comments
 );

@@ -1,32 +1,34 @@
 import { createSelector } from "@reduxjs/toolkit";
 import { NameSpace } from "../../const";
 import { InitialStateType } from "../../reducer";
-import { bushesAdapter, petrolStationsAdapter } from "./location-data";
+import { categoriesAdapter, statusesAdapter } from "./reference-data";
 import { Status } from "../../../const";
 import { StatusType } from "../../../types";
 
-
 type LocationDataStateType = Pick<
   InitialStateType,
-  typeof NameSpace.LocationData
+  typeof NameSpace.ReferenceData
 >;
 
+
 export const {
-  selectAll: selectAllPetrolStations,
-  selectById: selectPetrolStationById,
-} = petrolStationsAdapter.getSelectors(
-  (state: LocationDataStateType) => state[NameSpace.LocationData].petrolStations
+  selectAll: selectAllCategories,
+  selectById: selectCategoryById,
+  selectEntities: selectCategoriesEntities,
+} = categoriesAdapter.getSelectors(
+  (state: LocationDataStateType) => state[NameSpace.ReferenceData].categories
 );
 
 export const {
-  selectAll: selectAllBushes,
-  selectById: selectBushById,
-} = bushesAdapter.getSelectors(
-  (state: LocationDataStateType) => state[NameSpace.LocationData].bushes
+  selectAll: selectAllStatuses,
+  selectById: selectStatusById,
+  selectEntities: selectStatusesEntities,
+} = statusesAdapter.getSelectors(
+  (state: LocationDataStateType) => state[NameSpace.ReferenceData].statuses
 );
 
-export const getPetrolStationsStatus = createSelector(
-  (state: LocationDataStateType) => state[NameSpace.LocationData].petrolStations.status,
+export const getTicketStatusesStatus = createSelector(
+  (state: LocationDataStateType) => state[NameSpace.ReferenceData].statuses.status,
   (status) => ({
     status,
     isIdle: status === Status.Idle,
@@ -36,8 +38,8 @@ export const getPetrolStationsStatus = createSelector(
   }),
 );
 
-export const getBushesStatus = createSelector(
-  (state: LocationDataStateType) => state[NameSpace.LocationData].bushes.status,
+export const getCategoriesStatus = createSelector(
+  (state: LocationDataStateType) => state[NameSpace.ReferenceData].categories.status,
   (status) => ({
     status,
     isIdle: status === Status.Idle,
@@ -47,11 +49,11 @@ export const getBushesStatus = createSelector(
   }),
 );
 
-export const getLocationDataStatus = createSelector(
-  getPetrolStationsStatus,
-  getBushesStatus,
-  (petrolStationsStatus, bushesStatus) => {
-    const statuses = [petrolStationsStatus.status, bushesStatus.status];
+export const getReferenceDataStatus = createSelector(
+  getTicketStatusesStatus,
+  getCategoriesStatus,
+  (categoriesStatus, ticketStatusesStatus) => {
+    const statuses = [categoriesStatus.status, ticketStatusesStatus.status];
 
     let status: StatusType = Status.Idle;
 

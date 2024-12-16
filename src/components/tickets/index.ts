@@ -1,10 +1,10 @@
-import { TicketShow } from "./TicketShow";
+import { Ticket } from "../../pages/Ticket/Ticket";
 import ConfirmationNumberIcon from '@mui/icons-material/ConfirmationNumber';
-import Tickets from "../pages/Tickets/Tickets";
+import TicketsList from "../../pages/TicketsList/TicketsList";
 
 export default {
-  list: Tickets,
+  list: TicketsList,
   options: { label: 'Задачи' },
-  show: TicketShow,
+  show: Ticket,
   icon: ConfirmationNumberIcon,
 };

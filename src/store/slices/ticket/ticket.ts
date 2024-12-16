@@ -6,7 +6,7 @@ import {
   fetchUniqTicketData,
   fetchTicketAttachmentData,
   fetchTicketCommentsData,
-} from './thunk';
+} from './ticket-thunk';
 import type { AttachmentType, CommentType, StatusType, TicketType } from '../../../types';
 import { Status } from '../../../const';
 import { NameSpace } from '../../const';
@@ -25,19 +25,29 @@ export const commentsAdapter = createEntityAdapter<CommentType, string>({
 });
 
 type TicketsState = EntityState<TicketType, string> & { status: StatusType };
+type UniqTicketState = {
+  data: TicketType | null;
+  status: StatusType;
+};
 type AttachmentsState = EntityState<AttachmentType, string> & { status: StatusType };
 type CommentsState = EntityState<CommentType, string> & { status: StatusType };
+
 
 type InitialStateType = {
   tickets: TicketsState;
   attachments: AttachmentsState;
   comments: CommentsState;
+  uniqTicket: UniqTicketState;
 };
 
 const initialState: InitialStateType = {
   tickets: ticketsAdapter.getInitialState({ status: Status.Idle }),
   attachments: attachmentsAdapter.getInitialState({ status: Status.Idle }),
   comments: commentsAdapter.getInitialState({ status: Status.Idle }),
+  uniqTicket: {
+    data: null,
+    status: Status.Idle,
+  },
 };
 
 const ticketSlice = createSlice({
@@ -61,14 +71,16 @@ const ticketSlice = createSlice({
     // Обработка fetchUniqTicketData
     builder
       .addCase(fetchUniqTicketData.pending, (state) => {
-        state.tickets.status = Status.Loading;
+        state.uniqTicket.status = Status.Loading;
+        state.uniqTicket.data = null;
       })
       .addCase(fetchUniqTicketData.fulfilled, (state, action) => {
-        state.tickets.status = Status.Success;
-        ticketsAdapter.upsertOne(state.tickets, action.payload);
+        state.uniqTicket.status = Status.Success;
+        state.uniqTicket.data = action.payload;
       })
       .addCase(fetchUniqTicketData.rejected, (state) => {
-        state.tickets.status = Status.Error;
+        state.uniqTicket.status = Status.Error;
+        state.uniqTicket.data = null;
       });
 
     // Обработка fetchTicketAttachmentData

@@ -1,7 +1,7 @@
 /* eslint-disable no-param-reassign */
 import { createSlice, createEntityAdapter } from '@reduxjs/toolkit';
 import type { EntityState } from '@reduxjs/toolkit';
-import { fetchCategoriesData, fetchStatusesData } from './thunk';
+import { fetchCategoriesData, fetchStatusesData } from './reference-data-thunk';
 import { CategoryType, StatusType, TicketStatusType } from '../../../types';
 import { Status } from '../../../const';
 import { NameSpace } from '../../const';

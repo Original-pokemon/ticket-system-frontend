@@ -1,7 +1,7 @@
 /* eslint-disable no-param-reassign */
 import { createSlice, createEntityAdapter } from '@reduxjs/toolkit';
 import type { EntityState } from '@reduxjs/toolkit';
-import { fetchPetrolStationData, fetchBushData } from './thunk';
+import { fetchPetrolStationData, fetchBushData } from './location-data-thunk';
 import { BushType, PetrolStationType, StatusType } from '../../../types';
 import { Status } from '../../../const';
 import { NameSpace } from '../../const';

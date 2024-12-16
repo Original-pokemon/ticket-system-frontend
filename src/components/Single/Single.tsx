@@ -1,118 +1,44 @@
 import React from 'react';
-import { Box, Grid, Typography } from '@mui/material';
+import { Box, Grid2 as Grid, Typography, Stack, Paper } from '@mui/material';
 import { SxProps, Theme } from '@mui/system';
 
-interface SingleProps {
+type SingleProps = {
   sx?: SxProps<Theme>;
   children: React.ReactNode;
-}
+};
 
 function Single({ sx, children }: SingleProps) {
   return (
-    <Box sx={{ p: 2, backgroundColor: '#fff', borderRadius: 2, ...sx }}>
-      <Grid container spacing={2}>
+    <Grid container columns={12} columnSpacing={2} justifyContent={"space-between"}>
         {children}
-      </Grid>
-    </Box>
+    </Grid>
   );
 }
 
-// Подкомпоненты
-
-interface SingleTitleProps {
+type SingleMainContentProps = {
   children: React.ReactNode;
-}
+};
 
-function SingleTitle({ children }: SingleTitleProps) {
+function SingleMainContent({ children }: SingleMainContentProps) {
   return (
-    <Grid item xs={12} md={8}>
-      <Typography variant="h5" sx={{ mb: 3 }}>
+    <Grid size={'grow'}>
+      <Stack spacing={3} component={Paper} p={2} borderRadius={4}> 
         {children}
-      </Typography>
+      </Stack>
     </Grid>
   );
 }
 
-interface SingleSectionProps {
+type SingleSidePanelProps = {
   title?: React.ReactNode;
   children: React.ReactNode;
-}
-
-function SingleSection({ title, children }: SingleSectionProps) {
-  return (
-    <Grid item xs={12} md={8}>
-      {title && (
-        <Typography variant="h6" sx={{ mb: 1 }}>
-          {title}
-        </Typography>
-      )}
-      {children}
-    </Grid>
-  );
-}
-
-interface SingleItemProps {
-  label: React.ReactNode;
-  value: React.ReactNode;
-}
-
-function SingleItem({ label, value }: SingleItemProps) {
-  return (
-    <Box sx={{ display: 'flex', mb: 1 }}>
-      <Typography variant="body2" sx={{ fontWeight: 'bold', mr: 1 }}>
-        {label}:
-      </Typography>
-      <Typography variant="body2">{value}</Typography>
-    </Box>
-  );
-}
-
-interface SingleAttachmentsProps {
-  title?: React.ReactNode;
-  children: React.ReactNode;
-}
-
-function SingleAttachments({ title, children }: SingleAttachmentsProps) {
-  return (
-    <Grid item xs={12} md={8}>
-      {title && (
-        <Typography variant="h6" sx={{ mb: 1 }}>
-          {title}
-        </Typography>
-      )}
-      {children}
-    </Grid>
-  );
-}
-
-interface SingleCommentsProps {
-  title?: React.ReactNode;
-  children: React.ReactNode;
-}
-
-function SingleComments({ title, children }: SingleCommentsProps) {
-  return (
-    <Grid item xs={12} md={8}>
-      {title && (
-        <Typography variant="h6" sx={{ mb: 1 }}>
-          {title}
-        </Typography>
-      )}
-      {children}
-    </Grid>
-  );
-}
-
-interface SingleSidePanelProps {
-  title?: React.ReactNode;
-  children: React.ReactNode;
-}
+};
 
 function SingleSidePanel({ title, children }: SingleSidePanelProps) {
   return (
-    <Grid item xs={12} md={4}>
+    <Grid columns={{ xs: 12, md: 4 }} >
       {title && (
-        <Typography variant="h6" sx={{ mb: 2 }}>
+        <Typography variant="subtitle2" color='text.secondary'>
           {title}
         </Typography>
       )}
@@ -121,12 +47,97 @@ function SingleSidePanel({ title, children }: SingleSidePanelProps) {
   );
 }
 
-// Привязываем подкомпоненты к основному компоненту
+type SingleTitleProps = {
+  children: React.ReactNode;
+};
+
+function SingleTitle({ children }: SingleTitleProps) {
+  return (
+    <Typography variant="h4" >
+      {children}
+    </Typography>
+  );
+}
+
+type SingleSectionProps = {
+  title?: React.ReactNode;
+  children: React.ReactNode;
+};
+
+function SingleSection({ title, children }: SingleSectionProps) {
+  return (
+    <Box>
+      {title && (
+        <Typography variant="h6" sx={{ mb: 1 }}>
+          {title}
+        </Typography>
+      )}
+      <Stack spacing={2}>
+        {children}
+      </Stack>
+    </Box>
+  );
+}
+
+type SingleItemProps = {
+  label: React.ReactNode;
+  children: React.ReactNode;
+};
+
+function SingleItem({ label, children }: SingleItemProps) {
+  return (
+    <Stack direction={"row"} spacing={2} alignItems={"center"} justifyContent={"flex-start"} >
+      <Typography variant="h6" >
+        {label}:
+      </Typography>
+
+      <Box>{children}</Box>
+    </Stack>
+  );
+}
+
+type SingleAttachmentsProps = {
+  title?: React.ReactNode;
+  children: React.ReactNode;
+};
+
+function SingleAttachments({ title, children }: SingleAttachmentsProps) {
+  return (
+    <Box>
+      {title && (
+        <Typography variant="h6" sx={{ mb: 1 }}>
+          {title}
+        </Typography>
+      )}
+      {children}
+    </Box>
+  );
+}
+
+type SingleCommentsProps = {
+  title?: React.ReactNode;
+  children: React.ReactNode;
+};
+
+function SingleComments({ title, children }: SingleCommentsProps) {
+  return (
+    <Box>
+      {title && (
+        <Typography variant="h6" sx={{ mb: 1 }}>
+          {title}
+        </Typography>
+      )}
+      {children}
+    </Box>
+  );
+}
+
+Single.MainContent = SingleMainContent;
+Single.SidePanel = SingleSidePanel;
 Single.Title = SingleTitle;
 Single.Section = SingleSection;
 Single.Item = SingleItem;
 Single.Attachments = SingleAttachments;
 Single.Comments = SingleComments;
-Single.SidePanel = SingleSidePanel;
 
 export default Single;

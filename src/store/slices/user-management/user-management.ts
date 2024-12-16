@@ -8,7 +8,7 @@ import {
   fetchUniqManagerData,
   fetchTaskPerformersData,
   fetchUniqTaskPerformerData,
-} from './thunk';
+} from './user-management-thunk';
 import { ManagerType, StatusType, UserType } from '../../../types';
 import { TaskPerformerType } from '../../../types/task-performer';
 import { Status } from '../../../const';

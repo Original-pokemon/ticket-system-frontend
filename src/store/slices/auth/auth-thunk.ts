@@ -4,10 +4,12 @@ import { NameSpace } from '../../const';
 import { APIRoute } from '../../../const';
 import { AxiosError } from 'axios';
 import { toast } from 'react-toastify';
+import { saveToken } from '../../../services/api';
 
 export type AuthDataType = {
   username: string;
   password: string;
+  rememberMe: boolean;
 };
 
 export const postAuthData = createAsyncThunk<
@@ -17,6 +19,8 @@ export const postAuthData = createAsyncThunk<
 >(`${NameSpace.Auth}/postAuthData`, async (authData, { extra: api }) => {
   try {
     const { data } = await api.post<AuthDataType>(APIRoute.LOGIN, authData);
+
+    saveToken(token, rememberMe);
 
     return data.username;
   } catch (error) {

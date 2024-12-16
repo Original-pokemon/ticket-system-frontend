@@ -1,3 +1,3 @@
-export * from './thunk'
+export * from './ticket-thunk'
 export { default as ticketReducer } from './ticket'
-export * from './selectors'
+export * from './ticket-selectors'
