@@ -9,12 +9,12 @@ import { AuthDataType } from '.';
 
 type InitialStateType = {
   status: StatusType;
-  authData?: AuthDataType['username'];
+  authData: boolean;
 };
 
 const initialState: InitialStateType = {
   status: Status.Idle,
-  authData: undefined,
+  authData: false,
 };
 
 const authDataSlice = createSlice({
@@ -29,7 +29,7 @@ const authDataSlice = createSlice({
       })
       .addCase(_.postAuthData.fulfilled, (state, action) => {
         state.status = Status.Success;
-        state.authData = action.payload;
+        state.authData = true;
       })
       .addCase(_.postAuthData.rejected, (state) => {
         state.status = Status.Error;
@@ -39,9 +39,19 @@ const authDataSlice = createSlice({
       })
       .addCase(_.logout.fulfilled, (state) => {
         state.status = Status.Success;
-        state.authData = undefined;
+        state.authData = false;
       })
       .addCase(_.logout.rejected, (state) => {
+        state.status = Status.Error;
+      })
+      .addCase(_.checkAuth.pending, (state) => {
+        state.status = Status.Loading;
+      })
+      .addCase(_.checkAuth.fulfilled, (state) => {
+        state.status = Status.Success;
+        state.authData = true;
+      })
+      .addCase(_.checkAuth.rejected, (state) => {
         state.status = Status.Error;
       });
   },

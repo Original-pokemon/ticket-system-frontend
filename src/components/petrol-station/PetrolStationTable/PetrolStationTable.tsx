@@ -1,16 +1,17 @@
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../../hooks/state";
-import { fetchBushData, fetchCategoriesData, fetchManagersData, fetchPetrolStationData, fetchTaskPerformersData, fetchTicketsData, getCategoriesStatus, getLocationDataStatus, getManagersStatus, getPetrolStationsStatus, getTaskPerformersStatus, getTicketsStatus, selectAllManagers, selectAllPetrolStations, selectBushesEntities, selectCategoriesEntities, selectManagersEntities, selectPetrolStationsEntities, selectTaskPerformersEntities, selectTicketsEntities } from "../../../store";
-import { useRedirect } from "react-admin";
+import { fetchBushData, fetchManagersData, fetchPetrolStationData, fetchTaskPerformersData, fetchTicketsData, getCategoriesStatus, getLocationDataStatus, getManagersStatus, getPetrolStationsStatus, getTaskPerformersStatus, getTicketsStatus, selectAllManagers, selectAllPetrolStations, selectBushesEntities, selectCategoriesEntities, selectManagersEntities, selectPetrolStationsEntities, selectTaskPerformersEntities, selectTicketsEntities } from "../../../store";
 import Spinner from "../../Spinner/Spinner";
 import DataTable from "../../layouts/data-layouts/DataTable/DataTable";
 import getPetrolStationColumns from "./get-petrol-station-columns";
 import { getPetrolStationsRows } from "./get-petrol-station-rows";
+import { generatePath, useNavigate } from "react-router-dom";
+import { AppRoute } from "../../../const";
 
 const columns = getPetrolStationColumns()
 
 const PetrolStationTable = () => {
-  const redirect = useRedirect();
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const petrolStations = useAppSelector(selectAllPetrolStations);
   const managers = useAppSelector(selectManagersEntities);
@@ -29,8 +30,8 @@ const PetrolStationTable = () => {
   }) : []
 
   const handleRowClick = (id: string | number) => {
-    // const path = generatePath(AppRoute.Ticket, { id: String(id) });
-    redirect('show', 'petrol-station', id);
+    const path = generatePath(AppRoute.PetrolStation, { id: String(id) });
+    navigate(path);
   }
 
   useEffect(() => {

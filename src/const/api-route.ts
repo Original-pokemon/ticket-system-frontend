@@ -16,6 +16,7 @@ const APIRoute = {
   STATUS_HISTORY: '/status-history',
   ATTACHMENT: '/attachment',
   COMMENT: '/comment',
+  CHECK_AUTH: "/check-auth"
 } as const
 
 export default APIRoute

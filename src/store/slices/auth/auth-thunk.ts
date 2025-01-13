@@ -4,23 +4,22 @@ import { NameSpace } from '../../const';
 import { APIRoute } from '../../../const';
 import { AxiosError } from 'axios';
 import { toast } from 'react-toastify';
-import { saveToken } from '../../../services/api';
 
 export type AuthDataType = {
   username: string;
   password: string;
-  rememberMe: boolean;
 };
 
 export const postAuthData = createAsyncThunk<
   AuthDataType['username'],
   AuthDataType,
   AsyncThunkConfig
->(`${NameSpace.Auth}/postAuthData`, async (authData, { extra: api }) => {
+  >(`${NameSpace.Auth}/postAuthData`, async ({ username, password }, { extra: api }) => {
   try {
-    const { data } = await api.post<AuthDataType>(APIRoute.LOGIN, authData);
-
-    // saveToken(token, rememberMe);
+    const { data } = await api.post<AuthDataType>(APIRoute.LOGIN, {
+      username,
+      password
+    });
 
     return data.username;
   } catch (error) {
@@ -42,7 +41,7 @@ export const logout = createAsyncThunk<
   AsyncThunkConfig
 >(`${NameSpace.Auth}/logout`, async (_args, { extra: api }) => {
   try {
-    await api.post<AuthDataType>(APIRoute.LOGOUT);
+    await api.delete<AuthDataType>(APIRoute.LOGOUT);
 
     return true
   } catch (error) {
@@ -53,6 +52,21 @@ export const logout = createAsyncThunk<
         toast.warn('Не удалось выйти из аккаунта, попробуйте ещё раз', { toastId });
       }
     }
+
+    throw error;
+  }
+});
+
+export const checkAuth = createAsyncThunk<
+  boolean,
+  undefined,
+  AsyncThunkConfig
+>(`${NameSpace.Auth}/check-auth`, async (_args, { extra: api }) => {
+  try {
+    await api.get<AuthDataType>(APIRoute.CHECK_AUTH);
+
+    return true
+  } catch (error) {
 
     throw error;
   }

@@ -11,3 +11,4 @@ export * from './user';
 export * from './thunk-config'
 export * from './state'
 export * from './ticket-history'
+export * from './app-route'

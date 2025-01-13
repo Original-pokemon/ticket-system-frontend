@@ -1,4 +1,3 @@
-import { useRedirect } from "react-admin";
 import type { TicketType } from "../../../types";
 import { useEffect } from "react";
 import { fetchCategoriesData, fetchPetrolStationData, fetchStatusesData, getPetrolStationsStatus, getReferenceDataStatus, getTicketsStatus, selectAllCategories, selectAllPetrolStations, selectAllStatuses, selectAllTickets, selectCategoriesEntities, selectPetrolStationsEntities, selectStatusesEntities } from "../../../store";
@@ -6,6 +5,8 @@ import { useAppDispatch, useAppSelector } from "../../../hooks/state";
 import DataTable from "../../layouts/data-layouts/DataTable/DataTable";
 import ticketColumns from "./TicketColumns";
 import Spinner from "../../Spinner/Spinner";
+import { generatePath, useNavigate } from "react-router-dom";
+import { AppRoute } from "../../../const";
 
 type TicketTableProps = {
   name: string,
@@ -14,7 +15,7 @@ type TicketTableProps = {
 }
 
 const TicketTable = ({ name, tickets, isLoading }: TicketTableProps) => {
-  const redirect = useRedirect();
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const petrolStationsEntities = useAppSelector(selectPetrolStationsEntities);
   const categoriesEntities = useAppSelector(selectCategoriesEntities);
@@ -32,8 +33,8 @@ const TicketTable = ({ name, tickets, isLoading }: TicketTableProps) => {
   })
 
   const handleRowClick = (id: string | number) => {
-    // const path = generatePath(AppRoute.Ticket, { id: String(id) });
-    redirect('show', 'ticket', id);
+    const path = generatePath(AppRoute.Ticket, { id: String(id) });
+    navigate(path);
   }
 
   useEffect(() => {

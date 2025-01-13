@@ -17,5 +17,5 @@ export const getAuthStatus = createSelector(
   }),
 );
 
-export const getAuthData = (state: AuthStateType): AuthDataType['username'] | undefined =>
+export const getAuthData = (state: AuthStateType): boolean =>
   state[NameSpace.Auth].authData;

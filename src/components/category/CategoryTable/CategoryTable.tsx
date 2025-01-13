@@ -1,15 +1,15 @@
 import { useEffect } from "react";
-import { Status } from "../../../const";
+import { AppRoute, Status } from "../../../const";
 import { useAppDispatch, useAppSelector } from "../../../hooks/state";
 import { fetchCategoriesData, fetchTaskPerformersData, fetchTicketsData, getCategoriesStatus, getTaskPerformersStatus, getTicketsStatus, selectCategoriesEntities, selectPetrolStationsEntities, selectTaskPerformersEntities, selectTicketsEntities } from "../../../store";
 import getCategoryRows from "./get-category-rows";
-import { useRedirect } from "react-admin";
 import getCategoryColumns from "./get-category-columns";
 import Spinner from "../../Spinner/Spinner";
 import DataTable from "../../layouts/data-layouts/DataTable/DataTable";
+import { generatePath, useNavigate } from "react-router-dom";
 
 const CategoryTable = () => {
-  const redirect = useRedirect();
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const categories = useAppSelector(selectCategoriesEntities);
   const tickets = useAppSelector(selectTicketsEntities);
@@ -30,8 +30,8 @@ const CategoryTable = () => {
   }) : []
 
   const handleRowClick = (id: string | number) => {
-    // const path = generatePath(AppRoute.Ticket, { id: String(id) });
-    redirect('show', 'category', id);
+    const path = generatePath(AppRoute.TaskPerformer, { id: String(id) });
+    navigate(path)
   }
 
   useEffect(() => {

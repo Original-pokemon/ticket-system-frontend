@@ -1,16 +1,17 @@
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../../hooks/state";
 import { fetchManagersData, getManagersStatus, selectAllManagers } from "../../../store";
-import { useRedirect } from "react-admin";
-import Spinner from "../../Spinner/Spinner";
 import DataTable from "../../layouts/data-layouts/DataTable/DataTable";
 import getManagerColumns from "./get-manager-columns";
 import getManagerRows from "./get-manager-rows";
+import { generatePath, useNavigate } from "react-router-dom";
+import { AppRoute } from "../../../const";
+import Spinner from "../../Spinner/Spinner";
 
 const columns = getManagerColumns()
 
 const ManagerTable = () => {
-  const redirect = useRedirect();
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const managers = useAppSelector(selectAllManagers);
 
@@ -24,8 +25,8 @@ const ManagerTable = () => {
   }) : []
 
   const handleRowClick = (id: string | number) => {
-    // const path = generatePath(AppRoute.Ticket, { id: String(id) });
-    redirect('show', 'manager', id);
+    const path = generatePath(AppRoute.Manager, { id: String(id) });
+    navigate(path);
   }
 
   useEffect(() => {
