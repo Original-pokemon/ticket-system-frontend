@@ -20,7 +20,9 @@ import {
   getReferenceDataStatus,
   getPetrolStationsStatus,
   getUniqTicket,
-  selectStatusesEntities
+  selectStatusesEntities,
+  fetchUsersData,
+  selectUsersEntities
 } from '../../store';
 import { useLocation } from 'react-router-dom';
 import Spinner from '../../components/Spinner/Spinner';
@@ -40,6 +42,7 @@ export const Ticket = () => {
   const petrolStation = useAppSelector((state) => selectPetrolStationById(state, ticket?.petrol_station_id || ''));
   const ticketAttachments = useAppSelector(selectAllAttachments);
   const comments = useAppSelector(selectAllComments).filter(comment => comment.ticket_id === id);
+  const usersEntities = useAppSelector(selectUsersEntities)
 
   const uniqTicketStatus = useAppSelector(getUniqTicketStatus);
   const attachmentsStatus = useAppSelector(getAttachmentsStatus);
@@ -51,10 +54,9 @@ export const Ticket = () => {
   const isIdle = uniqTicketStatus.isIdle || referenceDataStatus.isIdle || petrolStationsStatus.isIdle;
   const isError = uniqTicketStatus.isError || attachmentsStatus.isError || commentsStatus.isError || referenceDataStatus.isError || petrolStationsStatus.isError;
 
-  const map = new Map(Object.entries(statusesEntities));
-
   useEffect(() => {
     dispatch(fetchUniqTicketData(id));
+    dispatch(fetchUsersData());
   }, [dispatch, id]);
 
   useEffect(() => {
@@ -147,14 +149,20 @@ export const Ticket = () => {
                     <TableHead>
                       <TableRow>
                         <TableCell>Статус</TableCell>
+                        <TableCell>Пользователь</TableCell>
                         <TableCell>Дата</TableCell>
                       </TableRow>
                     </TableHead>
                     <TableBody>
-                      {(ticket?.status_history || []).map(({ id: historyId, ticket_status, created_at }) => (
+                      {(ticket?.status_history || []).map(({ id: historyId, ticket_status, created_at, user_id }) => (
                         <TableRow key={historyId}>
                           <TableCell>
                             <Chip label={statusesEntities[ticket_status || ''].description || 'Не указано'} />
+                          </TableCell>
+                          <TableCell>
+                            <Typography variant="body2">
+                              {usersEntities[user_id]?.user_name || 'Не указано'}
+                            </Typography>
                           </TableCell>
                           <TableCell>
                             <Typography variant="body2">
