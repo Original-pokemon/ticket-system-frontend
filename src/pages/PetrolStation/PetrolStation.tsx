@@ -9,9 +9,9 @@ import { Chip, Table, TableBody, TableCell, TableContainer, TableHead, TableRow,
 import dayjs from "dayjs";
 import filterTickets from "../../utils/filter-tickets";
 import PageLayout from "../../components/layouts/PageLayout/PageLayout";
-import { FilterId } from "../TicketsList/const";
+import FilterData from "../TicketsList/const";
 import { SelectedFiltersType } from "../../components/Filter/types";
-import Filter from "../../components/Filter/Filter";
+import Filter, { FilterMetaType } from "../../components/Filter/Filter";
 
 const PetrolStation = () => {
   const dispatch = useAppDispatch();
@@ -24,7 +24,6 @@ const PetrolStation = () => {
   const managersEntities = useAppSelector(selectManagersEntities);
   const statusesData = useAppSelector(selectAllStatuses);
   const bushesEntities = useAppSelector(selectBushesEntities);
-  const bushesData = useAppSelector(selectAllBushes);
   const categoriesData = useAppSelector(selectAllCategories)
 
   const managersStatus = useAppSelector(getManagersStatus)
@@ -33,6 +32,7 @@ const PetrolStation = () => {
   const locationDataStatus = useAppSelector(getLocationDataStatus)
 
   const isIdle = managersStatus.isIdle && referenceDataStatus.isIdle && ticketStatusesStatus.isIdle && locationDataStatus.isIdle;
+  const isLoading = managersStatus.isLoading || referenceDataStatus.isLoading || ticketStatusesStatus.isLoading || locationDataStatus.isLoading;
 
   //for filter
   const [statusesType, setStatusesType] = useState<string[]>([]);
@@ -41,31 +41,44 @@ const PetrolStation = () => {
   const ticketStatusTypeOptions = useMemo(() => statusesData.map(({ id, description }) => ({
     label: description,
     value: String(id),
-  })), [statusesData]);
+  })), [statusesData.length]);
 
   const categoryTypeOptions = useMemo(() => categoriesData.map(({ id, description }) => ({
     label: description,
     value: String(id),
-  })), [categoriesData]);
+  })), [categoriesData.length]);
+
+  const filterMeta: FilterMetaType = useMemo(() => ({
+    [FilterData.Category.id]: {
+      title: FilterData.Category.title,
+      options: categoryTypeOptions,
+    },
+    [FilterData.Status.id]: {
+      title: FilterData.Status.title,
+      options: ticketStatusTypeOptions,
+    }
+  }), [categoryTypeOptions.length, ticketStatusTypeOptions.length]);
 
   const filteredTickets = useMemo(() => {
-    return filterTickets({ ticketsData, petrolStations: { [petrolStation.id]: { ...petrolStation } }, ticketStatusType: statusesType, bushesType: [petrolStation.bush_id], categoriesType });
+    return filterTickets({ ticketsData, petrolStations: { [petrolStation?.id]: { ...petrolStation } }, ticketStatusType: statusesType, bushesType: [petrolStation?.bush_id], categoriesType });
   }, [
-    ticketsData,
+    ticketsData.length,
     statusesType,
   ])
 
   const handleApplyFilters = useCallback((selectedFilters: SelectedFiltersType) => {
-    if (selectedFilters[FilterId.CATEGORY]) {
-      const { options } = selectedFilters[FilterId.CATEGORY];
+    const { Category: { id: categoryId }, Status: { id: StatusId } } = FilterData
+
+    if (selectedFilters[categoryId]) {
+      const { options } = selectedFilters[categoryId];
       const valueList = options.map((option) => option.value);
       setCategoriesType(valueList);
     } else {
       setCategoriesType([]);
     }
 
-    if (selectedFilters[FilterId.STATUS]) {
-      const { options } = selectedFilters[FilterId.STATUS];
+    if (selectedFilters[StatusId]) {
+      const { options } = selectedFilters[StatusId];
       const valueList = options.map((option) => option.value);
       setStatusesType(valueList);
     } else {
@@ -92,22 +105,20 @@ const PetrolStation = () => {
     return <Spinner fullscreen={true} />
   }
 
-  return (
+  return isLoading ? <Spinner fullscreen={false} /> : (
     <PageLayout>
       <PageLayout.Title>{petrolStation?.user?.user_name} </PageLayout.Title>
       <PageLayout.Toolbar>
         <PageLayout.Filters>
-          <Filter onChange={handleApplyFilters}>
+          <Filter onChange={handleApplyFilters} filterMeta={filterMeta}>
             <Filter.MultipleChoice
-              id={FilterId.CATEGORY}
-              title="Категории"
-              options={categoryTypeOptions}
+              id={FilterData.Category.id}
+              {...filterMeta[FilterData.Category.id]}
             />
 
             <Filter.MultipleChoice
-              id={FilterId.STATUS}
-              title="Статусы"
-              options={ticketStatusTypeOptions}
+              id={FilterData.Status.id}
+              {...filterMeta[FilterData.Status.id]}
             />
           </Filter>
         </PageLayout.Filters>

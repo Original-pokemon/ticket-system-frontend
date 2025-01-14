@@ -2,12 +2,12 @@ import PageLayout from "../../components/layouts/PageLayout/PageLayout"
 import { fetchBushData, fetchCategoriesData, fetchPetrolStationData, fetchStatusesData, fetchTicketsData, getLocationDataStatus, getPetrolStationsStatus, getReferenceDataStatus, getTicketsStatus, selectAllBushes, selectAllCategories, selectAllPetrolStations, selectAllStatuses, selectAllTickets, selectPetrolStationsEntities } from "../../store";
 import { useAppDispatch, useAppSelector } from "../../hooks/state";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import Filter from "../../components/Filter/Filter";
-import { FilterId } from "./const";
+import Filter, { FilterMetaType } from "../../components/Filter/Filter";
 import { SelectedFiltersType } from "../../components/Filter/types";
-import { PetrolStationType, TicketType } from "../../types";
 import { TicketTable } from "../../components/tickets/TicketTable";
 import filterTickets from "../../utils/filter-tickets";
+import FilterData from "./const";
+import Spinner from "../../components/Spinner/Spinner";
 
 const TicketsList = () => {
   const dispatch = useAppDispatch();
@@ -30,35 +30,52 @@ const TicketsList = () => {
   const categoryTypeOptions = useMemo(() => categoriesData.map(({ id, description }) => ({
     label: description,
     value: String(id),
-  })), [categoriesData]);
+  })), [categoriesData.length]);
   const ticketStatusTypeOptions = useMemo(() => statusesData.map(({ id, description }) => ({
     label: description,
     value: String(id),
-  })), [statusesData]);
+  })), [statusesData.length]);
   const busesTypeOptions = useMemo(() => bushesData.map(({ id, description }) => ({
     label: description,
     value: String(id),
-  })), [bushesData]);
+  })), [bushesData.length]);
+
+  const filterMeta: FilterMetaType = useMemo(() => ({
+    [FilterData.Category.id]: {
+      title: FilterData.Category.title,
+      options: categoryTypeOptions,
+    },
+    [FilterData.Bush.id]: {
+      title: FilterData.Bush.title,
+      options: busesTypeOptions,
+    },
+    [FilterData.Status.id]: {
+      title: FilterData.Status.title,
+      options: ticketStatusTypeOptions,
+    }
+  }), [categoryTypeOptions.length, busesTypeOptions.length, ticketStatusTypeOptions.length]);
 
   const handleApplyFilters = useCallback((selectedFilters: SelectedFiltersType) => {
-    if (selectedFilters[FilterId.CATEGORY]) {
-      const { options } = selectedFilters[FilterId.CATEGORY];
+    const { Category: { id: categoryId }, Bush: { id: bushId }, Status: { id: StatusId } } = FilterData
+
+    if (selectedFilters[categoryId]) {
+      const { options } = selectedFilters[categoryId];
       const valueList = options.map((option) => option.value);
       setCategoriesType(valueList);
     } else {
       setCategoriesType([]);
     }
 
-    if (selectedFilters[FilterId.BUSH]) {
-      const { options } = selectedFilters[FilterId.BUSH];
+    if (selectedFilters[bushId]) {
+      const { options } = selectedFilters[bushId];
       const valueList = options.map((option) => option.value);
       setBushesType(valueList);
     } else {
       setBushesType([]);
     }
 
-    if (selectedFilters[FilterId.STATUS]) {
-      const { options } = selectedFilters[FilterId.STATUS];
+    if (selectedFilters[StatusId]) {
+      const { options } = selectedFilters[StatusId];
       const valueList = options.map((option) => option.value);
       setStatusesType(valueList);
     } else {
@@ -69,8 +86,8 @@ const TicketsList = () => {
   const filteredTickets = useMemo(() => {
     return filterTickets({ ticketsData, petrolStations: petrolStationsEntities, ticketStatusType: statusesType, bushesType, categoriesType });
   }, [
-    ticketsData,
-    statusesType,
+    ticketsData.length,
+    statusesType.length,
     bushesType,
     petrolStationsEntities,
     categoriesType,
@@ -90,28 +107,25 @@ const TicketsList = () => {
     }
   }, [referenceDataStatus.isIdle, ticketsStatus.isIdle, locationDataStatus.isIdle, dispatch])
 
-  return (
+  return isLoading ? <Spinner fullscreen={false} /> : (
     <PageLayout>
       <PageLayout.Title>Задачи</PageLayout.Title>
       <PageLayout.Toolbar>
         <PageLayout.Filters>
-          <Filter onChange={handleApplyFilters}>
+          <Filter onChange={handleApplyFilters} filterMeta={filterMeta}>
             <Filter.MultipleChoice
-              id={FilterId.CATEGORY}
-              title="Категории"
-              options={categoryTypeOptions}
+              id={FilterData.Category.id}
+              {...filterMeta[FilterData.Category.id]}
             />
 
             <Filter.MultipleChoice
-              id={FilterId.STATUS}
-              title="Статусы"
-              options={ticketStatusTypeOptions}
+              id={FilterData.Status.id}
+              {...filterMeta[FilterData.Status.id]}
             />
 
             <Filter.MultipleChoice
-              id={FilterId.BUSH}
-              title="Кусты"
-              options={busesTypeOptions}
+              id={FilterData.Bush.id}
+              {...filterMeta[FilterData.Bush.id]}
             />
 
           </Filter>

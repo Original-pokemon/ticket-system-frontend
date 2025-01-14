@@ -8,12 +8,19 @@ import SingleChoice from './filter-elements/SingleChoice/SingleChoice';
 import FilterTextField from './filter-elements/FilterTextField/FilterTextField';
 import { useEffectSkipMount } from './hooks';
 import Actions from './const';
-import type { ActionType, SelectedFiltersType } from './types';
+import type { ActionType, FilterSectionType, SelectedFiltersType } from './types';
 import { FilterDispatchContext, FilterStateContext } from './filter-context';
+import { useSearchParams } from 'react-router-dom';
+import { buildSearchParamsFromFilters, parseSearchParamsToFilters } from './url-filter-utils';
+
+export type FilterMetaType = {
+  [key: FilterSectionType['id']]: Omit<FilterSectionType, 'id'>;
+}
 
 type FilterProperties = {
   children: ReactElement | ReactElement[];
   onChange: ({ key, value }: SelectedFiltersType) => void;
+  filterMeta: FilterMetaType
 };
 
 function filterReducer(
@@ -73,9 +80,9 @@ function filterReducer(
     }
   }
 }
-
-function Filter({ children, onChange }: FilterProperties) {
-  const [state, dispatch] = useReducer(filterReducer, {});
+function Filter({ children, onChange, filterMeta }: FilterProperties) {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [state, dispatch] = useReducer(filterReducer, {}, () => parseSearchParamsToFilters(searchParams, filterMeta));
   const [drawerOpen, setDrawerOpen] = useState(false);
   const debounceTimeout = useRef<NodeJS.Timeout | null>(null);
   const previousStateReference = useRef<SelectedFiltersType | null>(null);
@@ -100,11 +107,11 @@ function Filter({ children, onChange }: FilterProperties) {
     }
 
     debounceTimeout.current = setTimeout(() => {
-      if (state) {
-        onChange(state);
-      }
+      onChange(state);
+      const newSearchParams = buildSearchParamsFromFilters(state);
+      setSearchParams(newSearchParams);
     }, 300);
-  }, [state, onChange]);
+  }, [state, onChange, setSearchParams]);
 
   return (
     <FilterStateContext.Provider value={state}>

@@ -48,7 +48,6 @@ export const fetchTicketAttachmentData = createAsyncThunk<
 
     return data;
   } catch (error) {
-    console.log('error :>> ', error);
     throw error;
   }
 });

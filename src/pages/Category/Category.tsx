@@ -7,12 +7,11 @@ import Single from "../../components/Single/Single";
 import { TicketTable } from "../../components/tickets/TicketTable";
 import { Chip, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
 import dayjs from "dayjs";
-import { PetrolStationType, TicketType } from "../../types";
 import filterTickets from "../../utils/filter-tickets";
 import PageLayout from "../../components/layouts/PageLayout/PageLayout";
-import { FilterId } from "../TicketsList/const";
+import FilterData from "../TicketsList/const";
 import { SelectedFiltersType } from "../../components/Filter/types";
-import Filter from "../../components/Filter/Filter";
+import Filter, { FilterMetaType } from "../../components/Filter/Filter";
 
 const Category = () => {
   const dispatch = useAppDispatch();
@@ -34,6 +33,7 @@ const Category = () => {
   const busesStatus = useAppSelector(getTicketStatusesStatus)
 
   const isIdle = ticketsStatus.isIdle && referenceDataStatus.isIdle && taskPerformersStatus.isIdle && busesStatus.isIdle;
+  const isLoading = ticketsStatus.isLoading || referenceDataStatus.isLoading || taskPerformersStatus.isLoading || busesStatus.isLoading;
 
   //for filter
   const [statusesType, setStatusesType] = useState<string[]>([]);
@@ -42,17 +42,29 @@ const Category = () => {
   const ticketStatusTypeOptions = useMemo(() => statusesData.map(({ id, description }) => ({
     label: description,
     value: String(id),
-  })), [statusesData]);
+  })), [statusesData.length]);
 
   const busesTypeOptions = useMemo(() => bushesData.map(({ id, description }) => ({
     label: description,
     value: String(id),
-  })), [bushesData]);
+  })), [bushesData.length]);
+
+
+  const filterMeta: FilterMetaType = useMemo(() => ({
+    [FilterData.Bush.id]: {
+      title: FilterData.Bush.title,
+      options: busesTypeOptions,
+    },
+    [FilterData.Status.id]: {
+      title: FilterData.Status.title,
+      options: ticketStatusTypeOptions,
+    }
+  }), [busesTypeOptions, ticketStatusTypeOptions]);
 
   const filteredTickets = useMemo(() => {
     return filterTickets({ ticketsData, petrolStations: petrolStationsEntities, ticketStatusType: statusesType, bushesType, categoriesType: [id] });
   }, [
-    ticketsData,
+    ticketsData.length,
     statusesType,
     bushesType,
     petrolStationsEntities,
@@ -60,20 +72,21 @@ const Category = () => {
 
   const filteredTaskPerformers = useMemo(() => {
     return taskPerformers.filter(({ category_id }) => category_id === id)
-  }, [taskPerformers, id])
+  }, [taskPerformers.length, id])
 
   const handleApplyFilters = useCallback((selectedFilters: SelectedFiltersType) => {
+    const { Bush: { id: bushId }, Status: { id: StatusId } } = FilterData
 
-    if (selectedFilters[FilterId.BUSH]) {
-      const { options } = selectedFilters[FilterId.BUSH];
+    if (selectedFilters[bushId]) {
+      const { options } = selectedFilters[bushId];
       const valueList = options.map((option) => option.value);
       setBushesType(valueList);
     } else {
       setBushesType([]);
     }
 
-    if (selectedFilters[FilterId.STATUS]) {
-      const { options } = selectedFilters[FilterId.STATUS];
+    if (selectedFilters[StatusId]) {
+      const { options } = selectedFilters[StatusId];
       const valueList = options.map((option) => option.value);
       setStatusesType(valueList);
     } else {
@@ -102,23 +115,20 @@ const Category = () => {
     return <Spinner fullscreen={true} />
   }
 
-  return (
+  return isLoading ? <Spinner fullscreen={false} /> : (
     <PageLayout>
       <PageLayout.Title>{category?.description} </PageLayout.Title>
       <PageLayout.Toolbar>
         <PageLayout.Filters>
-          <Filter onChange={handleApplyFilters}>
-
+          <Filter onChange={handleApplyFilters} filterMeta={filterMeta}>
             <Filter.MultipleChoice
-              id={FilterId.STATUS}
-              title="Статусы"
-              options={ticketStatusTypeOptions}
+              id={FilterData.Status.id}
+              {...filterMeta[FilterData.Status.id]}
             />
 
             <Filter.MultipleChoice
-              id={FilterId.BUSH}
-              title="Кусты"
-              options={busesTypeOptions}
+              id={FilterData.Bush.id}
+              {...filterMeta[FilterData.Bush.id]}
             />
 
           </Filter>
