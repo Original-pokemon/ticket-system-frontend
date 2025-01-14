@@ -24,9 +24,14 @@ const ManagerTable = () => {
     managers,
   }) : []
 
-  const handleRowClick = (id: string | number) => {
+  const handleRowClick = (id: string | number, event: React.MouseEvent | undefined) => {
     const path = generatePath(AppRoute.Manager, { id: String(id) });
-    navigate(path);
+
+    if (event?.ctrlKey || event?.metaKey) {
+      window.open(path, "_blank");
+    } else {
+      navigate(path);
+    } 
   }
 
   useEffect(() => {

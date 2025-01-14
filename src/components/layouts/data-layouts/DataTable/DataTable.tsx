@@ -8,7 +8,7 @@ type Properties = {
   disableColumnSorting?: boolean;
   disableToolBar?: boolean;
   disableFooter?: boolean;
-  onClick?: (id: GridRowId) => void;
+  onClick?: (id: GridRowId, event?: React.MouseEvent) => void;
 } & DataGridProps;
 
 function DataTable({
@@ -28,7 +28,7 @@ function DataTable({
 }: Properties) {
   return (
     <DataGridStyled
-      onRowClick={({ id }) => onClick && onClick(id)}
+      onRowClick={({ id }, event) => onClick && onClick(id, event)}
       rows={rows}
       columns={[...columns]}
       filterModel={filterModel}

@@ -29,9 +29,14 @@ const CategoryTable = () => {
     completedStatusId: '7',
   }) : []
 
-  const handleRowClick = (id: string | number) => {
+  const handleRowClick = (id: string | number, event: React.MouseEvent | undefined) => {
     const path = generatePath(AppRoute.TaskPerformer, { id: String(id) });
-    navigate(path)
+
+    if (event?.ctrlKey || event?.metaKey) {
+      window.open(path, "_blank");
+    } else {
+      navigate(path);
+    } 
   }
 
   useEffect(() => {
