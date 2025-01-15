@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useLayoutEffect } from 'react';
 import { Typography, Chip, Stack, Paper, TableContainer, Table, TableHead, TableRow, TableCell, TableBody } from '@mui/material';
 import dayjs from 'dayjs';
 import { useAppDispatch, useAppSelector } from '../../hooks/state';
@@ -12,7 +12,6 @@ import {
   selectCategoryById,
   selectPetrolStationById,
   selectAllAttachments,
-  selectAllStatuses,
   selectAllComments,
   getUniqTicketStatus,
   getAttachmentsStatus,
@@ -22,13 +21,15 @@ import {
   getUniqTicket,
   selectStatusesEntities,
   fetchUsersData,
-  selectUsersEntities
+  selectUsersEntities,
+  getUsersStatus
 } from '../../store';
 import { useLocation } from 'react-router-dom';
 import Spinner from '../../components/Spinner/Spinner';
-import AttachmentImageField from '../../components/tickets/TicketTable/AttachmentImageField';
 import Single from '../../components/Single/Single';
 import PageLayout from '../../components/layouts/PageLayout/PageLayout';
+import AttachmentImageField from '../../components/tickets/Attachment/AttachmentImageField';
+import Attachments from '../../components/tickets/Attachments/Attachments';
 
 export const Ticket = () => {
   const dispatch = useAppDispatch();
@@ -40,21 +41,16 @@ export const Ticket = () => {
   const ticketCategory = useAppSelector((state) => selectCategoryById(state, ticket?.ticket_category || ''));
   const statusesEntities = useAppSelector(selectStatusesEntities);
   const petrolStation = useAppSelector((state) => selectPetrolStationById(state, ticket?.petrol_station_id || ''));
-  const ticketAttachments = useAppSelector(selectAllAttachments);
   const comments = useAppSelector(selectAllComments).filter(comment => comment.ticket_id === id);
   const usersEntities = useAppSelector(selectUsersEntities)
 
   const uniqTicketStatus = useAppSelector(getUniqTicketStatus);
-  const attachmentsStatus = useAppSelector(getAttachmentsStatus);
   const commentsStatus = useAppSelector(getCommentsStatus);
   const referenceDataStatus = useAppSelector(getReferenceDataStatus);
   const petrolStationsStatus = useAppSelector(getPetrolStationsStatus);
+  const userStatus = useAppSelector(getUsersStatus);
 
-  const isLoading = uniqTicketStatus.isLoading || attachmentsStatus.isLoading || commentsStatus.isLoading || referenceDataStatus.isLoading || petrolStationsStatus.isLoading;
-  const isIdle = uniqTicketStatus.isIdle || referenceDataStatus.isIdle || petrolStationsStatus.isIdle;
-  const isError = uniqTicketStatus.isError || attachmentsStatus.isError || commentsStatus.isError || referenceDataStatus.isError || petrolStationsStatus.isError;
-
-  useEffect(() => {
+  useLayoutEffect(() => {
     dispatch(fetchUniqTicketData(id));
     dispatch(fetchUsersData());
   }, [dispatch, id]);
@@ -70,45 +66,60 @@ export const Ticket = () => {
         dispatch(fetchPetrolStationData());
       }
 
-      if (ticket.attachments && ticket.attachments.length > 0 && attachmentsStatus.isIdle) {
-        dispatch(fetchTicketAttachmentData(ticket.attachments));
-      }
-
       if (commentsStatus.isIdle) {
         dispatch(fetchTicketCommentsData(ticket.comments));
       }
     }
-  }, [uniqTicketStatus.isSuccess, ticket, dispatch, referenceDataStatus.isIdle, petrolStationsStatus.isIdle, commentsStatus.isIdle, attachmentsStatus.isIdle, id]);
+  }, [uniqTicketStatus.isSuccess, dispatch, referenceDataStatus.isIdle, petrolStationsStatus.isIdle, commentsStatus.isIdle, id]);
 
-  if (isLoading || isIdle) {
+  useEffect(() => {
+    if (uniqTicketStatus.isSuccess && ticket) {
+      if (referenceDataStatus.isIdle) {
+        dispatch(fetchStatusesData());
+        dispatch(fetchCategoriesData());
+      }
+    }
+  }, [uniqTicketStatus.isSuccess, ticket, ticket?.attachments.length, dispatch, referenceDataStatus.isIdle, petrolStationsStatus.isIdle, commentsStatus.isIdle, id]);
+
+  if (uniqTicketStatus.isLoading || uniqTicketStatus.isIdle) {
     return <Spinner fullscreen />;
   }
 
   return (
     <PageLayout>
       {
-        (isError || !ticket) ?
+        uniqTicketStatus.isError ?
           <Typography variant="h6" color="error">
             Произошла ошибка при загрузке данных тикета.
           </Typography> : (
             <Single>
               <Single.MainContent>
-                <Single.Title>{ticket.title}</Single.Title>
+                <Single.Title>{ticket?.title}</Single.Title>
                 <Single.Section>
                   <Single.Item label="Описание">
-                    <Typography>{ticket.description}</Typography>
+                    <Typography>{ticket?.description}</Typography>
                   </Single.Item>
                   <Single.Item label="АЗС">
+                    {petrolStationsStatus.isLoading ? <Spinner fullscreen={false} /> : (
                     <Chip label={petrolStation?.user?.user_name || 'Не указано'} />
+                    )}
                   </Single.Item>
                   <Single.Item label="Статус">
-                    <Chip label={statusesEntities[ticket.status_id || ''].description || 'Не указано'} />
+                    {referenceDataStatus.isSuccess ? (
+                      <Chip label={statusesEntities[ticket?.status_id || '']?.description || 'Не указано'} />
+                    ) : (
+                      <Spinner fullscreen={false} />
+                    )}
                   </Single.Item>
                   <Single.Item label="Категория">
+                    {referenceDataStatus.isSuccess ? (
                     <Chip label={ticketCategory?.description || 'Не указано'} />
+                    ) : (
+                      <Spinner fullscreen={false} />
+                    )}
                   </Single.Item>
                   <Single.Item label="Заявленная дата исполнения">
-                    {ticket.deadline ? dayjs(ticket.deadline).format('DD.MM.YYYY') : 'Не указана'}
+                    {ticket?.deadline ? dayjs(ticket.deadline).format('DD.MM.YYYY') : 'Не указана'}
                   </Single.Item>
                 </Single.Section>
 
@@ -145,14 +156,19 @@ export const Ticket = () => {
                       </TableRow>
                     </TableHead>
                     <TableBody>
-                      {(ticket?.status_history || []).map(({ id: historyId, ticket_status, created_at, user_id }) => (
+                      {(uniqTicketStatus.isSuccess && ticket?.status_history) && (ticket?.status_history).map(({ id: historyId, ticket_status, created_at, user_id }) => (
                         <TableRow key={historyId}>
                           <TableCell>
-                            <Chip label={statusesEntities[ticket_status || ''].description || 'Не указано'} />
+                            {referenceDataStatus.isSuccess ? (
+                              <Chip label={statusesEntities[ticket_status].description || 'Не указано'} />
+                            ) : (
+                              <Spinner fullscreen={false} />
+                            )}
                           </TableCell>
                           <TableCell>
                             <Typography variant="body2">
-                              {usersEntities[user_id]?.user_name || 'Не указано'}
+
+                              {userStatus.isSuccess ? usersEntities[user_id]?.user_name : <Spinner fullscreen={false} />}
                             </Typography>
                           </TableCell>
                           <TableCell>
