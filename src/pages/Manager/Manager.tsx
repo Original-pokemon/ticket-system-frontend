@@ -155,7 +155,7 @@ const Manager = () => {
           <TicketTable name="tickets_per_category" tickets={filteredTickets} isLoading={managersStatus.isLoading} />
         </Single.MainContent>
 
-        <Single.SidePanel title="Исполнители для категории">
+        <Single.SidePanel title="Прикрепленные АЗС">
           <TableContainer>
             {locationDataStatus.isLoading && <Spinner fullscreen={false} />}
             {locationDataStatus.isSuccess && (

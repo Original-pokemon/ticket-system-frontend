@@ -128,7 +128,7 @@ const PetrolStation = () => {
           <TicketTable name="tickets_per_category" tickets={filteredTickets} isLoading={managersStatus.isLoading} />
         </Single.MainContent>
 
-        <Single.SidePanel title="Исполнители для категории">
+        <Single.SidePanel title="Прикрепленные менеджеры">
           <TableContainer>
             {managersStatus.isLoading && <Spinner fullscreen={false} />}
             {managersStatus.isSuccess && (
