@@ -10,12 +10,9 @@ type AttachmentsProps = {
 }
 
 function Attachments({ attachmentsId }: AttachmentsProps) {
-  console.log('attachmentsId :>> ', attachmentsId);
   const dispatch = useAppDispatch();
   const ticketAttachments = useAppSelector(selectAllAttachments);
   const attachmentsStatus = useAppSelector(getAttachmentsStatus);
-
-  console.log('ticketAttachments :>> ', ticketAttachments);
 
   useEffect(() => {
     if (attachmentsId.length) {
@@ -27,7 +24,7 @@ function Attachments({ attachmentsId }: AttachmentsProps) {
 
   if (attachmentsStatus.isLoading) return <Spinner fullscreen={false} />
 
-  return ticketAttachments.length && (
+  return (
     <Stack direction="row" spacing={2}>
       {ticketAttachments.map(({ id, path }) => (
         <AttachmentImageField key={id} id={id} path={path} imagSize={{ width: 200, height: 200 }} />
