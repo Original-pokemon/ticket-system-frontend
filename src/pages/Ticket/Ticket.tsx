@@ -113,16 +113,7 @@ export const Ticket = () => {
                 </Single.Section>
 
                 <Single.Attachments title="Вложения">
-                  {(ticket.attachments && ticket.attachments.length === 0) && (
-                    <Typography variant="body2">Вложения отсутствуют</Typography>
-                  )}
-                  {ticket.attachments && ticket.attachments.length > 0 && (
-                    <Stack direction="row" spacing={2}>
-                      {ticketAttachments.map(({ id, path }) => (
-                        <AttachmentImageField key={id} id={id} path={path} imagSize={{ width: 200, height: 200 }} />
-                      ))}
-                    </Stack>
-                  )}
+                  <Attachments attachmentsId={ticket?.attachments || []} />
                 </Single.Attachments>
 
                 <Single.Comments title="Комментарии">

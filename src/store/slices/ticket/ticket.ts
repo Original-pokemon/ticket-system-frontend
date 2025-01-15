@@ -90,7 +90,7 @@ const ticketSlice = createSlice({
       })
       .addCase(fetchTicketAttachmentData.fulfilled, (state, action) => {
         state.attachments.status = Status.Success;
-        attachmentsAdapter.upsertMany(state.attachments, action.payload);
+        attachmentsAdapter.setAll(state.attachments, action.payload);
       })
       .addCase(fetchTicketAttachmentData.rejected, (state) => {
         state.attachments.status = Status.Error;
@@ -103,7 +103,7 @@ const ticketSlice = createSlice({
       })
       .addCase(fetchTicketCommentsData.fulfilled, (state, action) => {
         state.comments.status = Status.Success;
-        commentsAdapter.upsertMany(state.comments, action.payload);
+        commentsAdapter.setAll(state.comments, action.payload);
       })
       .addCase(fetchTicketCommentsData.rejected, (state) => {
         state.comments.status = Status.Error;
