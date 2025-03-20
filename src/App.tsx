@@ -24,7 +24,6 @@ const App = () => (
       <Route path={AppRoute.Login} element={<Login />} />
       <Route element={<AuthGuard />}>
         <Route element={<Layout />}>
-          {/* <Route path={AppRoute.Main} element={<Layout />}> */}
           <Route path={AppRoute.Tickets} element={<TicketsList />} />
           <Route path={AppRoute.Ticket} element={<Ticket />} />
           <Route path={AppRoute.Managers} element={<ManagersList />} />

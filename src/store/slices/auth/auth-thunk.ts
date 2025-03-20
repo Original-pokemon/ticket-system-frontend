@@ -4,6 +4,7 @@ import { NameSpace } from '../../const';
 import { APIRoute } from '../../../const';
 import { AxiosError } from 'axios';
 import { toast } from 'react-toastify';
+import { dropToken } from '../../../services/api';
 
 export type AuthDataType = {
   username: string;
@@ -42,6 +43,8 @@ export const logout = createAsyncThunk<
 >(`${NameSpace.Auth}/logout`, async (_args, { extra: api }) => {
   try {
     await api.delete<AuthDataType>(APIRoute.LOGOUT);
+
+    dropToken();
 
     return true
   } catch (error) {

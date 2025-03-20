@@ -1,4 +1,5 @@
 const AppRoute = {
+  Main: "/",
   Tickets: '/tickets',
   Ticket: '/tickets/:id',
   Managers: '/managers',

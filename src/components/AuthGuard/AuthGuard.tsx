@@ -9,7 +9,7 @@ import { AppRoute } from '../../const';
 function AuthGuard(): React.JSX.Element {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { isIdle, isError, isLoading, isSuccess } = useAppSelector(getAuthStatus);
+  const { isIdle, isError, isLoading } = useAppSelector(getAuthStatus);
   const isAuth = useAppSelector(getAuthData);
 
   useEffect(() => {
@@ -22,13 +22,9 @@ function AuthGuard(): React.JSX.Element {
       navigate(AppRoute.Login);
     }
 
-    if (isSuccess && !isAuth) {
-      dispatch(logout());
-      navigate(AppRoute.Login);
-    }
-  }, [dispatch, isIdle, isError, navigate]);
+  }, [dispatch, isIdle, isError, navigate,]);
 
-  if (isLoading) {
+  if (isLoading || !isAuth) {
     return <Spinner fullscreen size={100} />;
   }
 
