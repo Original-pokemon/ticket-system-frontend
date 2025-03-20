@@ -32,10 +32,7 @@ const App = () => (
           <Route path={AppRoute.PetrolStation} element={<PetrolStation />} />
           <Route path={AppRoute.TaskPerformers} element={<CategoriesList />} />
           <Route path={AppRoute.TaskPerformer} element={<Category />} />
-          <Route
-            path={AppRoute.PageNotFound}
-            element={<TicketsList />}
-          />
+          <Route path={AppRoute.PageNotFound} element={<TicketsList />} />
         </Route>
       </Route>
     </Routes>
