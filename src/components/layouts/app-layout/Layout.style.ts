@@ -15,10 +15,12 @@ const LayoutStyleBox = styled(Box)<BoxProps>(({ theme }) => ({
   },
 
   '.container': {
+    width: '100%',
     flexGrow: '1',
-    display: 'flex',
-
-    // gap: '1.2rem',
+    display: 'grid', // Используем grid вместо flex
+    gridTemplateColumns: 'auto 1fr', // Первая колонка для меню, вторая для контента
+    boxSizing: 'border-box',
+    padding: '0',
   },
 
   '.menuContainer': {
@@ -36,9 +38,9 @@ const LayoutStyleBox = styled(Box)<BoxProps>(({ theme }) => ({
   },
 
   '.contentContainer': {
-    width: '100%',
-    margin: '0 1.2rem',
-
+    minWidth: 0, // Важное свойство для предотвращения переполнения в grid
+    padding: '0 1.2rem', // Используем padding вместо margin
+    boxSizing: 'border-box',
     backgroundColor: theme.palette.background.default,
 
     [theme.breakpoints.values.md]: {
