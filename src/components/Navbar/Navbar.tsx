@@ -2,6 +2,7 @@ import {
   Menu as MenuIcon,
   Person as PersonIcon,
   Logout,
+  Refresh as RefreshIcon,
 } from '@mui/icons-material';
 import { useState } from 'react';
 import {
@@ -17,8 +18,17 @@ import {
   Box,
 } from '@mui/material';
 import Logo from '../logo/Logo';
-import { useAppDispatch, useAppSelector } from '../../hooks/state';
-import { logout } from '../../store';
+import { useAppDispatch } from '../../hooks/state';
+import {
+  logout,
+  fetchStatusesData,
+  fetchCategoriesData,
+  fetchPetrolStationData,
+  fetchTicketsData,
+  fetchUsersData,
+  fetchManagersData,
+  fetchTaskPerformersData
+} from '../../store';
 import { useNavigate } from 'react-router-dom';
 import { AppRoute } from '../../const';
 
@@ -61,6 +71,23 @@ function Navbar({ onMenuClick, className }: NavbarProperties) {
         {!isMobile && <Logo />}
 
         <Box sx={{ flexGrow: 1 }} />
+
+        <Tooltip title="Обновить данные">
+          <IconButton
+            color="inherit"
+            onClick={() => {
+              dispatch(fetchTaskPerformersData())
+              dispatch(fetchManagersData())
+              dispatch(fetchStatusesData());
+              dispatch(fetchCategoriesData());
+              dispatch(fetchPetrolStationData());
+              dispatch(fetchTicketsData());
+              dispatch(fetchUsersData());
+            }}
+          >
+            <RefreshIcon />
+          </IconButton>
+        </Tooltip>
 
         <Tooltip title="Открыть настройки пользователя">
           <IconButton color="inherit" onClick={handleOpenUserMenu}>
