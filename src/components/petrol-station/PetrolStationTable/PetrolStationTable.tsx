@@ -1,6 +1,5 @@
 import { useEffect } from "react";
-import { useAppDispatch, useAppSelector } from "../../../hooks/state";
-import { fetchBushData, fetchManagersData, fetchPetrolStationData, fetchTaskPerformersData, fetchTicketsData, getCategoriesStatus, getLocationDataStatus, getManagersStatus, getPetrolStationsStatus, getTaskPerformersStatus, getTicketsStatus, selectAllManagers, selectAllPetrolStations, selectBushesEntities, selectCategoriesEntities, selectManagersEntities, selectPetrolStationsEntities, selectTaskPerformersEntities, selectTicketsEntities } from "../../../store";
+import { usePetrolStations, useBushesEntities, useLocationDataStatus, useLocationDataActions, useManagersEntities, useManagersStatus, useUserManagementActions } from "../../../store";
 import Spinner from "../../Spinner/Spinner";
 import DataTable from "../../layouts/data-layouts/DataTable/DataTable";
 import getPetrolStationColumns from "./get-petrol-station-columns";
@@ -12,13 +11,14 @@ const columns = getPetrolStationColumns()
 
 const PetrolStationTable = () => {
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
-  const petrolStations = useAppSelector(selectAllPetrolStations);
-  const managers = useAppSelector(selectManagersEntities);
-  const bushesData = useAppSelector(selectBushesEntities);
+  const { fetchPetrolStations, fetchBushes } = useLocationDataActions();
+  const { fetchManagersData } = useUserManagementActions();
+  const petrolStations = usePetrolStations();
+  const managers = useManagersEntities();
+  const bushesData = useBushesEntities();
 
-  const locationDataStatus = useAppSelector(getLocationDataStatus)
-  const managersStatus = useAppSelector(getManagersStatus)
+  const locationDataStatus = useLocationDataStatus();
+  const managersStatus = useManagersStatus();
 
   const isSuccess = managersStatus.isSuccess || locationDataStatus.isSuccess
   const isLoading = managersStatus.isLoading || locationDataStatus.isLoading
@@ -41,14 +41,14 @@ const PetrolStationTable = () => {
 
   useEffect(() => {
     if (locationDataStatus.isIdle) {
-      dispatch(fetchPetrolStationData())
-      dispatch(fetchBushData())
+      fetchPetrolStations();
+      fetchBushes();
     }
 
     if (managersStatus.isIdle) {
-      dispatch(fetchManagersData())
+      fetchManagersData();
     }
-  }, [dispatch, locationDataStatus.isIdle])
+  }, [locationDataStatus.isIdle, managersStatus.isIdle, fetchPetrolStations, fetchBushes, fetchManagersData]);
 
   return isLoading ? <Spinner fullscreen={false} /> : (
     <DataTable

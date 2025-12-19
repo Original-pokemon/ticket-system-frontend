@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import { AppRoute, Status } from "../../../const";
-import { useAppDispatch, useAppSelector } from "../../../hooks/state";
-import { fetchCategoriesData, fetchTaskPerformersData, fetchTicketsData, getCategoriesStatus, getTaskPerformersStatus, getTicketsStatus, selectCategoriesEntities, selectPetrolStationsEntities, selectTaskPerformersEntities, selectTicketsEntities } from "../../../store";
+import { useCategoriesEntities, useCategoriesStatus, useReferenceDataActions, useTicketsEntities, useTicketsStatus, useTicketActions, useUserManagementActions, useTaskPerformersEntities, useTaskPerformersStatus } from "../../../store";
 import getCategoryRows from "./get-category-rows";
 import getCategoryColumns from "./get-category-columns";
 import Spinner from "../../Spinner/Spinner";
@@ -9,15 +8,17 @@ import DataTable from "../../layouts/data-layouts/DataTable/DataTable";
 import { generatePath, useNavigate } from "react-router-dom";
 
 const CategoryTable = () => {
+  const { fetchCategoriesData } = useReferenceDataActions()
+  const { fetchTicketsData } = useTicketActions()
+  const { fetchTaskPerformersData } = useUserManagementActions()
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
-  const categories = useAppSelector(selectCategoriesEntities);
-  const tickets = useAppSelector(selectTicketsEntities);
-  const performers = useAppSelector(selectTaskPerformersEntities);
+  const categories = useCategoriesEntities()
+  const tickets = useTicketsEntities();
+  const performers = useTaskPerformersEntities();
 
-  const categoriesStatus = useAppSelector(getCategoriesStatus)
-  const ticketsStatus = useAppSelector(getTicketsStatus)
-  const taskPerformersStatus = useAppSelector(getTaskPerformersStatus)
+  const categoriesStatus = useCategoriesStatus()
+  const ticketsStatus = useTicketsStatus()
+  const taskPerformersStatus = useTaskPerformersStatus()
 
   const isSuccess = categoriesStatus.isSuccess && ticketsStatus.isSuccess && taskPerformersStatus.isSuccess
   const isLoading = categoriesStatus.isLoading || ticketsStatus.isLoading || taskPerformersStatus.isLoading
@@ -41,17 +42,17 @@ const CategoryTable = () => {
 
   useEffect(() => {
     if (categoriesStatus.isIdle) {
-      dispatch(fetchCategoriesData())
+      fetchCategoriesData()
     }
 
     if (ticketsStatus.isIdle) {
-      dispatch(fetchTicketsData())
+      fetchTicketsData()
     }
 
     if (taskPerformersStatus.isIdle) {
-      dispatch(fetchTaskPerformersData())
+      fetchTaskPerformersData()
     }
-  }, [dispatch, categoriesStatus.isIdle])
+  }, [categoriesStatus.isIdle, ticketsStatus.isIdle, taskPerformersStatus.isIdle, fetchTicketsData, fetchTaskPerformersData])
 
   return isLoading ? <Spinner fullscreen={false} /> : (
     <DataTable

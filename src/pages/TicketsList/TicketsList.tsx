@@ -1,6 +1,5 @@
 import PageLayout from "../../components/layouts/PageLayout/PageLayout"
-import { fetchBushData, fetchCategoriesData, fetchPetrolStationData, fetchStatusesData, fetchTicketsData, getLocationDataStatus, getPetrolStationsStatus, getReferenceDataStatus, getTicketsStatus, selectAllBushes, selectAllCategories, selectAllPetrolStations, selectAllStatuses, selectAllTickets, selectPetrolStationsEntities } from "../../store";
-import { useAppDispatch, useAppSelector } from "../../hooks/state";
+import { usePetrolStationsEntities, useLocationDataStatus, useLocationDataActions, useBushes, useCategories, useStatuses, useReferenceDataStatus, useReferenceDataActions, useTickets, useTicketsStatus, useTicketActions } from "../../store";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import Filter, { FilterMetaType } from "../../components/Filter/Filter";
 import { SelectedFiltersType } from "../../components/Filter/types";
@@ -10,16 +9,18 @@ import FilterData from "./const";
 import Spinner from "../../components/Spinner/Spinner";
 
 const TicketsList = () => {
-  const dispatch = useAppDispatch();
-  const ticketsData = useAppSelector(selectAllTickets)
-  const categoriesData = useAppSelector(selectAllCategories)
-  const statusesData = useAppSelector(selectAllStatuses)
-  const bushesData = useAppSelector(selectAllBushes)
-  const petrolStationsEntities = useAppSelector(selectPetrolStationsEntities)
+  const { fetchPetrolStations, fetchBushes } = useLocationDataActions();
+  const { fetchCategoriesData, fetchStatusesData } = useReferenceDataActions();
+  const { fetchTicketsData } = useTicketActions();
+  const ticketsData = useTickets()
+  const categoriesData = useCategories()
+  const statusesData = useStatuses()
+  const bushesData = useBushes()
+  const petrolStationsEntities = usePetrolStationsEntities()
 
-  const ticketsStatus = useAppSelector(getTicketsStatus)
-  const referenceDataStatus = useAppSelector(getReferenceDataStatus)
-  const locationDataStatus = useAppSelector(getLocationDataStatus)
+  const ticketsStatus = useTicketsStatus()
+  const referenceDataStatus = useReferenceDataStatus()
+  const locationDataStatus = useLocationDataStatus()
   const isLoading = ticketsStatus.isLoading || referenceDataStatus.isLoading || locationDataStatus.isLoading
 
   const [categoriesType, setCategoriesType] = useState<string[]>([]);
@@ -81,7 +82,7 @@ const TicketsList = () => {
     } else {
       setStatusesType([]);
     }
-  }, [dispatch])
+  }, [])
 
   const filteredTickets = useMemo(() => {
     return filterTickets({ ticketsData, petrolStations: petrolStationsEntities, ticketStatusType: statusesType, bushesType, categoriesType });
@@ -95,17 +96,17 @@ const TicketsList = () => {
 
   useEffect(() => {
     if (referenceDataStatus.isIdle) {
-      dispatch(fetchStatusesData())
-      dispatch(fetchCategoriesData())
+      fetchStatusesData();
+      fetchCategoriesData();
     }
     if (locationDataStatus.isIdle) {
-      dispatch(fetchPetrolStationData())
-      dispatch(fetchBushData())
+      fetchPetrolStations();
+      fetchBushes();
     }
     if (ticketsStatus.isIdle) {
-      dispatch(fetchTicketsData())
+      fetchTicketsData()
     }
-  }, [referenceDataStatus.isIdle, ticketsStatus.isIdle, locationDataStatus.isIdle, dispatch])
+  }, [referenceDataStatus.isIdle, ticketsStatus.isIdle, locationDataStatus.isIdle, fetchPetrolStations, fetchBushes, fetchStatusesData, fetchCategoriesData, fetchTicketsData])
 
   return isLoading ? <Spinner fullscreen={false} /> : (
     <PageLayout>

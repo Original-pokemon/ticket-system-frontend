@@ -18,16 +18,12 @@ import {
   Box,
 } from '@mui/material';
 import Logo from '../logo/Logo';
-import { useAppDispatch } from '../../hooks/state';
 import {
-  logout,
-  fetchStatusesData,
-  fetchCategoriesData,
-  fetchPetrolStationData,
-  fetchTicketsData,
-  fetchUsersData,
-  fetchManagersData,
-  fetchTaskPerformersData
+  useLocationDataActions,
+  useReferenceDataActions,
+  useTicketActions,
+  useUserManagementActions,
+  useAuthActions
 } from '../../store';
 import { useNavigate } from 'react-router-dom';
 import { AppRoute } from '../../const';
@@ -38,7 +34,11 @@ type NavbarProperties = {
 };
 
 function Navbar({ onMenuClick, className }: NavbarProperties) {
-  const dispatch = useAppDispatch();
+  const { fetchCategoriesData, fetchStatusesData } = useReferenceDataActions()
+  const { fetchPetrolStations } = useLocationDataActions()
+  const { fetchTicketsData } = useTicketActions()
+  const { fetchUsersData, fetchManagersData, fetchTaskPerformersData } = useUserManagementActions()
+  const { logout } = useAuthActions()
   const navigate = useNavigate();
 
   const [anchorElement, setAnchorElement] = useState<undefined | HTMLElement>();
@@ -76,13 +76,13 @@ function Navbar({ onMenuClick, className }: NavbarProperties) {
           <IconButton
             color="inherit"
             onClick={() => {
-              dispatch(fetchTaskPerformersData())
-              dispatch(fetchManagersData())
-              dispatch(fetchStatusesData());
-              dispatch(fetchCategoriesData());
-              dispatch(fetchPetrolStationData());
-              dispatch(fetchTicketsData());
-              dispatch(fetchUsersData());
+              fetchTaskPerformersData()
+              fetchManagersData()
+              fetchPetrolStations();
+              fetchTicketsData();
+              fetchUsersData();
+              fetchStatusesData()
+              fetchCategoriesData()
             }}
           >
             <RefreshIcon />
@@ -111,7 +111,7 @@ function Navbar({ onMenuClick, className }: NavbarProperties) {
         >
           <MenuItem
             onClick={() => {
-              dispatch(logout());
+              logout();
               navigate(AppRoute.Login);
               handleCloseUserMenu();
             }}

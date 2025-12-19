@@ -1,85 +1,77 @@
 import { useEffect, useLayoutEffect } from 'react';
 import { Typography, Chip, Stack, Paper, TableContainer, Table, TableHead, TableRow, TableCell, TableBody } from '@mui/material';
 import dayjs from 'dayjs';
-import { useAppDispatch, useAppSelector } from '../../hooks/state';
 import {
-  fetchStatusesData,
-  fetchCategoriesData,
-  fetchPetrolStationData,
-  fetchUniqTicketData,
-  fetchTicketAttachmentData,
-  fetchTicketCommentsData,
-  selectCategoryById,
-  selectPetrolStationById,
-  selectAllAttachments,
-  selectAllComments,
-  getUniqTicketStatus,
-  getAttachmentsStatus,
-  getCommentsStatus,
-  getReferenceDataStatus,
-  getPetrolStationsStatus,
-  getUniqTicket,
-  selectStatusesEntities,
-  fetchUsersData,
-  selectUsersEntities,
-  getUsersStatus
+  useUserManagementActions,
+  useUsersEntities,
+  useUsersStatus,
+  usePetrolStationsStatus,
+  useLocationDataActions,
+  useReferenceDataStatus,
+  useReferenceDataActions,
+  useCategoryById,
+  usePetrolStationById,
+  useStatusesEntities,
+  useUniqTicket,
+  useUniqTicketStatus,
+  useComments,
+  useCommentsStatus,
+  useTicketActions
 } from '../../store';
 import { useLocation } from 'react-router-dom';
 import Spinner from '../../components/Spinner/Spinner';
 import Single from '../../components/Single/Single';
 import PageLayout from '../../components/layouts/PageLayout/PageLayout';
-import AttachmentImageField from '../../components/tickets/Attachment/AttachmentImageField';
 import Attachments from '../../components/tickets/Attachments/Attachments';
 
 export const Ticket = () => {
-  const dispatch = useAppDispatch();
+  const { fetchCategoriesData, fetchStatusesData } = useReferenceDataActions()
+  const { fetchPetrolStations } = useLocationDataActions()
+  const { fetchUniqTicketData, fetchTicketCommentsData } = useTicketActions()
+  const { fetchUsersData } = useUserManagementActions()
   const location = useLocation();
   const path = location.pathname.split('/');
   const id = path[2];
 
-  const ticket = useAppSelector(getUniqTicket);
-  const ticketCategory = useAppSelector((state) => selectCategoryById(state, ticket?.ticket_category || ''));
-  const statusesEntities = useAppSelector(selectStatusesEntities);
-  const petrolStation = useAppSelector((state) => selectPetrolStationById(state, ticket?.petrol_station_id || ''));
-  const comments = useAppSelector(selectAllComments).filter(comment => comment.ticket_id === id);
-  const usersEntities = useAppSelector(selectUsersEntities)
+  const ticket = useUniqTicket();
+  const ticketCategory = ticket?.ticket_category ? useCategoryById(ticket?.ticket_category) : null
+  const allComments = useComments();
+  const comments = allComments.filter(comment => comment.ticket_id === id);
+  const usersEntities = useUsersEntities()
+  const petrolStation = ticket?.petrol_station_id ? usePetrolStationById(ticket?.petrol_station_id) : null
+  const statusesEntities = useStatusesEntities()
 
-  const uniqTicketStatus = useAppSelector(getUniqTicketStatus);
-  const commentsStatus = useAppSelector(getCommentsStatus);
-  const referenceDataStatus = useAppSelector(getReferenceDataStatus);
-  const petrolStationsStatus = useAppSelector(getPetrolStationsStatus);
-  const userStatus = useAppSelector(getUsersStatus);
+  const uniqTicketStatus = useUniqTicketStatus();
+  const commentsStatus = useCommentsStatus();
+  const referenceDataStatus = useReferenceDataStatus();
+  const petrolStationsStatus = usePetrolStationsStatus();
+  const userStatus = useUsersStatus();
 
   useLayoutEffect(() => {
-    dispatch(fetchUniqTicketData(id));
-    dispatch(fetchUsersData());
-  }, [dispatch, id]);
+    fetchUniqTicketData(id);
+    fetchUsersData();
+  }, [fetchUniqTicketData, fetchUsersData, id]);
 
   useEffect(() => {
     if (uniqTicketStatus.isSuccess && ticket) {
-      if (referenceDataStatus.isIdle) {
-        dispatch(fetchStatusesData());
-        dispatch(fetchCategoriesData());
-      }
-
       if (petrolStationsStatus.isIdle) {
-        dispatch(fetchPetrolStationData());
+        fetchPetrolStations()
       }
 
       if (commentsStatus.isIdle) {
-        dispatch(fetchTicketCommentsData(ticket.comments));
+        fetchTicketCommentsData(ticket.comments);
       }
     }
-  }, [uniqTicketStatus.isSuccess, dispatch, referenceDataStatus.isIdle, petrolStationsStatus.isIdle, commentsStatus.isIdle, id]);
+  }, [uniqTicketStatus.isSuccess, fetchPetrolStations, fetchTicketCommentsData, referenceDataStatus.isIdle, petrolStationsStatus.isIdle, commentsStatus.isIdle, id, ticket]);
 
   useEffect(() => {
     if (uniqTicketStatus.isSuccess && ticket) {
       if (referenceDataStatus.isIdle) {
-        dispatch(fetchStatusesData());
-        dispatch(fetchCategoriesData());
+        fetchStatusesData();
+        fetchCategoriesData();
       }
     }
-  }, [uniqTicketStatus.isSuccess, ticket, ticket?.attachments.length, dispatch, referenceDataStatus.isIdle, petrolStationsStatus.isIdle, commentsStatus.isIdle, id]);
+  }, [uniqTicketStatus.isSuccess, ticket, ticket?.attachments.length, referenceDataStatus.isIdle, petrolStationsStatus.isIdle, commentsStatus.isIdle, id, fetchCategoriesData, fetchStatusesData, fetchPetrolStations, fetchTicketCommentsData]);
 
   if (uniqTicketStatus.isLoading || uniqTicketStatus.isIdle) {
     return <Spinner fullscreen />;
@@ -189,3 +181,4 @@ export const Ticket = () => {
     </PageLayout>
   );
 };
+

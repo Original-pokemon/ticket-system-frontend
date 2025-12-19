@@ -1,7 +1,6 @@
 import { useLocation } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "../../hooks/state";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { fetchBushData, fetchCategoriesData, fetchStatusesData, fetchTaskPerformersData, fetchTicketsData, getCategoriesStatus, getReferenceDataStatus, getTaskPerformersStatus, getTicketsStatus, getTicketStatusesStatus, selectAllBushes, selectAllStatuses, selectAllTaskPerformers, selectAllTickets, selectBushesEntities, selectCategoriesEntities, selectCategoryById, selectPetrolStationsEntities, selectStatusesEntities } from "../../store";
+import { useLocationDataActions, useBushes, usePetrolStationsEntities, useBushesEntities, useCategoryById, useStatuses, useReferenceDataStatus, useBushesStatus, useReferenceDataActions, useTickets, useTicketsStatus, useTicketActions, useTaskPerformers, useTaskPerformersStatus, useUserManagementActions } from "../../store";
 import Spinner from "../../components/Spinner/Spinner";
 import Single from "../../components/Single/Single";
 import { TicketTable } from "../../components/tickets/TicketTable";
@@ -14,23 +13,26 @@ import { SelectedFiltersType } from "../../components/Filter/types";
 import Filter, { FilterMetaType } from "../../components/Filter/Filter";
 
 const Category = () => {
-  const dispatch = useAppDispatch();
+  const { fetchBushes } = useLocationDataActions()
+  const { fetchCategoriesData, fetchStatusesData } = useReferenceDataActions()
+  const { fetchTicketsData } = useTicketActions()
+  const { fetchTaskPerformersData } = useUserManagementActions()
   const location = useLocation();
   const path = location.pathname.split('/');
   const id = path[2];
 
-  const ticketsData = useAppSelector(selectAllTickets)
-  const category = useAppSelector((state) => selectCategoryById(state, id))
-  const petrolStationsEntities = useAppSelector(selectPetrolStationsEntities);
-  const statusesData = useAppSelector(selectAllStatuses);
-  const bushesEntities = useAppSelector(selectBushesEntities);
-  const bushesData = useAppSelector(selectAllBushes);
-  const taskPerformers = useAppSelector(selectAllTaskPerformers)
+  const ticketsData = useTickets()
+  const category = useCategoryById(id)
+  const petrolStationsEntities = usePetrolStationsEntities();
+  const statusesData = useStatuses()
+  const bushesEntities = useBushesEntities();
+  const bushesData = useBushes();
+  const taskPerformers = useTaskPerformers()
 
-  const ticketsStatus = useAppSelector(getTicketsStatus)
-  const referenceDataStatus = useAppSelector(getReferenceDataStatus)
-  const taskPerformersStatus = useAppSelector(getTaskPerformersStatus)
-  const busesStatus = useAppSelector(getTicketStatusesStatus)
+  const ticketsStatus = useTicketsStatus()
+  const referenceDataStatus = useReferenceDataStatus()
+  const taskPerformersStatus = useTaskPerformersStatus()
+  const busesStatus = useBushesStatus()
 
   const isIdle = ticketsStatus.isIdle && referenceDataStatus.isIdle && taskPerformersStatus.isIdle && busesStatus.isIdle;
   const isLoading = ticketsStatus.isLoading || referenceDataStatus.isLoading || taskPerformersStatus.isLoading || busesStatus.isLoading;
@@ -92,24 +94,24 @@ const Category = () => {
     } else {
       setStatusesType([]);
     }
-  }, [dispatch])
+  }, [])
 
   useEffect(() => {
     if (ticketsStatus.isIdle) {
-      dispatch(fetchTicketsData());
+      fetchTicketsData();
     }
     if (referenceDataStatus.isIdle) {
-      dispatch(fetchCategoriesData());
-      dispatch(fetchStatusesData())
+      fetchCategoriesData()
+      fetchStatusesData()
     }
     if (taskPerformersStatus.isIdle) {
-      dispatch(fetchTaskPerformersData());
+      fetchTaskPerformersData();
     }
     if (busesStatus.isIdle) {
-      dispatch(fetchBushData())
+      fetchBushes()
     }
 
-  }, [dispatch]);
+  }, [ticketsStatus.isIdle, fetchTicketsData, referenceDataStatus.isIdle, taskPerformersStatus.isIdle, busesStatus.isIdle, fetchCategoriesData, fetchStatusesData, fetchTaskPerformersData, fetchBushes]);
 
   if (isIdle) {
     return <Spinner fullscreen={true} />

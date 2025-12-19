@@ -1,7 +1,6 @@
 import type { TicketType } from "../../../types";
 import { useEffect } from "react";
-import { fetchCategoriesData, fetchPetrolStationData, fetchStatusesData, getPetrolStationsStatus, getReferenceDataStatus, getTicketsStatus, selectAllCategories, selectAllPetrolStations, selectAllStatuses, selectAllTickets, selectCategoriesEntities, selectPetrolStationsEntities, selectStatusesEntities } from "../../../store";
-import { useAppDispatch, useAppSelector } from "../../../hooks/state";
+import { useCategoriesEntities, useLocationDataActions, usePetrolStationsEntities, usePetrolStationsStatus, useReferenceDataActions, useStatusesEntities, useStatusesStatus } from "../../../store";
 import DataTable from "../../layouts/data-layouts/DataTable/DataTable";
 import ticketColumns from "./TicketColumns";
 import Spinner from "../../Spinner/Spinner";
@@ -15,14 +14,15 @@ type TicketTableProps = {
 }
 
 const TicketTable = ({ name, tickets, isLoading }: TicketTableProps) => {
+  const { fetchPetrolStations } = useLocationDataActions()
+  const { fetchCategoriesData, fetchStatusesData } = useReferenceDataActions()
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
-  const petrolStationsEntities = useAppSelector(selectPetrolStationsEntities);
-  const categoriesEntities = useAppSelector(selectCategoriesEntities);
-  const ticketStatusesEntities = useAppSelector(selectStatusesEntities);
+  const petrolStationsEntities = usePetrolStationsEntities()
+  const categoriesEntities = useCategoriesEntities();
+  const ticketStatusesEntities = useStatusesEntities();
 
-  const { isIdle: isReferenceDataStatusIdle } = useAppSelector(getReferenceDataStatus)
-  const { isIdle: isPetrolStationsStatusIdle } = useAppSelector(getPetrolStationsStatus)
+  const { isIdle: isReferenceDataStatusIdle } = useStatusesStatus()
+  const { isIdle: isPetrolStationsStatusIdle } = usePetrolStationsStatus()
 
   const isIdle = isReferenceDataStatusIdle || isPetrolStationsStatusIdle
 
@@ -45,12 +45,12 @@ const TicketTable = ({ name, tickets, isLoading }: TicketTableProps) => {
 
   useEffect(() => {
     if (isReferenceDataStatusIdle) {
-      dispatch(fetchStatusesData())
-      dispatch(fetchCategoriesData())
+      fetchCategoriesData()
+      fetchStatusesData()
     }
 
     if (isPetrolStationsStatusIdle) {
-      dispatch(fetchPetrolStationData())
+      fetchPetrolStations()
     }
   })
 

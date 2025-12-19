@@ -1,6 +1,5 @@
 import { useEffect } from "react";
-import { useAppDispatch, useAppSelector } from "../../../hooks/state";
-import { fetchManagersData, getManagersStatus, selectAllManagers } from "../../../store";
+import { useManagers, useManagersStatus, useUserManagementActions } from "../../../store";
 import DataTable from "../../layouts/data-layouts/DataTable/DataTable";
 import getManagerColumns from "./get-manager-columns";
 import getManagerRows from "./get-manager-rows";
@@ -12,10 +11,10 @@ const columns = getManagerColumns()
 
 const ManagerTable = () => {
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
-  const managers = useAppSelector(selectAllManagers);
+  const { fetchManagersData } = useUserManagementActions();
+  const managers = useManagers();
 
-  const managersStatus = useAppSelector(getManagersStatus)
+  const managersStatus = useManagersStatus()
 
   const isSuccess = managersStatus.isSuccess
   const isLoading = managersStatus.isLoading
@@ -36,9 +35,9 @@ const ManagerTable = () => {
 
   useEffect(() => {
     if (managersStatus.isIdle) {
-      dispatch(fetchManagersData())
+      fetchManagersData()
     }
-  }, [dispatch, managersStatus.isIdle])
+  }, [managersStatus.isIdle, fetchManagersData])
 
   return isLoading ? <Spinner fullscreen={false} /> : (
     <DataTable

@@ -1,101 +1,81 @@
-import { createSelector } from "@reduxjs/toolkit";
-import { InitialStateType } from "../../reducer";
-import { managersAdapter, taskPerformersAdapter, usersAdapter } from "./user-management";
-import { Status } from "../../../const";
-import { StatusType } from "../../../types";
-import { NameSpace } from "../../const";
+import { useUserManagementStore } from './user-management-store';
+import { Status } from '../../../const';
+import { StatusType } from '../../../types';
 
-type UserManagementStateType = Pick<
-  InitialStateType,
-  typeof NameSpace.UserManagement
->;
+export const useUsers = () => {
+  const { ids, entities } = useUserManagementStore.use.users();
+  return ids.map((id) => entities[id]);
+};
 
-export const {
-  selectAll: selectAllUsers,
-  selectById: selectUserById,
-  selectEntities: selectUsersEntities,
-} = usersAdapter.getSelectors(
-  (state: UserManagementStateType) => state[NameSpace.UserManagement].users
-);
+export const useUsersEntities = () => useUserManagementStore.use.users().entities;
 
-export const {
-  selectAll: selectAllManagers,
-  selectById: selectManagerById,
-  selectEntities: selectManagersEntities,
-} = managersAdapter.getSelectors(
-  (state: UserManagementStateType) => state[NameSpace.UserManagement].managers
-);
+export const useUserById = (id: string) => {
+  const entities = useUserManagementStore.use.users().entities;
+  return entities[id];
+};
 
-export const {
-  selectAll: selectAllTaskPerformers,
-  selectById: selectTaskPerformerById,
-  selectEntities: selectTaskPerformersEntities,
-} = taskPerformersAdapter.getSelectors(
-  (state: UserManagementStateType) => state[NameSpace.UserManagement].taskPerformers
-);
+export const useManagers = () => {
+  const { ids, entities } = useUserManagementStore.use.managers();
+  return ids.map((id) => entities[id]);
+};
 
+export const useManagersEntities = () => useUserManagementStore.use.managers().entities;
 
-export const getManagersStatus = createSelector(
-  (state: UserManagementStateType) => state[NameSpace.UserManagement].managers.status,
-  (status) => ({
+export const useManagerById = (id: string) => {
+  const entities = useUserManagementStore.use.managers().entities;
+  return entities[id];
+};
+
+export const useTaskPerformers = () => {
+  const { ids, entities } = useUserManagementStore.use.taskPerformers();
+  return ids.map((id) => entities[id]);
+};
+
+export const useTaskPerformersEntities = () => useUserManagementStore.use.taskPerformers().entities;
+
+export const useTaskPerformerById = (id: string) => {
+  const entities = useUserManagementStore.use.taskPerformers().entities;
+  return entities[id];
+};
+
+export const useUsersStatus = () => {
+  const status = useUserManagementStore.use.users().status;
+  return {
     status,
     isIdle: status === Status.Idle,
     isLoading: status === Status.Loading,
     isError: status === Status.Error,
     isSuccess: status === Status.Success,
-  }),
-);
+  };
+};
 
-export const getTaskPerformersStatus = createSelector(
-  (state: UserManagementStateType) => state[NameSpace.UserManagement].taskPerformers.status,
-  (status) => ({
+export const useManagersStatus = () => {
+  const status = useUserManagementStore.use.managers().status;
+  return {
     status,
     isIdle: status === Status.Idle,
     isLoading: status === Status.Loading,
     isError: status === Status.Error,
     isSuccess: status === Status.Success,
-  }),
-);
+  };
+};
 
-export const getUsersStatus = createSelector(
-  (state: UserManagementStateType) => state[NameSpace.UserManagement].users.status,
-  (status) => ({
+export const useTaskPerformersStatus = () => {
+  const status = useUserManagementStore.use.taskPerformers().status;
+  return {
     status,
     isIdle: status === Status.Idle,
     isLoading: status === Status.Loading,
     isError: status === Status.Error,
     isSuccess: status === Status.Success,
-  }),
-);
+  };
+};
 
-
-export const getUserManagementStatus = createSelector(
-  getManagersStatus,
-  getTaskPerformersStatus,
-  getUsersStatus,
-  (managersStatus, usersStatus, taskPerformersStatus) => {
-    const statuses = [managersStatus.status, usersStatus.status, taskPerformersStatus.status];
-
-    let status: StatusType = Status.Idle;
-
-    if (statuses.every((status) => status === Status.Success)) {
-      status = Status.Success;
-    }
-
-    if (statuses.includes(Status.Loading)) {
-      status = Status.Loading;
-    }
-
-    if (statuses.includes(Status.Error)) {
-      status = Status.Error;
-    }
-
-    return {
-      status,
-      isIdle: status === Status.Idle,
-      isLoading: status === Status.Loading,
-      isError: status === Status.Error,
-      isSuccess: status === Status.Success,
-    }
-  },
-);
+export const useUserManagementActions = () => ({
+  fetchUsersData: useUserManagementStore.use.fetchUsersData(),
+  fetchUniqUserData: useUserManagementStore.use.fetchUniqUserData(),
+  fetchManagersData: useUserManagementStore.use.fetchManagersData(),
+  fetchUniqManagerData: useUserManagementStore.use.fetchUniqManagerData(),
+  fetchTaskPerformersData: useUserManagementStore.use.fetchTaskPerformersData(),
+  fetchUniqTaskPerformerData: useUserManagementStore.use.fetchUniqTaskPerformerData(),
+});

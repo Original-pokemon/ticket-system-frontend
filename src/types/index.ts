@@ -8,7 +8,6 @@ export * from './petrol-station';
 export * from './status';
 export * from './ticket';
 export * from './user';
-export * from './thunk-config'
-export * from './state'
+export * from './request-status'
 export * from './ticket-history'
 export * from './app-route'

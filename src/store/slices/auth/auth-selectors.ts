@@ -1,21 +1,21 @@
-import { createSelector } from "@reduxjs/toolkit";
-import { Status } from "../../../const";
-import { AuthDataType } from "../..";
-import { InitialStateType } from "../../reducer";
-import { NameSpace } from "../../const";
+import { useAuthStore } from './auth-store';
+import { Status } from '../../../const';
 
-type AuthStateType = Pick<InitialStateType, typeof NameSpace.Auth>;
-
-export const getAuthStatus = createSelector(
-  (state: AuthStateType) => state[NameSpace.Auth].status,
-  (status) => ({
+export const useAuthStatus = () => {
+  const status = useAuthStore.use.status();
+  return {
     status,
     isIdle: status === Status.Idle,
     isLoading: status === Status.Loading,
     isError: status === Status.Error,
     isSuccess: status === Status.Success,
-  }),
-);
+  };
+};
 
-export const getAuthData = (state: AuthStateType): boolean =>
-  state[NameSpace.Auth].authData;
+export const useAuthData = () => useAuthStore.use.authData();
+
+export const useAuthActions = () => ({
+  postAuthData: useAuthStore.use.postAuthData(),
+  logout: useAuthStore.use.logout(),
+  checkAuth: useAuthStore.use.checkAuth(),
+});

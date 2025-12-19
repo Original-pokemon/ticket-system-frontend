@@ -1,6 +1,5 @@
 import { useEffect } from "react";
-import { fetchTicketAttachmentData, getAttachmentsStatus, selectAllAttachments } from "../../../store";
-import { useAppDispatch, useAppSelector } from "../../../hooks/state";
+import { useAttachments, useAttachmentsStatus, useTicketActions } from "../../../store";
 import { Stack, Typography } from "@mui/material";
 import AttachmentImageField from "../Attachment/AttachmentImageField";
 import Spinner from "../../Spinner/Spinner";
@@ -10,15 +9,15 @@ type AttachmentsProps = {
 }
 
 function Attachments({ attachmentsId }: AttachmentsProps) {
-  const dispatch = useAppDispatch();
-  const ticketAttachments = useAppSelector(selectAllAttachments);
-  const attachmentsStatus = useAppSelector(getAttachmentsStatus);
+  const { fetchTicketAttachmentData } = useTicketActions();
+  const ticketAttachments = useAttachments();
+  const attachmentsStatus = useAttachmentsStatus();
 
   useEffect(() => {
     if (attachmentsId.length) {
-      dispatch(fetchTicketAttachmentData(attachmentsId));
+      fetchTicketAttachmentData(attachmentsId);
     }
-  }, [dispatch, attachmentsId]);
+  }, [attachmentsId, fetchTicketAttachmentData]);
 
   if (!attachmentsId.length) return <Typography variant="body2">Вложения отсутствуют</Typography>
 

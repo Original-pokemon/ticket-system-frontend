@@ -2,8 +2,6 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
@@ -15,8 +13,7 @@ import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { Controller, useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { getAuthData, getAuthStatus, postAuthData } from '../../store';
-import { useAppDispatch, useAppSelector } from '../../hooks/state';
+import { useAuthData, useAuthStatus, useAuthActions } from '../../store';
 import Spinner from '../../components/Spinner/Spinner';
 import { AppRoute } from '../../const';
 
@@ -47,9 +44,9 @@ const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
 };
 
 function Login() {
-  const dispatch = useAppDispatch();
-  const { isSuccess, isLoading } = useAppSelector(getAuthStatus);
-  const isAuth = useAppSelector(getAuthData);
+  const { isSuccess, isLoading } = useAuthStatus();
+  const isAuth = useAuthData();
+  const { postAuthData } = useAuthActions();
   const navigate = useNavigate();
 
   const [showPassword, setShowPassword] = useState(false);
@@ -69,7 +66,7 @@ function Login() {
   });
 
   const onSubmit = async (data: LoginFormData) => {
-    dispatch(postAuthData(data));
+    postAuthData(data);
   };
 
   const togglePasswordVisibility = () => {

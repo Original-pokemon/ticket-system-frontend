@@ -1,7 +1,6 @@
 import { useLocation } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "../../hooks/state";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { fetchBushData, fetchCategoriesData, fetchManagersData, fetchPetrolStationData, fetchStatusesData, fetchTaskPerformersData, fetchTicketsData, getCategoriesStatus, getLocationDataStatus, getManagersStatus, getReferenceDataStatus, getTaskPerformersStatus, getTicketsStatus, getTicketStatusesStatus, selectAllBushes, selectAllCategories, selectAllStatuses, selectAllTaskPerformers, selectAllTickets, selectBushesEntities, selectCategoriesEntities, selectCategoryById, selectManagerById, selectManagersEntities, selectPetrolStationById, selectPetrolStationsEntities, selectStatusesEntities } from "../../store";
+import { useBushesEntities, useCategories, useLocationDataActions, useLocationDataStatus, usePetrolStationById, useReferenceDataActions, useReferenceDataStatus, useStatuses, useStatusesStatus, useManagersEntities, useManagersStatus, useUserManagementActions } from "../../store";
 import Spinner from "../../components/Spinner/Spinner";
 import Single from "../../components/Single/Single";
 import { TicketTable } from "../../components/tickets/TicketTable";
@@ -14,22 +13,24 @@ import { SelectedFiltersType } from "../../components/Filter/types";
 import Filter, { FilterMetaType } from "../../components/Filter/Filter";
 
 const PetrolStation = () => {
-  const dispatch = useAppDispatch();
+  const { fetchBushes, fetchPetrolStations } = useLocationDataActions()
+  const { fetchCategoriesData, fetchStatusesData } = useReferenceDataActions()
+  const { fetchManagersData } = useUserManagementActions()
   const location = useLocation();
   const path = location.pathname.split('/');
   const id = path[2];
 
-  const petrolStation = useAppSelector((state) => selectPetrolStationById(state, id))
+  const petrolStation = usePetrolStationById(id)
   const ticketsData = petrolStation?.tickets || []
-  const managersEntities = useAppSelector(selectManagersEntities);
-  const statusesData = useAppSelector(selectAllStatuses);
-  const bushesEntities = useAppSelector(selectBushesEntities);
-  const categoriesData = useAppSelector(selectAllCategories)
+  const managersEntities = useManagersEntities();
+  const statusesData = useStatuses();
+  const bushesEntities = useBushesEntities()
+  const categoriesData = useCategories()
 
-  const managersStatus = useAppSelector(getManagersStatus)
-  const referenceDataStatus = useAppSelector(getReferenceDataStatus)
-  const ticketStatusesStatus = useAppSelector(getTicketStatusesStatus)
-  const locationDataStatus = useAppSelector(getLocationDataStatus)
+  const managersStatus = useManagersStatus()
+  const referenceDataStatus = useReferenceDataStatus()
+  const ticketStatusesStatus = useStatusesStatus()
+  const locationDataStatus = useLocationDataStatus()
 
   const isIdle = managersStatus.isIdle && referenceDataStatus.isIdle && ticketStatusesStatus.isIdle && locationDataStatus.isIdle;
   const isLoading = managersStatus.isLoading || referenceDataStatus.isLoading || ticketStatusesStatus.isLoading || locationDataStatus.isLoading;
@@ -84,22 +85,22 @@ const PetrolStation = () => {
     } else {
       setStatusesType([]);
     }
-  }, [dispatch])
+  }, [])
 
   useEffect(() => {
     if (managersStatus.isIdle) {
-      dispatch(fetchManagersData());
+      fetchManagersData();
     }
     if (referenceDataStatus.isIdle) {
-      dispatch(fetchCategoriesData());
-      dispatch(fetchStatusesData())
+      fetchCategoriesData()
+      fetchStatusesData()
     }
     if (locationDataStatus.isIdle) {
-      dispatch(fetchBushData())
-      dispatch(fetchPetrolStationData())
+      fetchBushes()
+      fetchPetrolStations()
     }
 
-  }, [dispatch, managersStatus.isIdle, referenceDataStatus.isIdle, locationDataStatus.isIdle]);
+  }, [managersStatus.isIdle, referenceDataStatus.isIdle, locationDataStatus.isIdle, fetchManagersData, fetchCategoriesData, fetchStatusesData, fetchBushes, fetchPetrolStations]);
 
   if (isIdle) {
     return <Spinner fullscreen={true} />
