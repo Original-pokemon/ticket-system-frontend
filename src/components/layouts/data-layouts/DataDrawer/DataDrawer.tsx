@@ -6,7 +6,6 @@ import {
   SheetHeader,
 } from '@/components/ui/sheet';
 import { Separator } from '@/components/ui/separator';
-import { useIsMobile } from '@/components/hooks/use-mobile';
 
 type DataDrawerProperties = {
   open: boolean;
@@ -29,6 +28,7 @@ function DataDrawer({
     <Sheet open={open} onOpenChange={(open) => !open && onClose()}>
       <SheetContent
         side={direction}
+        className="flex flex-col h-auto max-h-screen"
       >
         {children}
       </SheetContent>
@@ -39,8 +39,6 @@ function DataDrawer({
 type DrawerHeaderProperties = {
   children?: React.ReactNode;
 };
-
-
 
 type HeaderTitleProperties = {
   children?: React.ReactNode;
@@ -78,7 +76,7 @@ type DrawerBodyProperties = {
 };
 
 function DrawerBody({ children }: DrawerBodyProperties) {
-  return <div className="flex-1 overflow-y-auto p-2 h-full" >{children}</div>;
+  return <div className="flex-1 overflow-y-auto p-2" >{children}</div>;
 }
 
 type DrawerActionsProperties = {
