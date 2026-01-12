@@ -6,38 +6,55 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  --background: #ffffff;
-  --foreground: #111827;
-  --card: #ffffff;
-  --card-foreground: #111827;
-  --popover: #ffffff;
-  --popover-foreground: #111827;
-  --primary: #d87943;
-  --primary-foreground: #ffffff;
-  --secondary: #527575;
-  --secondary-foreground: #ffffff;
-  --muted: #f3f4f6;
-  --muted-foreground: #6b7280;
-  --accent: #eeeeee;
-  --accent-foreground: #111827;
-  --destructive: #ef4444;
-  --destructive-foreground: #fafafa;
-  --border: #e5e7eb;
-  --input: #e5e7eb;
-  --ring: #d87943;
-  --chart-1: #5f8787;
-  --chart-2: #e78a53;
-  --chart-3: #fbcb97;
-  --chart-4: #888888;
-  --chart-5: #999999;
-  --sidebar: #f3f4f6;
-  --sidebar-foreground: #111827;
-  --sidebar-primary: #d87943;
-  --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #ffffff;
-  --sidebar-accent-foreground: #111827;
-  --sidebar-border: #e5e7eb;
-  --sidebar-ring: #d87943;
+  --background: oklch(0.98 0.005 245);          
+  --foreground: oklch(0.20 0.03 245);          
+
+  /* Белоснежные карточки для максимального контраста с фоном */
+  --card: oklch(1 0 0);                        
+  --card-foreground: oklch(0.20 0.03 245);     
+  
+  --popover: oklch(1 0 0);                     
+  --popover-foreground: oklch(0.20 0.03 245);  
+
+  /* --- АКЦЕНТЫ (Стали насыщеннее и темнее) --- */
+  --primary: oklch(0.55 0.16 45);              
+  --primary-foreground: oklch(0.99 0 0);       
+
+  /* Темный хвойно-бирюзовый для вторичных кнопок */
+  --secondary: oklch(0.35 0.06 195);           
+  --secondary-foreground: oklch(0.99 0 0);     
+
+  /* --- СИСТЕМНЫЕ ЭЛЕМЕНТЫ --- */
+  --muted: oklch(0.94 0.01 245);               
+  --muted-foreground: oklch(0.45 0.03 245);    
+
+  --accent: oklch(0.92 0.02 245);              
+  --accent-foreground: oklch(0.15 0.05 245);   
+
+  --destructive: oklch(0.55 0.18 25);          
+  --destructive-foreground: oklch(1 0 0);   
+
+  /* --- ГРАНИЦЫ (Стали темнее для четкости таблиц) --- */
+  --border: oklch(0.85 0.02 245);              
+  --input: oklch(0.85 0.02 245);               
+  --ring: oklch(0.55 0.16 45);                 
+
+  /* --- САЙДБАР (SIDEBAR) --- */
+  --sidebar: oklch(0.94 0.01 245);             
+  --sidebar-foreground: oklch(0.25 0.03 245);  
+  --sidebar-primary: oklch(0.55 0.16 45);      
+  --sidebar-primary-foreground: oklch(1 0 0);
+  --sidebar-accent: oklch(0.88 0.02 245);
+  --sidebar-accent-foreground: oklch(0.20 0.03 245);
+  --sidebar-border: oklch(0.85 0.02 245);
+  --sidebar-ring: oklch(0.55 0.16 45);
+
+  --chart-1: oklch(0.45 0.08 195);
+  --chart-2: oklch(0.55 0.16 45);
+  --chart-3: oklch(0.75 0.12 50);
+  --chart-4: oklch(0.40 0.00 0);
+  --chart-5: oklch(0.50 0.00 0);
+
   --font-sans: Geist Mono, ui-monospace, monospace;
   --font-serif: serif;
   --font-mono: JetBrains Mono, monospace;
@@ -61,38 +78,54 @@
 }
 
 .dark {
-  --background: #001433;
-  --foreground: #c1c1c1;
-  --card: #121212;
-  --card-foreground: #c1c1c1;
-  --popover: #121113;
-  --popover-foreground: #c1c1c1;
-  --primary: #ff8533;
-  --primary-foreground: #121113;
-  --secondary: #5f8787;
-  --secondary-foreground: #121113;
-  --muted: #222222;
-  --muted-foreground: #888888;
-  --accent: #677000;
-  --accent-foreground: #c1c1c1;
-  --destructive: #5f8787;
-  --destructive-foreground: #121113;
-  --border: #002d72;
-  --input: #002d72;
-  --ring: #e78a53;
-  --chart-1: #5f8787;
-  --chart-2: #e78a53;
-  --chart-3: #fbcb97;
-  --chart-4: #888888;
-  --chart-5: #999999;
-  --sidebar: #011128;
-  --sidebar-foreground: #c1c1c1;
-  --sidebar-primary: #e78a53;
-  --sidebar-primary-foreground: #121113;
-  --sidebar-accent: #e78a53;
-  --sidebar-accent-foreground: #c1c1c1;
-  --sidebar-border: #222222;
-  --sidebar-ring: #e78a53;
+  --background: oklch(0.18 0.04 245);          /* #001433 - Темно-синий фон */
+  --foreground: oklch(0.82 0.00 0);            /* #c1c1c1 - Светло-серый текст */
+
+  --card: oklch(0.21 0.00 0);                  /* #121212 */
+  --card-foreground: oklch(0.82 0.00 0);       /* #c1c1c1 */
+  
+  --popover: oklch(0.20 0.00 0);               /* #121113 */
+  --popover-foreground: oklch(0.82 0.00 0);    /* #c1c1c1 */
+
+  /* Основной оранжевый акцент */
+  --primary: oklch(0.72 0.18 45);              /* #ff8533 */
+  --primary-foreground: oklch(0.20 0.00 0);    /* #121113 */
+
+  /* Второстепенный (Мутный бирюзовый) */
+  --secondary: oklch(0.58 0.04 195);           /* #5f8787 */
+  --secondary-foreground: oklch(0.20 0.00 0);  /* #121113 */
+
+  --muted: oklch(0.26 0.00 0);                 /* #222222 */
+  --muted-foreground: oklch(0.62 0.00 0);      /* #888888 */
+
+  --accent: oklch(0.58 0.04 195);              /* #5f8787 */
+  --accent-foreground: oklch(0.82 0.00 0);     /* #c1c1c1 */
+
+  --destructive: oklch(0.58 0.04 195);         /* #5f8787 (у вас в HEX был одинаковый с secondary) */
+  --destructive-foreground: oklch(0.20 0.00 0);/* #121113 */
+
+  --border: oklch(0.28 0.07 245);              /* #002d72 */
+  --input: oklch(0.28 0.07 245);               /* #002d72 */
+  --ring: oklch(0.70 0.15 45);                 /* #e78a53 */
+
+  /* Сайдбар */
+  --sidebar: oklch(0.15 0.04 245);             /* #011128 */
+  --sidebar-foreground: oklch(0.82 0.00 0);    /* #c1c1c1 */
+  --sidebar-primary: oklch(0.70 0.15 45);      /* #e78a53 */
+  --sidebar-primary-foreground: oklch(0.20 0.00 0);
+  --sidebar-accent: oklch(0.70 0.15 45);
+  --sidebar-accent-foreground: oklch(0.82 0.00 0);
+  --sidebar-border: oklch(0.26 0.00 0);
+  --sidebar-ring: oklch(0.70 0.15 45);
+
+  /* Графики */
+  --chart-1: oklch(0.58 0.04 195);
+  --chart-2: oklch(0.70 0.15 45);
+  --chart-3: oklch(0.85 0.10 50);
+  --chart-4: oklch(0.62 0.00 0);
+  --chart-5: oklch(0.68 0.00 0);
+
+
   --font-sans: Geist Mono, ui-monospace, monospace;
   --font-serif: serif;
   --font-mono: JetBrains Mono, monospace;

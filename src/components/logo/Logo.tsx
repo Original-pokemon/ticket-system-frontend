@@ -18,7 +18,17 @@ interface LogoProps {
 function Logo({ size = 'lg' }: LogoProps) {
   return (
     <NavLink className={`${sizeClasses[size]} flex items-center font-bold gap-2.5`} to={AppRoute.Tickets}>
-      <img src="/logo.svg" alt="logo" />
+      <div
+        className="w-32 h-8 bg-foreground"
+        style={{
+          maskImage: 'url(/logo.svg)',
+          maskRepeat: 'no-repeat',
+          maskSize: 'contain',
+          WebkitMaskImage: 'url(/logo.svg)',
+          WebkitMaskRepeat: 'no-repeat',
+          WebkitMaskSize: 'contain',
+        }}
+      />
     </NavLink>
   );
 }

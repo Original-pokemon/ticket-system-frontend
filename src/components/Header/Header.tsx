@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/tooltip"
 import { SidebarTrigger } from "@/components/ui/sidebar"
 import { Breadcrumbs } from "@/components/ui/breadcrumbs";
+import { ModeToggle } from "../ModeToggle/mode-toggle";
 
 type HeaderProperties = {
   className?: string;
@@ -46,12 +47,16 @@ function Header({ className }: HeaderProperties) {
         <Breadcrumbs />
 
         <div className="flex-1" />
+        <div className="flex items-center gap-2">
+          <ModeToggle />
+        </div>
+
 
         <div className="flex items-center gap-2">
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
-                <Button variant="ghost" size="icon" onClick={handleRefresh}>
+                <Button variant="outline" size="icon" onClick={handleRefresh}>
                   <RefreshCw className="h-4 w-4" />
                 </Button>
               </TooltipTrigger>

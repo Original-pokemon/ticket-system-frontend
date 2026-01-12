@@ -14,7 +14,7 @@ import { Ticket } from "./pages/Ticket/Ticket";
 import Manager from "./pages/Manager/Manager";
 import PetrolStation from "./pages/PetrolStation/PetrolStation";
 import Category from "./pages/Category/Category";
-import { ThemeProvider } from "./components/theme-provider/theme-provider";
+import { ThemeProvider } from "./components/ThemeProvider/ThemeProvider";
 
 const App = () => (
   <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
