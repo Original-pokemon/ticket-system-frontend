@@ -1,17 +1,5 @@
-import { useRecordContext } from "react-admin";
-import { Card, CardMedia, Modal } from "@mui/material";
 import { useCallback, useState } from "react";
 import { AttachmentType } from "../../../types";
-
-const style = {
-  position: 'absolute' as 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
-  boxShadow: 24,
-};
 
 type AttachmentImageFieldProps = {
   id: string,
@@ -32,35 +20,36 @@ const AttachmentImageField = ({ id, imagSize, path }: AttachmentImageFieldProps)
 
   return (
     <>
-      <Card sx={{ display: 'inline-block', margin: '0.6vw' }}>
-        <CardMedia
-          component="img"
-          image={path}
-          width={imagSize.width}
-          height={imagSize.height}
+      <div className="inline-block m-[0.6vw]">
+        <img
+          src={path}
           alt={id}
-          sx={{ maxWidth: '42em', maxHeight: '15em' }}
+          style={{ 
+            width: imagSize.width, 
+            height: imagSize.height,
+            maxWidth: '42em',
+            maxHeight: '15em'
+          }}
+          className="cursor-pointer"
           onClick={handleOpenLightbox}
         />
-      </Card>
-      {
-        isLightboxOpen && (
-          <Modal
-            open={isLightboxOpen}
-            onClose={handleCloseLightbox}
-          >
-            <Card sx={style}>
-              <CardMedia
-                component="img"
-                image={path}
-                alt={id}
-                sx={{ maxWidth: '50vh', maxHeight: '50vh' }}
-                onClick={handleCloseLightbox}
-              />
-            </Card>
-          </Modal>
-        )
-      }
+      </div>
+      {isLightboxOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80" onClick={handleCloseLightbox}>
+          <div className="bg-background border-2 border-border rounded-lg shadow-24 p-4">
+            <img
+              src={path}
+              alt={id}
+              style={{ 
+                maxWidth: '50vh', 
+                maxHeight: '50vh'
+              }}
+              className="cursor-pointer"
+              onClick={handleCloseLightbox}
+            />
+          </div>
+        </div>
+      )}
     </>
   );
 };

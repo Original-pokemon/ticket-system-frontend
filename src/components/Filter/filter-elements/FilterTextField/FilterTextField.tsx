@@ -1,10 +1,11 @@
-import { Box, Typography, TextField } from '@mui/material';
 import React, { useEffect, useState, useRef } from 'react';
 import {
   useSelectedFiltersDispatch,
   useSelectedFiltersState,
 } from '../../hooks';
 import Actions from '../../const';
+import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
 
 type TextFilterComponentProperties = {
   id: string;
@@ -89,24 +90,20 @@ function FilterTextField({
   }, []);
 
   return (
-    <Box sx={{ p: 2 }}>
-      <Typography variant="subtitle1" gutterBottom>
+    <div className="p-4">
+      <Label htmlFor={id} className="font-medium mb-2 block">
         {title}
-      </Typography>
+      </Label>
 
-      <TextField
+      <Input
         id={id}
-        fullWidth
-        variant="outlined"
-        size="small"
         value={value}
         onChange={handleChange}
         placeholder={`Введите ${title.toLowerCase()}`}
       />
-    </Box>
+    </div>
   );
 }
 
-export type FilterTextFieldType = ReturnType<typeof FilterTextField>;
 
 export default React.memo(FilterTextField);

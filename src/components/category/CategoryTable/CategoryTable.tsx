@@ -56,13 +56,10 @@ const CategoryTable = () => {
 
   return isLoading ? <Spinner fullscreen={false} /> : (
     <DataTable
-      name="Категории"
+      pageName="task_performers"
       columns={getCategoryColumns()}
-      rows={rows}
-      loading={isLoading}
+      data={rows}
       onClick={handleRowClick}
-      disableToolBar
-      disableFooter
     />
   )
 }

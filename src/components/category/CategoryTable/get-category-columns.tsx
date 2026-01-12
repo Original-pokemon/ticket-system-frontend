@@ -1,35 +1,39 @@
-import { GridColDef } from "@mui/x-data-grid";
+import { ColumnDef } from "@tanstack/react-table"
 
-const getCategoryColumns = (): GridColDef[] => [
+export type CategoryTableRow = {
+  id: string | number;
+  description: string;
+  totalTasks: number;
+  inProgressTasks: number;
+  completedTasks: number;
+  performersCount: number;
+}
+
+const getCategoryColumns = (): ColumnDef<CategoryTableRow>[] => [
   {
-    field: 'description',
-    headerName: 'Название категории',
-    flex: 1,
-    minWidth: 200,
+    accessorKey: 'description',
+    header: 'Название категории',
+    cell: info => info.getValue(),
   },
   {
-    field: 'totalTasks',
-    headerName: 'Всего задач',
-    type: 'number',
-    width: 120,
+    accessorKey: 'totalTasks',
+    header: 'Всего задач',
+    cell: info => info.getValue<number>(),
   },
   {
-    field: 'inProgressTasks',
-    headerName: 'Задачи в процессе',
-    type: 'number',
-    width: 150,
+    accessorKey: 'inProgressTasks',
+    header: 'Задачи в процессе',
+    cell: info => info.getValue<number>(),
   },
   {
-    field: 'completedTasks',
-    headerName: 'Исполненные задачи',
-    type: 'number',
-    width: 150,
+    accessorKey: 'completedTasks',
+    header: 'Исполненные задачи',
+    cell: info => info.getValue<number>(),
   },
   {
-    field: 'performersCount',
-    headerName: 'Кол-во исполнителей',
-    type: 'number',
-    width: 150,
+    accessorKey: 'performersCount',
+    header: 'Кол-во исполнителей',
+    cell: info => info.getValue<number>(),
   },
 ];
 

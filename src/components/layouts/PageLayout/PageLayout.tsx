@@ -1,60 +1,58 @@
 import React from 'react';
-import { Box, Grid2 as Grid, Typography } from '@mui/material';
-import { SxProps, Theme } from '@mui/system';
 
 type SubComponentProperties = {
   children: React.ReactNode;
 };
 
 function Breadcrumbs({ children }: SubComponentProperties) {
-  return <Box mb={2}>{children}</Box>;
+  return <div className="mb-2">{children}</div>;
 }
 
 function Title({ children }: SubComponentProperties) {
   return (
-    <Typography variant="h5" sx={{ mb: 2 }}>
+    <h5 className="mb-6 text-4xl leading-tight">
       {children}
-    </Typography>
+    </h5>
   );
 }
 
 function Diagrams({ children }: SubComponentProperties) {
-  return <Box mb={2}>{children}</Box>;
+  return <div className="mb-2">{children}</div>;
 }
 
 function Content({ children }: SubComponentProperties) {
-  return <Box>{children}</Box>;
+  return <div>{children}</div>;
 }
 
 function Filters({ children }: SubComponentProperties) {
   return (
     <>
       {React.Children.map(children, (child) => (
-        <Grid>{child}</Grid>
+        <div>{child}</div>
       ))}
     </>
   );
 }
 
 function Sorting({ children }: SubComponentProperties) {
-  return <Grid offset="auto">{children}</Grid>;
+  return <div className="ml-auto">{children}</div>;
 }
 
 function Toolbar({ children }: SubComponentProperties) {
   return (
-    <Grid container justifyContent="space-between" pb={2} spacing={2}>
+    <div className="flex justify-between pb-2 gap-2">
       {children}
-    </Grid>
+    </div>
   );
 }
 
 type PageLayoutProperties = {
   children: React.ReactNode;
-  sx?: SxProps<Theme>;
+  className?: string;
 };
 
-function PageLayout({ children, sx }: PageLayoutProperties) {
-  return <Box sx={{ p: 2, ...sx }}>{children}</Box>;
+function PageLayout({ children, className }: PageLayoutProperties) {
+  return <div className={`p-6 ${className || ''}`}>{children}</div>;
 }
 
 PageLayout.Breadcrumbs = Breadcrumbs;

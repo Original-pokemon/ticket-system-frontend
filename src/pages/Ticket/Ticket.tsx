@@ -1,5 +1,6 @@
 import { useEffect, useLayoutEffect } from 'react';
-import { Typography, Chip, Stack, Paper, TableContainer, Table, TableHead, TableRow, TableCell, TableBody } from '@mui/material';
+import { Table, TableBody, TableCell, TableHeader, TableRow } from "@/components/ui/table";
+import { Badge } from "@/components/ui/badge";
 import dayjs from 'dayjs';
 import {
   useUserManagementActions,
@@ -34,11 +35,11 @@ export const Ticket = () => {
   const id = path[2];
 
   const ticket = useUniqTicket();
-  const ticketCategory = ticket?.ticket_category ? useCategoryById(ticket?.ticket_category) : null
+  const ticketCategory = useCategoryById(ticket?.ticket_category || '')
   const allComments = useComments();
   const comments = allComments.filter(comment => comment.ticket_id === id);
   const usersEntities = useUsersEntities()
-  const petrolStation = ticket?.petrol_station_id ? usePetrolStationById(ticket?.petrol_station_id) : null
+  const petrolStation = usePetrolStationById(ticket?.petrol_station_id || '')
   const statusesEntities = useStatusesEntities()
 
   const uniqTicketStatus = useUniqTicketStatus();
@@ -81,31 +82,31 @@ export const Ticket = () => {
     <PageLayout>
       {
         uniqTicketStatus.isError ?
-          <Typography variant="h6" color="error">
+          <h6 className="text-lg text-red-500">
             Произошла ошибка при загрузке данных тикета.
-          </Typography> : (
+          </h6> : (
             <Single>
               <Single.MainContent>
                 <Single.Title>{ticket?.title}</Single.Title>
                 <Single.Section>
                   <Single.Item label="Описание">
-                    <Typography>{ticket?.description}</Typography>
+                    <p>{ticket?.description}</p>
                   </Single.Item>
                   <Single.Item label="АЗС">
                     {petrolStationsStatus.isLoading ? <Spinner fullscreen={false} /> : (
-                    <Chip label={petrolStation?.user?.user_name || 'Не указано'} />
+                      <Badge>{petrolStation?.user?.user_name || 'Не указано'}</Badge>
                     )}
                   </Single.Item>
                   <Single.Item label="Статус">
                     {referenceDataStatus.isSuccess ? (
-                      <Chip label={statusesEntities[ticket?.status_id || '']?.description || 'Не указано'} />
+                      <Badge>{statusesEntities[ticket?.status_id || '']?.description || 'Не указано'}</Badge>
                     ) : (
                       <Spinner fullscreen={false} />
                     )}
                   </Single.Item>
                   <Single.Item label="Категория">
                     {referenceDataStatus.isSuccess ? (
-                    <Chip label={ticketCategory?.description || 'Не указано'} />
+                      <Badge>{ticketCategory?.description || 'Не указано'}</Badge>
                     ) : (
                       <Spinner fullscreen={false} />
                     )}
@@ -121,58 +122,55 @@ export const Ticket = () => {
 
                 <Single.Comments title="Комментарии">
                   {comments.length === 0 ? (
-                    <Typography variant="body2">No results found</Typography>
+                    <span className="text-sm">No results found</span>
                   ) : (
-                    <Stack spacing={1}>
+                      <div className="flex flex-col gap-1">
                       {comments.map((comment) => (
-                        <Paper key={comment.id} sx={{ p: 1 }}>
-                          <Typography variant="body2">{comment.text}</Typography>
-                          <Typography variant="caption" color="text.secondary">
+                        <div key={comment.id} className="p-1 bg-white shadow">
+                          <p className="text-sm">{comment.text}</p>
+                          <span className="text-xs text-gray-500">
                             {dayjs(comment.created_at).format('HH:mm DD.MM.YYYY')}
-                          </Typography>
-                        </Paper>
+                          </span>
+                        </div>
                       ))}
-                    </Stack>
+                      </div>
                   )}
                 </Single.Comments>
               </Single.MainContent>
 
               <Single.SidePanel title="История изменений">
-                <TableContainer>
-                  <Table>
-                    <TableHead>
-                      <TableRow>
-                        <TableCell>Статус</TableCell>
-                        <TableCell>Пользователь</TableCell>
-                        <TableCell>Дата</TableCell>
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableCell>Статус</TableCell>
+                      <TableCell>Пользователь</TableCell>
+                      <TableCell>Дата</TableCell>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {(uniqTicketStatus.isSuccess && ticket?.status_history) && (ticket?.status_history).map(({ id: historyId, ticket_status, created_at, user_id }) => (
+                      <TableRow key={historyId}>
+                        <TableCell>
+                          {referenceDataStatus.isSuccess ? (
+                            <Badge>{statusesEntities[ticket_status].description || 'Не указано'}</Badge>
+                          ) : (
+                            <Spinner fullscreen={false} />
+                          )}
+                        </TableCell>
+                        <TableCell>
+                          <span className="text-sm">
+                            {userStatus.isSuccess ? usersEntities[user_id]?.user_name : <Spinner fullscreen={false} />}
+                          </span>
+                        </TableCell>
+                        <TableCell>
+                          <span className="text-sm">
+                            {dayjs(created_at).format('HH:mm DD.MM.YYYY')}
+                          </span>
+                        </TableCell>
                       </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {(uniqTicketStatus.isSuccess && ticket?.status_history) && (ticket?.status_history).map(({ id: historyId, ticket_status, created_at, user_id }) => (
-                        <TableRow key={historyId}>
-                          <TableCell>
-                            {referenceDataStatus.isSuccess ? (
-                              <Chip label={statusesEntities[ticket_status].description || 'Не указано'} />
-                            ) : (
-                              <Spinner fullscreen={false} />
-                            )}
-                          </TableCell>
-                          <TableCell>
-                            <Typography variant="body2">
-
-                              {userStatus.isSuccess ? usersEntities[user_id]?.user_name : <Spinner fullscreen={false} />}
-                            </Typography>
-                          </TableCell>
-                          <TableCell>
-                            <Typography variant="body2">
-                              {dayjs(created_at).format('HH:mm DD.MM.YYYY')}
-                            </Typography>
-                          </TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </TableContainer>
+                    ))}
+                  </TableBody>
+                </Table>
               </Single.SidePanel>
             </Single>
           )

@@ -1,7 +1,9 @@
-import { GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
-import { Chip } from '@mui/material';
-import { CategoryType, PetrolStationType, TicketStatusType } from '../../../types';
+import { ColumnDef } from '@tanstack/react-table';
+import { Badge } from '@/components/ui/badge';
+import { CategoryType, PetrolStationType, TicketStatusType, TicketType } from '../../../types';
 import dayjs from 'dayjs';
+import { ArrowUpDown } from "lucide-react"
+import { Button } from '@/components/ui/button';
 
 type TicketColumnProperties = {
   petrolStations: Record<string, PetrolStationType>;
@@ -22,57 +24,65 @@ const getCategoryName = (categories: Record<string, CategoryType>, id: string) =
   return categories[id]?.description || 'Не указано'
 }
 
-const getDate = (value: Date | string | undefined) => {
-  return value ? new Date(value) : undefined;
+const formatDate = (value: string | Date | undefined) => {
+  if (!value) return 'Не указано';
+  const date = typeof value === 'string' ? new Date(value) : value;
+  return dayjs(date).format('DD.MM.YYYY');
 }
 
-const formatDate = (value: Date | string | undefined) => {
-  if (!value || typeof value === 'string') return 'Не указано';
-  return dayjs(value).format('DD.MM.YYYY');
-}
-
-const getTicketColumns = ({ petrolStations, statuses, categories }: TicketColumnProperties): GridColDef[] => {
-  const renderChip = (params: GridRenderCellParams) => <Chip label={params.value} />;
+const getTicketColumns = ({ petrolStations, statuses, categories }: TicketColumnProperties): ColumnDef<TicketType>[] => {
   return [
     {
-      field: 'title',
-      headerName: 'Название',
-      width: 200,
+      accessorKey: 'title',
+      header: "Название",
+      size: 200,
     },
     {
-      field: 'petrol_station_id',
-      headerName: 'АЗС',
-      width: 120,
-      valueGetter: (value: string) => getPetrolStationName(petrolStations, value),
-      renderCell: renderChip,
+      accessorKey: 'petrol_station_id',
+      header: 'АЗС',
+      accessorFn: (row) => getPetrolStationName(petrolStations, row.petrol_station_id),
+      cell: (props) => <Badge variant="secondary">{props.getValue() as string}</Badge>,
+      size: 120,
     },
     {
-      field: 'status_id',
-      headerName: 'Статус',
-      width: 250,
-      valueGetter: (value: string) => getStatusName(statuses, value),
-      renderCell: renderChip,
+      accessorKey: 'status_id',
+      header: 'Статус',
+      accessorFn: (row) => getStatusName(statuses, row.status_id),
+      cell: (props) => <Badge variant="secondary">{props.getValue() as string}</Badge>,
+      size: 250,
     },
     {
-      field: 'ticket_category',
-      headerName: 'Категория',
-      width: 150,
-      valueGetter: (value: string) => getCategoryName(categories, value),
-      renderCell: renderChip,
+      accessorKey: 'ticket_category',
+      header: 'Категория',
+      accessorFn: (row) => getCategoryName(categories, row.ticket_category || ''),
+      cell: (props) => <Badge variant="secondary">{props.getValue() as string}</Badge>,
+      size: 150,
     },
     {
-      field: 'deadline',
-      headerName: 'Заявленная дата исполнения',
-      width: 200,
-      valueGetter: (value: string) => getDate(value),
-      valueFormatter: (value) => formatDate(value),
+      accessorKey: 'deadline',
+      header: 'Заявленная дата исполнения',
+      cell: (props) => formatDate(props.getValue() as string | Date),
+      size: 200,
     },
     {
-      field: 'created_at',
-      headerName: 'Создана',
-      width: 150,
-      valueGetter: (value: string) => getDate(value),
-      valueFormatter: (value) => formatDate(value),
+      accessorKey: 'created_at',
+      header: ({ column }) => (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Создана
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      ),
+      cell: (props) => formatDate(props.getValue() as string),
+      enableSorting: true,
+      sortingFn: (rowA, rowB, columnId) => {
+        const a = new Date(rowA.getValue(columnId) as string);
+        const b = new Date(rowB.getValue(columnId) as string);
+        return a.getTime() - b.getTime();
+      },
+      size: 150,
     },
   ];
 }

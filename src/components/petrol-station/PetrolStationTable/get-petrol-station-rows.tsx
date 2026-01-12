@@ -1,12 +1,5 @@
 import { BushType, ManagerType, PetrolStationType, UserType } from "../../../types";
-
-type PetrolStationRow = {
-  id: string;
-  petrolStationName: string;
-  bushName: string;
-  managers: string[];
-  totalTasks: number;
-};
+import { PetrolStationRow } from './get-petrol-station-columns';
 
 type GetPetrolStationsRowsProps = {
   petrolStations: PetrolStationType[];

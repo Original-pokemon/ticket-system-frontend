@@ -1,41 +1,45 @@
-import { GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
-import { Chip, Grid2, Stack } from "@mui/material";
-import { ManagerType } from "../../../types";
+import { ColumnDef } from "@tanstack/react-table"
+import { Badge } from "@/components/ui/badge"
 
-const getPetrolStationColumns = (): GridColDef[] => [
+export type PetrolStationRow = {
+  id: string | number;
+  petrolStationName: string;
+  bushName: string;
+  totalTasks: number;
+  managers: string[];
+}
+
+const getPetrolStationColumns = (): ColumnDef<PetrolStationRow>[] => [
   {
-    field: 'petrolStationName',
-    headerName: 'АЗС',
-    minWidth: 170,
+    accessorKey: 'petrolStationName',
+    header: 'АЗС',
+    cell: info => info.getValue(),
   },
   {
-    field: 'bushName',
-    headerName: 'Куст',
-    minWidth: 170,
+    accessorKey: 'bushName',
+    header: 'Куст',
+    cell: info => info.getValue(),
   },
   {
-    field: 'totalTasks',
-    headerName: 'Задачи',
-    type: 'number',
-    width: 170,
+    accessorKey: 'totalTasks',
+    header: 'Задачи',
+    cell: info => info.getValue<number>(),
   },
   {
-    field: 'managers',
-    headerName: 'Менеджер',
-    minWidth: 200,
-    flex: 1,
-    renderCell: (params: GridRenderCellParams<string[]>) => {
-      const managers = params.value || [];
+    accessorKey: 'managers',
+    header: 'Менеджер',
+    cell: info => {
+      const managers = info.getValue<string[]>();
       return (
-        <Grid2 container alignItems="center" flexWrap={"wrap"} spacing={1}>
-          {managers.map((manager: string) => (
-            <Grid2>
-              <Chip key={manager} label={manager} />
-            </Grid2>
+        <div className="flex flex-wrap gap-1">
+          {managers.map((manager) => (
+            <Badge key={manager} variant="secondary">
+              {manager}
+            </Badge>
           ))}
-        </Grid2>
+        </div>
       );
-    }
+    },
   },
 ];
 

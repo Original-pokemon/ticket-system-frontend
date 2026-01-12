@@ -1,26 +1,24 @@
-import MainMenu, { MenuType } from '../MainMenu/MainMenu';
+import Sidebar from '../Sidebar/Sidebar';
 import DataDrawer from '../layouts/data-layouts/DataDrawer/DataDrawer';
 import Logo from '../logo/Logo';
 
 type SideMenuPropertiesType = {
   open: boolean;
   onClose: () => void;
-  menu: MenuType;
 };
 
-function SideMenu({ open, onClose, menu }: SideMenuPropertiesType) {
+function SideMenu({ open, onClose }: SideMenuPropertiesType) {
   return (
     <DataDrawer
       direction="left"
       maxSize="sm"
-      sx={{ width: 320 }}
       open={open}
       onClose={onClose}
     >
-      <DataDrawer.Header title={<Logo />} onClose={onClose} />
+      <DataDrawer.Header title={<Logo />} />
 
       <DataDrawer.Body>
-        <MainMenu menu={menu} onClick={onClose} />
+        <Sidebar />
       </DataDrawer.Body>
     </DataDrawer>
   );

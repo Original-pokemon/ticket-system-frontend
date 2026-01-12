@@ -1,13 +1,5 @@
 import { ManagerType, TicketType, TicketStatusType } from '../../../types';
-
-type ManagerRow = {
-  id: string;
-  userName: string;
-  totalTasks: number;
-  tasksUnderReview: number;    // Задачи на рассмотрении у менеджера (статус '2')
-  completedTasks: number;   // Исполненные задачи (статус '7')
-  petrolStations: number;   // Кол-во АЗС
-};
+import { ManagerRow } from './get-manager-columns';
 
 type GetManagerRowsProps = {
   managers: ManagerType[];

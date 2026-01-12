@@ -1,6 +1,5 @@
 import { ReactElement, useReducer, useRef, useState } from 'react';
-import { Button } from '@mui/material';
-import FilterListIcon from '@mui/icons-material/FilterList';
+import { Filter as FilterIcon } from "lucide-react"
 import AppliedFilters from './AppliedFilters/AppliedFilters';
 import FilterContent from './FilterContent/FilterContent';
 import MultipleChoice from './filter-elements/MultipleChoice/MultipleChoice';
@@ -12,6 +11,7 @@ import type { ActionType, FilterSectionType, SelectedFiltersType } from './types
 import { FilterDispatchContext, FilterStateContext } from './filter-context';
 import { useSearchParams } from 'react-router-dom';
 import { buildSearchParamsFromFilters, parseSearchParamsToFilters } from './url-filter-utils';
+import { Button } from '@/components/ui/button';
 
 export type FilterMetaType = {
   [key: FilterSectionType['id']]: Omit<FilterSectionType, 'id'>;
@@ -117,12 +117,12 @@ function Filter({ children, onChange, filterMeta }: FilterProperties) {
     <FilterStateContext.Provider value={state}>
       <FilterDispatchContext.Provider value={dispatch}>
         <Button
-          variant={hasSelectedFilters ? 'contained' : 'outlined'}
-          startIcon={<FilterListIcon />}
-          size="small"
+          variant={hasSelectedFilters ? "default" : "outline"}
+          size="sm"
           onClick={handleDrawerOpen}
           aria-label="Фильтры"
         >
+          <FilterIcon className="mr-2 h-4 w-4" />
           {`Фильтры${hasSelectedFilters ? ` (${Object.keys(state).length})` : ''}`}
         </Button>
 

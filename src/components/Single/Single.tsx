@@ -1,17 +1,15 @@
 import React from 'react';
-import { Box, Grid2 as Grid, Typography, Stack, Paper } from '@mui/material';
-import { SxProps, Theme } from '@mui/system';
 
 type SingleProps = {
-  sx?: SxProps<Theme>;
+  className?: string;
   children: React.ReactNode;
 };
 
-function Single({ sx, children }: SingleProps) {
+function Single({ className, children }: SingleProps) {
   return (
-    <Grid container columns={12} columnSpacing={2} justifyContent={"space-between"}>
-        {children}
-    </Grid>
+    <div className={`grid grid-cols-12 gap-2 ${className || ''}`}>
+      {children}
+    </div>
   );
 }
 
@@ -21,11 +19,11 @@ type SingleMainContentProps = {
 
 function SingleMainContent({ children }: SingleMainContentProps) {
   return (
-    <Grid size={'grow'}>
-      <Stack spacing={3} component={Paper} p={2} borderRadius={4}> 
+    <div className="col-span-12 md:col-span-8">
+      <div className="flex flex-col gap-3 border border-border rounded-lg p-2">
         {children}
-      </Stack>
-    </Grid>
+      </div>
+    </div>
   );
 }
 
@@ -36,14 +34,14 @@ type SingleSidePanelProps = {
 
 function SingleSidePanel({ title, children }: SingleSidePanelProps) {
   return (
-    <Grid columns={{ xs: 12, md: 4 }} >
+    <div className="col-span-12 md:col-span-4">
       {title && (
-        <Typography variant="subtitle2" color='text.secondary'>
+        <div className="text-muted-foreground font-semibold">
           {title}
-        </Typography>
+        </div>
       )}
       {children}
-    </Grid>
+    </div>
   );
 }
 
@@ -53,9 +51,9 @@ type SingleTitleProps = {
 
 function SingleTitle({ children }: SingleTitleProps) {
   return (
-    <Typography variant="h4" >
+    <div className="text-2xl font-bold">
       {children}
-    </Typography>
+    </div>
   );
 }
 
@@ -66,16 +64,16 @@ type SingleSectionProps = {
 
 function SingleSection({ title, children }: SingleSectionProps) {
   return (
-    <Box>
+    <div>
       {title && (
-        <Typography variant="h6" sx={{ mb: 1 }}>
+        <div className="text-lg font-semibold mb-1">
           {title}
-        </Typography>
+        </div>
       )}
-      <Stack spacing={2}>
+      <div className="flex flex-col gap-2">
         {children}
-      </Stack>
-    </Box>
+      </div>
+    </div>
   );
 }
 
@@ -86,13 +84,12 @@ type SingleItemProps = {
 
 function SingleItem({ label, children }: SingleItemProps) {
   return (
-    <Stack direction={"row"} spacing={2} alignItems={"center"} justifyContent={"flex-start"} >
-      <Typography variant="h6" >
+    <div className="flex flex-row gap-2 items-center justify-start">
+      <div className="text-lg font-semibold">
         {label}:
-      </Typography>
-
-      <Box>{children}</Box>
-    </Stack>
+      </div>
+      <div>{children}</div>
+    </div>
   );
 }
 
@@ -103,14 +100,14 @@ type SingleAttachmentsProps = {
 
 function SingleAttachments({ title, children }: SingleAttachmentsProps) {
   return (
-    <Box>
+    <div>
       {title && (
-        <Typography variant="h6" sx={{ mb: 1 }}>
+        <div className="text-lg font-semibold mb-1">
           {title}
-        </Typography>
+        </div>
       )}
       {children}
-    </Box>
+    </div>
   );
 }
 
@@ -121,14 +118,14 @@ type SingleCommentsProps = {
 
 function SingleComments({ title, children }: SingleCommentsProps) {
   return (
-    <Box>
+    <div>
       {title && (
-        <Typography variant="h6" sx={{ mb: 1 }}>
+        <div className="text-lg font-semibold mb-1">
           {title}
-        </Typography>
+        </div>
       )}
       {children}
-    </Box>
+    </div>
   );
 }
 

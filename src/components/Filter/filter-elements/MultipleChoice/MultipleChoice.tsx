@@ -1,10 +1,3 @@
-import {
-  FormGroup,
-  FormControlLabel,
-  Checkbox,
-  FormControl,
-  Typography,
-} from '@mui/material';
 import React from 'react';
 import { FilterSectionType } from '../../types';
 import {
@@ -12,14 +5,15 @@ import {
   useSelectedFiltersState,
 } from '../../hooks';
 import Actions from '../../const';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Label } from '@/components/ui/label';
 
 function MultipleChoice({ id, title, options }: FilterSectionType) {
   const selectedFilters = useSelectedFiltersState();
   const dispatch = useSelectedFiltersDispatch();
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedValue = event.target.value;
-    const isSelected = event.target.checked;
+  const handleChange = (checked: boolean, selectedValue: string) => {
+    const isSelected = checked;
 
     const selectedOption = options.find(
       (option) => option.value === selectedValue,
@@ -60,24 +54,26 @@ function MultipleChoice({ id, title, options }: FilterSectionType) {
   );
 
   return (
-    <FormControl id={id} sx={{ p: 2 }}>
-      <Typography variant="subtitle1">{title}</Typography>
-      <FormGroup>
+    <div id={id} className="p-4">
+      <Label className="font-medium mb-5 block">{title}</Label>
+      <div className="space-y-2">
         {options.map(({ label, value }) => (
-          <FormControlLabel
-            key={value}
-            value={value}
-            control={
-              <Checkbox
-                checked={selectedValuesSet.has(value)}
-                onChange={handleChange}
-              />
-            }
-            label={label}
-          />
+          <div key={value} className="flex items-center space-x-2">
+            <Checkbox
+              id={`${id}-${value}`}
+              checked={selectedValuesSet.has(value)}
+              onCheckedChange={(checked) => handleChange(checked as boolean, value)}
+            />
+            <Label
+              htmlFor={`${id}-${value}`}
+              className="font-normal cursor-pointer"
+            >
+              {label}
+            </Label>
+          </div>
         ))}
-      </FormGroup>
-    </FormControl>
+      </div>
+    </div>
   );
 }
 

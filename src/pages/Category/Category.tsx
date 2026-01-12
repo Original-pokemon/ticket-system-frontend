@@ -4,7 +4,8 @@ import { useLocationDataActions, useBushes, usePetrolStationsEntities, useBushes
 import Spinner from "../../components/Spinner/Spinner";
 import Single from "../../components/Single/Single";
 import { TicketTable } from "../../components/tickets/TicketTable";
-import { Chip, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
+import { Table, TableBody, TableCell, TableHeader, TableRow } from "@/components/ui/table";
+import { Badge } from "@/components/ui/badge";
 import dayjs from "dayjs";
 import filterTickets from "../../utils/filter-tickets";
 import PageLayout from "../../components/layouts/PageLayout/PageLayout";
@@ -142,39 +143,37 @@ const Category = () => {
         </Single.MainContent>
 
         <Single.SidePanel title="Исполнители для категории">
-          <TableContainer>
-            {taskPerformersStatus.isLoading && <Spinner fullscreen={false} />}
-            {taskPerformersStatus.isSuccess && (
-              <Table>
-                <TableHead>
-                  <TableRow>
-                    <TableCell>Исполнитель</TableCell>
-                    <TableCell>Куст</TableCell>
-                    <TableCell>Создан</TableCell>
+          {taskPerformersStatus.isLoading && <Spinner fullscreen={false} />}
+          {taskPerformersStatus.isSuccess && (
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableCell>Исполнитель</TableCell>
+                  <TableCell>Куст</TableCell>
+                  <TableCell>Создан</TableCell>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {(filteredTaskPerformers || []).map(({ id, bush_id, user }) => (
+                  <TableRow key={id}>
+                    <TableCell>
+                      <span className="text-sm">
+                        {user.user_name}
+                      </span>
+                    </TableCell>
+                    <TableCell>
+                      <Badge>{bushesEntities[bush_id || '']?.description || 'Не указано'}</Badge>
+                    </TableCell>
+                    <TableCell>
+                      <span className="text-sm">
+                        {dayjs(user.created_at).format('DD.MM.YYYY')}
+                      </span>
+                    </TableCell>
                   </TableRow>
-                </TableHead>
-                <TableBody>
-                  {(filteredTaskPerformers || []).map(({ id, bush_id, user }) => (
-                    <TableRow key={id}>
-                      <TableCell>
-                        <Typography variant="body2">
-                          {user.user_name}
-                        </Typography>
-                      </TableCell>
-                      <TableCell>
-                        <Chip label={bushesEntities[bush_id || '']?.description || 'Не указано'} />
-                      </TableCell>
-                      <TableCell>
-                        <Typography variant="body2">
-                          {dayjs(user.created_at).format('DD.MM.YYYY')}
-                        </Typography>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            )}
-          </TableContainer>
+                ))}
+              </TableBody>
+            </Table>
+          )}
         </Single.SidePanel>
       </Single>
     </PageLayout>

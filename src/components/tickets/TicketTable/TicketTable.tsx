@@ -56,11 +56,9 @@ const TicketTable = ({ name, tickets, isLoading }: TicketTableProps) => {
 
   return isIdle ? <Spinner fullscreen={false} /> : (
     <DataTable
-      name={name}
+      pageName="tickets"
       columns={columns}
-      rows={tickets}
-      pageSizeOptions={[10, 100, 1000, { value: -1, label: 'Все' }]}
-      loading={isLoading}
+      data={tickets}
       onClick={handleRowClick}
     />
   )

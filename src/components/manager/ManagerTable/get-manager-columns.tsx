@@ -1,35 +1,39 @@
-import { GridColDef } from "@mui/x-data-grid";
+import { ColumnDef } from "@tanstack/react-table"
 
-const getManagerColumns = (): GridColDef[] => [
+export type ManagerRow = {
+  id: string | number;
+  userName: string;
+  totalTasks: number;
+  tasksUnderReview: number;
+  completedTasks: number;
+  petrolStations: number;
+}
+
+const getManagerColumns = (): ColumnDef<ManagerRow>[] => [
   {
-    field: 'userName',
-    headerName: 'Менеджер',
-    flex: 1,
-    minWidth: 200,
+    accessorKey: 'userName',
+    header: 'Менеджер',
+    cell: info => info.getValue(),
   },
   {
-    field: 'totalTasks',
-    headerName: 'Всего задач',
-    type: 'number',
-    width: 120,
+    accessorKey: 'totalTasks',
+    header: 'Всего задач',
+    cell: info => info.getValue<number>(),
   },
   {
-    field: 'tasksUnderReview',
-    headerName: 'Задачи на рассмотрении менеджера',
-    type: 'number',
-    width: 150,
+    accessorKey: 'tasksUnderReview',
+    header: 'Задачи на рассмотрении менеджера',
+    cell: info => info.getValue<number>(),
   },
   {
-    field: 'completedTasks',
-    headerName: 'Исполненые задачи',
-    type: 'number',
-    width: 150,
+    accessorKey: 'completedTasks',
+    header: 'Исполненые задачи',
+    cell: info => info.getValue<number>(),
   },
   {
-    field: 'petrolStations',
-    headerName: 'Кол-во АЗС',
-    type: 'number',
-    width: 150,
+    accessorKey: 'petrolStations',
+    header: 'Кол-во АЗС',
+    cell: info => info.getValue<number>(),
   },
 ];
 

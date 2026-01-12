@@ -4,7 +4,8 @@ import { usePetrolStationsEntities, useBushesEntities, useLocationDataStatus, us
 import Spinner from "../../components/Spinner/Spinner";
 import Single from "../../components/Single/Single";
 import { TicketTable } from "../../components/tickets/TicketTable";
-import { Chip, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
+import { Table, TableBody, TableCell, TableHeader, TableRow } from "@/components/ui/table";
+import { Badge } from "@/components/ui/badge";
 import dayjs from "dayjs";
 import filterTickets from "../../utils/filter-tickets";
 import PageLayout from "../../components/layouts/PageLayout/PageLayout";
@@ -156,39 +157,37 @@ const Manager = () => {
         </Single.MainContent>
 
         <Single.SidePanel title="Прикрепленные АЗС">
-          <TableContainer>
-            {locationDataStatus.isLoading && <Spinner fullscreen={false} />}
-            {locationDataStatus.isSuccess && (
-              <Table>
-                <TableHead>
-                  <TableRow>
-                    <TableCell>АЗС</TableCell>
-                    <TableCell>Куст</TableCell>
-                    <TableCell>Создан</TableCell>
+          {locationDataStatus.isLoading && <Spinner fullscreen={false} />}
+          {locationDataStatus.isSuccess && (
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableCell>АЗС</TableCell>
+                  <TableCell>Куст</TableCell>
+                  <TableCell>Создан</TableCell>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {(manager?.petrol_stations || []).map(({ id, user, bush_id, }) => (
+                  <TableRow key={id}>
+                    <TableCell>
+                      <span className="text-sm">
+                        {petrolStationsEntities[id]?.user?.user_name}
+                      </span>
+                    </TableCell>
+                    <TableCell>
+                      <Badge>{bushesEntities[bush_id || ''].description || 'Не указано'}</Badge>
+                    </TableCell>
+                    <TableCell>
+                      <span className="text-sm">
+                        {dayjs(user?.created_at).format('DD.MM.YYYY')}
+                      </span>
+                    </TableCell>
                   </TableRow>
-                </TableHead>
-                <TableBody>
-                  {(manager?.petrol_stations || []).map(({ id, user, bush_id, }) => (
-                    <TableRow key={id}>
-                      <TableCell>
-                        <Typography variant="body2">
-                          {petrolStationsEntities[id]?.user?.user_name}
-                        </Typography>
-                      </TableCell>
-                      <TableCell>
-                        <Chip label={bushesEntities[bush_id || ''].description || 'Не указано'} />
-                      </TableCell>
-                      <TableCell>
-                        <Typography variant="body2">
-                          {dayjs(user?.created_at).format('DD.MM.YYYY')}
-                        </Typography>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            )}
-          </TableContainer>
+                ))}
+              </TableBody>
+            </Table>
+          )}
         </Single.SidePanel>
       </Single>
     </PageLayout>

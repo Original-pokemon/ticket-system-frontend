@@ -1,5 +1,4 @@
 
-import { CssBaseline } from "@mui/material";
 import { Route, Routes } from "react-router-dom";
 import { AppRoute } from "./const";
 import AuthGuard from "./components/AuthGuard/AuthGuard";
@@ -15,10 +14,10 @@ import { Ticket } from "./pages/Ticket/Ticket";
 import Manager from "./pages/Manager/Manager";
 import PetrolStation from "./pages/PetrolStation/PetrolStation";
 import Category from "./pages/Category/Category";
+import { ThemeProvider } from "./components/theme-provider/theme-provider";
 
 const App = () => (
-  <>
-    <CssBaseline />
+  <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
     <ToastContainer />
     <Routes>
       <Route path={AppRoute.Login} element={<Login />} />
@@ -36,7 +35,7 @@ const App = () => (
         </Route>
       </Route>
     </Routes>
-  </>
+  </ThemeProvider>
 );
-
+App
 export default App;

@@ -1,7 +1,8 @@
-import { Box, Chip, Button } from '@mui/material';
-import DeleteIcon from '@mui/icons-material/Delete';
+import { X } from "lucide-react"
 import { useSelectedFiltersDispatch, useSelectedFiltersState } from '../hooks';
 import Actions from '../const';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 
 function AppliedFilters() {
   const selectedFilters = useSelectedFiltersState();
@@ -25,27 +26,31 @@ function AppliedFilters() {
   };
 
   return hasSelectedFilters ? (
-      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mt: 2 }}>
-        {Object.entries(selectedFilters).map(
-          ([categoryId, { title, options }]) =>
-            options.map(({ value, label }) => (
-              <Chip
-                key={`${title}-${value}`}
-                label={`${title}: ${label}`}
-                onDelete={() => handleDeleteFilter(categoryId, value)}
-              />
-            )),
-        )}
+    <div className="flex flex-wrap gap-2 mt-4">
+      {Object.entries(selectedFilters).map(
+        ([categoryId, { title, options }]) =>
+          options.map(({ value, label }) => (
+            <Badge
+              key={`${title}-${value}`}
+              variant="secondary"
+              className="cursor-pointer"
+              onClick={() => handleDeleteFilter(categoryId, value)}
+            >
+              {`${title}: ${label}`}
+              <X className="ml-2 h-3 w-3" />
+            </Badge>
+          )),
+      )}
 
-        <Button
-          startIcon={<DeleteIcon />}
-          color="error"
-          onClick={handleClearAll}
-          sx={{ ml: 2 }}
-        >
-          Очистить
-        </Button>
-      </Box>
+      <Button
+        variant="ghost"
+        size="sm"
+        onClick={handleClearAll}
+        className="ml-2 text-red-500 hover:text-red-700"
+      >
+        Очистить
+      </Button>
+    </div>
   ) : null;
 }
 

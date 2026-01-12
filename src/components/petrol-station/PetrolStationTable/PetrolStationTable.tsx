@@ -52,14 +52,10 @@ const PetrolStationTable = () => {
 
   return isLoading ? <Spinner fullscreen={false} /> : (
     <DataTable
-      name="petrolStations"
+      pageName="petrol_stations"
       columns={columns}
-      rows={rows}
-      loading={isLoading}
+      data={rows}
       onClick={handleRowClick}
-      pageSize={-1}
-      disableToolBar
-      disableFooter
     />
   )
 }

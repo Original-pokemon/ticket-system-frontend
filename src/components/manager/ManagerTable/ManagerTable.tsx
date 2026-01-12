@@ -41,13 +41,10 @@ const ManagerTable = () => {
 
   return isLoading ? <Spinner fullscreen={false} /> : (
     <DataTable
-      name="managers"
+      pageName="managers"
       columns={columns}
-      rows={rows}
-      loading={isLoading}
+      data={rows}
       onClick={handleRowClick}
-      disableToolBar
-      disableFooter
     />
   )
 }

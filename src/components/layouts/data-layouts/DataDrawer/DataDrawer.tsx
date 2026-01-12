@@ -1,17 +1,20 @@
-import { Drawer, SxProps, Theme, useMediaQuery, Box } from '@mui/material';
-import { useTheme } from '@mui/material/styles';
-import DrawerHeader from './DrawerHeader';
-import DrawerActions from './DrawerActions';
-import DrawerBody from './DrawerBody';
 import { ReactElement } from 'react';
+import {
+  SheetTitle,
+  Sheet,
+  SheetContent,
+  SheetHeader,
+} from '@/components/ui/sheet';
+import { Separator } from '@/components/ui/separator';
+import { useIsMobile } from '@/components/hooks/use-mobile';
 
 type DataDrawerProperties = {
   open: boolean;
   onClose: () => void;
   direction?: 'left' | 'right' | 'top' | 'bottom';
   fullScreen?: boolean;
-  sx?: SxProps<Theme>;
-  maxSize: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | number;
+  className?: string;
+  maxSize?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | number;
   children: ReactElement | ReactElement[];
 };
 
@@ -19,71 +22,75 @@ function DataDrawer({
   open,
   onClose,
   direction = 'right',
-  fullScreen = false,
-  maxSize,
-  sx,
   children,
 }: DataDrawerProperties) {
-  const theme = useTheme();
-  const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
-
-  const shouldFullScreen = isSmallScreen || fullScreen;
-
-  const getSize = () => {
-    if (shouldFullScreen) {
-      return '100%';
-    }
-    if (typeof maxSize === 'number') {
-      return maxSize;
-    }
-    switch (maxSize) {
-      case 'xs': {
-        return theme.breakpoints.values.xs;
-      }
-      case 'sm': {
-        return theme.breakpoints.values.sm;
-      }
-      case 'md': {
-        return theme.breakpoints.values.md;
-      }
-      case 'lg': {
-        return theme.breakpoints.values.lg;
-      }
-      case 'xl': {
-        return theme.breakpoints.values.xl;
-      }
-      default: {
-        return theme.breakpoints.values.sm;
-      }
-    }
-  };
-
-  const paperStyles: SxProps<Theme> = {
-    width: direction === 'left' || direction === 'right' ? getSize() : '100%',
-    height: direction === 'top' || direction === 'bottom' ? getSize() : '100%',
-    // transform: shouldFullScreen ? 'translate(-50%, -50%)' : 'none',
-    borderRadius: '0 20px 20px 0',
-    ...sx,
-  };
 
   return (
-    <Drawer
-      anchor={direction}
-      open={open}
-      onClose={onClose}
-      PaperProps={{
-        sx: paperStyles,
-      }}
-      ModalProps={{
-        keepMounted: true,
-      }}
-    >
-      <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+    <Sheet open={open} onOpenChange={(open) => !open && onClose()}>
+      <SheetContent
+        side={direction}
+      >
         {children}
-      </Box>
-    </Drawer>
+      </SheetContent>
+    </Sheet>
   );
 }
+
+type DrawerHeaderProperties = {
+  children?: React.ReactNode;
+};
+
+
+
+type HeaderTitleProperties = {
+  children?: React.ReactNode;
+};
+
+function HeaderTitle({ children }: HeaderTitleProperties) {
+  return (
+    <SheetTitle className="font-semibold">
+      {children}
+    </SheetTitle>
+  );
+}
+
+type HeaderActionProperties = {
+  children: React.ReactNode;
+};
+
+function HeaderAction({ children }: HeaderActionProperties) {
+  return <div className="flex items-center gap-2">{children}</div>;
+}
+
+function DrawerHeader({ children }: DrawerHeaderProperties) {
+  return (
+    <>
+      <SheetHeader className="flex flex-row justify-between items-center p-2 pb-3 -mx-6 px-6 mt-0">
+        {children}
+      </SheetHeader>
+      <Separator className="mb-3" />
+    </>
+  );
+}
+
+type DrawerBodyProperties = {
+  children: React.ReactNode;
+};
+
+function DrawerBody({ children }: DrawerBodyProperties) {
+  return <div className="flex-1 overflow-y-auto p-2 h-full" >{children}</div>;
+}
+
+type DrawerActionsProperties = {
+  children: React.ReactNode;
+};
+
+function DrawerActions({ children }: DrawerActionsProperties) {
+  return <div className="p-4 border-t border-border mt-auto">{children}</div>;
+}
+
+DrawerHeader.Title = HeaderTitle;
+DrawerHeader.Action = HeaderAction;
 
 DataDrawer.Header = DrawerHeader;
 DataDrawer.Body = DrawerBody;

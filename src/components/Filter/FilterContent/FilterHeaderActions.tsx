@@ -1,6 +1,7 @@
 import React from 'react';
-import { IconButton, Badge } from '@mui/material';
-import RefreshIcon from '@mui/icons-material/Refresh';
+import { RefreshCw } from "lucide-react"
+import { Button } from '@/components/ui/button';
+import { useSelectedFiltersState } from '../hooks';
 
 type FilterHeaderActionsProperties = {
   hasTempSelectedFilters: boolean;
@@ -11,20 +12,20 @@ const FilterHeaderActions: React.FC<FilterHeaderActionsProperties> = ({
   hasTempSelectedFilters,
   onClearTempFilters,
 }) => {
+  const selectedFilters = useSelectedFiltersState();
+  const hasSelectedFilters = Object.keys(selectedFilters).length > 0;
+
   return (
-    <IconButton
+    <Button
+      variant="ghost"
+      size="sm"
       onClick={onClearTempFilters}
       disabled={!hasTempSelectedFilters}
       aria-label="Сбросить фильтры"
+      className={hasSelectedFilters ? "text-orange-500" : ""}
     >
-      <Badge
-        color="secondary"
-        variant="dot"
-        invisible={!hasTempSelectedFilters}
-      >
-        <RefreshIcon />
-      </Badge>
-    </IconButton>
+      <RefreshCw className="h-4 w-4" />
+    </Button>
   );
 };
 

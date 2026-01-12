@@ -1,6 +1,6 @@
 import React from 'react';
 import { FilterList, FilterListItem } from 'react-admin';
-import { SvgIconComponent } from '@mui/icons-material';
+import { LucideIcon } from 'lucide-react';
 
 type FilterOption = {
   label: string;
@@ -13,14 +13,14 @@ type Filters = {
 
 type CategoriesFilterProps = {
   label: string;
-  icon: React.ReactElement<SvgIconComponent>;
+  icon: LucideIcon;
   filterKey: string;
   filterOptions: FilterOption[];
 };
 
 export const FilterSection: React.FC<CategoriesFilterProps> = ({
   label,
-  icon,
+  icon: Icon,
   filterKey,
   filterOptions,
 }) => {
@@ -41,7 +41,7 @@ export const FilterSection: React.FC<CategoriesFilterProps> = ({
   };
 
   return (
-    <FilterList label={label} icon={icon} >
+    <FilterList label={label} icon={<Icon className="w-4 h-4" />} >
       {filterOptions.map(({ value, label }) => (
         <FilterListItem
           key={value}

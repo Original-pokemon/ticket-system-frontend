@@ -1,31 +1,39 @@
-import { Box, CircularProgress, CircularProgressProps } from '@mui/material';
-
 type SpinnerProperties = {
   fullscreen: boolean; // Если true, спиннер будет блокировать весь экран
-} & CircularProgressProps;
+  size?: number;
+};
 
 function Spinner({
   fullscreen = false,
   size = 40,
-  ...rest
 }: SpinnerProperties) {
   return (
-    <Box
-      sx={{
-        position: fullscreen ? 'fixed' : 'relative',
-        top: fullscreen ? 0 : 'auto',
-        left: fullscreen ? 0 : 'auto',
-        width: fullscreen ? '100vw' : '100%',
-        height: fullscreen ? '100vh' : '100%',
-        backgroundColor: fullscreen ? 'rgba(0, 0, 0, 0.5)' : 'transparent', // Прозрачный фон, если fullscreen
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        zIndex: fullscreen ? 1000 : 'auto', // Поднимаем z-index при fullscreen
-      }}
+    <div
+      className={
+        fullscreen
+          ? 'fixed inset-0 w-screen h-screen bg-black/50 flex items-center justify-center z-1000'
+          : 'relative w-full h-full flex items-center justify-center'
+      }
     >
-      <CircularProgress size={size} {...rest} />
-    </Box>
+      <svg
+        width={size}
+        height={size}
+        viewBox="0 0 50 50"
+        className="animate-spin"
+        style={{ color: 'var(--primary)' }}
+      >
+        <circle
+          cx="25"
+          cy="25"
+          r="20"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="5"
+          strokeLinecap="round"
+          strokeDasharray="90, 150"
+        />
+      </svg>
+    </div>
   );
 }
 

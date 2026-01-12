@@ -3,7 +3,9 @@ import { Status } from '../../../const';
 import { StatusType } from '../../../types';
 
 export const usePetrolStations = () => {
-  const { ids, entities } = useLocationDataStore.use.petrolStations();
+  const data = useLocationDataStore.use.petrolStations();
+  if (!data) return [];
+  const { ids, entities } = data;
   return ids.map((id) => entities[id]);
 };
 
@@ -15,7 +17,8 @@ export const usePetrolStationById = (id: string) => {
 };
 
 export const usePetrolStationsStatus = () => {
-  const status = useLocationDataStore.use.petrolStations().status;
+  const data = useLocationDataStore.use.petrolStations();
+  const status = data.status;
   return {
     status,
     isIdle: status === Status.Idle,
@@ -26,14 +29,17 @@ export const usePetrolStationsStatus = () => {
 };
 
 export const useBushes = () => {
-  const { ids, entities } = useLocationDataStore.use.bushes();
+  const data = useLocationDataStore.use.bushes();
+  if (!data) return [];
+  const { ids, entities } = data;
   return ids.map((id) => entities[id]);
 };
 
 export const useBushesEntities = () => useLocationDataStore.use.bushes().entities;
 
 export const useBushesStatus = () => {
-  const status = useLocationDataStore.use.bushes().status;
+  const data = useLocationDataStore.use.bushes();
+  const status = data?.status || Status.Idle;
   return {
     status,
     isIdle: status === Status.Idle,
@@ -44,8 +50,10 @@ export const useBushesStatus = () => {
 };
 
 export const useLocationDataStatus = () => {
-  const petrolStationsStatus = useLocationDataStore.use.petrolStations().status;
-  const bushesStatus = useLocationDataStore.use.bushes().status;
+  const petrolStationsData = useLocationDataStore.use.petrolStations();
+  const bushesData = useLocationDataStore.use.bushes();
+  const petrolStationsStatus = petrolStationsData?.status || Status.Idle;
+  const bushesStatus = bushesData?.status || Status.Idle;
   const statuses = [petrolStationsStatus, bushesStatus];
 
   let status: StatusType = Status.Idle;

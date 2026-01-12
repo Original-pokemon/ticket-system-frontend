@@ -1,14 +1,6 @@
 import { CategoryType, TicketStatusType, TicketType } from "../../../types";
 import { TaskPerformerType } from "../../../types/task-performer";
-
-type CategoryTableRow = {
-  id: string;
-  description: string;
-  totalTasks: number;
-  inProgressTasks: number;
-  completedTasks: number;
-  performersCount: number;
-};
+import { CategoryTableRow } from "./get-category-columns";
 
 type CategoryColumnProperties = {
   categories: Record<string, CategoryType>;
