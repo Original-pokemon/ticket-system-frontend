@@ -16,6 +16,7 @@ export const useAuthData = () => useAuthStore.use.authData();
 
 export const useAuthActions = () => ({
   postAuthData: useAuthStore.use.postAuthData(),
+  postTelegramAuth: useAuthStore.use.postTelegramAuth(),
   logout: useAuthStore.use.logout(),
   checkAuth: useAuthStore.use.checkAuth(),
 });

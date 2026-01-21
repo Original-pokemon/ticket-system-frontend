@@ -7,6 +7,7 @@ import { createSelectors } from '../../create-selectors';
 import { AxiosError } from 'axios';
 import { toast } from 'react-toastify';
 import { dropToken } from '../../../services/api';
+import { TelegramUser } from '../../../types/telegram';
 
 const api = createAPI();
 
@@ -24,6 +25,7 @@ interface Actions {
   setStatus: (status: StatusType) => void;
   setAuthData: (authData: boolean) => void;
   postAuthData: (data: AuthDataType) => Promise<string>;
+  postTelegramAuth: (user: TelegramUser) => Promise<string>;
   logout: () => Promise<boolean>;
   checkAuth: () => Promise<boolean>;
 }
@@ -57,6 +59,26 @@ const authStore = create<State & Actions>((set, get) => ({
 
         if (!toast.isActive(toastId)) {
           toast.warn('Неверные имя пользователя или пароль.', { toastId });
+        }
+      }
+      throw error;
+    }
+  },
+  postTelegramAuth: async (user: TelegramUser) => {
+    const { setStatus, setAuthData } = get();
+    setStatus(Status.Loading);
+    try {
+      const { data } = await api.post<TelegramUser>(APIRoute.TELEGRAM_LOGIN, user);
+      setStatus(Status.Success);
+      setAuthData(true);
+      return data.username || user.username || user.first_name;
+    } catch (error) {
+      setStatus(Status.Error);
+      if (error instanceof AxiosError && error.response?.status === 401) {
+        const toastId = 'telegram-auth-error';
+
+        if (!toast.isActive(toastId)) {
+          toast.warn('Ошибка авторизации через Telegram.', { toastId });
         }
       }
       throw error;

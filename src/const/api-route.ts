@@ -1,5 +1,6 @@
 const APIRoute = {
   LOGIN: "/login",
+  TELEGRAM_LOGIN: "/telegram-login",
   LOGOUT: "/logout",
   TICKETS: "/ticket",
   TICKET: (ticketId: string) => `/ticket/${ticketId}`,

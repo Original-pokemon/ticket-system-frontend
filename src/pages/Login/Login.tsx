@@ -3,19 +3,19 @@ import { useNavigate } from 'react-router-dom';
 import { useAuthData, useAuthStatus, useAuthActions } from '../../store';
 import Spinner from '../../components/Spinner/Spinner';
 import { AppRoute } from '../../const';
-import { LoginForm } from '../../components/login-form';
+import { LoginForm } from '../../components/LoginForm/LoginForm';
 import Logo from '../../components/logo/Logo';
-
-type LoginFormData = {
-  username: string;
-  password: string;
-};
+import { TelegramUser } from '../../types/telegram';
 
 function Login() {
   const { isSuccess, isLoading } = useAuthStatus();
   const isAuth = useAuthData();
-  const { postAuthData } = useAuthActions();
+  const { postAuthData, postTelegramAuth } = useAuthActions();
   const navigate = useNavigate();
+
+  const handleTelegramAuth = async (user: TelegramUser) => {
+    await postTelegramAuth(user);
+  };
 
   useEffect(() => {
     if (isSuccess && isAuth) {
@@ -32,7 +32,11 @@ function Login() {
         <div className="flex flex-1 items-center justify-center">
           <div className="w-full max-w-xs">
             {isLoading && <Spinner fullscreen size={70} />}
-            <LoginForm postAuthData={postAuthData} isLoading={isLoading} />
+            <LoginForm
+              postAuthData={postAuthData}
+              onTelegramAuth={handleTelegramAuth}
+              isLoading={isLoading}
+            />
           </div>
         </div>
       </div>

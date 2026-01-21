@@ -37,5 +37,5 @@ const App = () => (
     </Routes>
   </ThemeProvider>
 );
-App
+
 export default App;
