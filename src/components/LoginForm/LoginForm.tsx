@@ -134,7 +134,7 @@ export function LoginForm({ postAuthData, onTelegramAuth, isLoading }: LoginForm
             onAuthCallback={onTelegramAuth}
             lang="ru"
             buttonSize="large"
-            showAvatar={true}
+            showAvatar={false}
             requestAccess="write"
           />
         </Field>

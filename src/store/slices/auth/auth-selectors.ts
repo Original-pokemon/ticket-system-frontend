@@ -14,6 +14,8 @@ export const useAuthStatus = () => {
 
 export const useAuthData = () => useAuthStore.use.authData();
 
+export const useCurrentUser = () => useAuthStore.use.currentUser();
+
 export const useAuthActions = () => ({
   postAuthData: useAuthStore.use.postAuthData(),
   postTelegramAuth: useAuthStore.use.postTelegramAuth(),
