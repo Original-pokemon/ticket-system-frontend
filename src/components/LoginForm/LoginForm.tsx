@@ -128,7 +128,7 @@ export function LoginForm({ postAuthData, onTelegramAuth, isLoading }: LoginForm
           </Field>
         </FieldSet>
         <FieldSeparator>Или продложите с</FieldSeparator>
-        <Field className="text-center">
+        <Field className="items-center">
           <TelegramLoginButton
             botUsername='Ticket_system_ortk_bot'
             onAuthCallback={onTelegramAuth}
