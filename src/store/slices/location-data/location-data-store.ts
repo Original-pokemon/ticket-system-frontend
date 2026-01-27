@@ -42,6 +42,9 @@ const locationDataStore = create<State & Actions>((set, get) => ({
   },
   setPetrolStations: (data) =>
     set((state) => {
+      if (!Array.isArray(data)) {
+        return state;
+      }
       const entities = data.reduce((acc, item) => {
         acc[item.id] = item;
         return acc;
@@ -64,6 +67,9 @@ const locationDataStore = create<State & Actions>((set, get) => ({
     })),
   setBushes: (data) =>
     set((state) => {
+      if (!Array.isArray(data)) {
+        return state;
+      }
       const entities = data.reduce((acc, item) => {
         acc[item.id] = item;
         return acc;

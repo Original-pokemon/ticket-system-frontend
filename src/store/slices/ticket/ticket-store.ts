@@ -66,6 +66,9 @@ const ticketStore = create<State & Actions>((set, get) => ({
   },
   setTickets: (data) =>
     set((state) => {
+      if (!Array.isArray(data)) {
+        return state;
+      }
       const entities = data.reduce((acc, item) => {
         acc[item.id] = item;
         return acc;
@@ -88,6 +91,9 @@ const ticketStore = create<State & Actions>((set, get) => ({
     })),
   setAttachments: (data) =>
     set((state) => {
+      if (!Array.isArray(data)) {
+        return state;
+      }
       const entities = data.reduce((acc, item) => {
         acc[item.id] = item;
         return acc;
@@ -110,6 +116,9 @@ const ticketStore = create<State & Actions>((set, get) => ({
     })),
   setComments: (data) =>
     set((state) => {
+      if (!Array.isArray(data)) {
+        return state;
+      }
       const entities = data.reduce((acc, item) => {
         acc[item.id] = item;
         return acc;
