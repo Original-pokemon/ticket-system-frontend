@@ -4,6 +4,7 @@ import { CategoryType, TicketStatusType, StatusType } from '../../../types';
 import { Status } from '../../../const';
 import { APIRoute } from '../../../const';
 import { createSelectors } from '../../create-selectors';
+import { normalizeToArray } from '../../../utils/normalize-array';
 
 const api = createAPI();
 
@@ -42,14 +43,12 @@ const referenceDataStore = create<State & Actions>((set, get) => ({
   },
   setCategories: (data) =>
     set((state) => {
-      if (!Array.isArray(data)) {
-        return state;
-      }
-      const entities = data.reduce((acc, item) => {
+      const safeData = normalizeToArray<CategoryType>(data);
+      const entities = safeData.reduce((acc, item) => {
         acc[item.id] = item;
         return acc;
       }, {} as Record<string, CategoryType>);
-      const ids = data.map((item) => item.id);
+      const ids = safeData.map((item) => item.id);
       return {
         categories: {
           ...state.categories,
@@ -67,14 +66,12 @@ const referenceDataStore = create<State & Actions>((set, get) => ({
     })),
   setStatuses: (data) =>
     set((state) => {
-      if (!Array.isArray(data)) {
-        return state;
-      }
-      const entities = data.reduce((acc, item) => {
+      const safeData = normalizeToArray<TicketStatusType>(data);
+      const entities = safeData.reduce((acc, item) => {
         acc[item.id] = item;
         return acc;
       }, {} as Record<string, TicketStatusType>);
-      const ids = data.map((item) => item.id);
+      const ids = safeData.map((item) => item.id);
       return {
         statuses: {
           ...state.statuses,
