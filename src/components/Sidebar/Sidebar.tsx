@@ -23,11 +23,12 @@ import {
 import { AppRoute } from "@/const"
 import Logo from "../logo/Logo"
 import { NavUser } from "./NavUser"
+import { useCurrentUser } from "@/store/slices/auth/auth-selectors"
 
 const data = {
   user: {
     name: "User",
-    email: "user@example.com",
+    username: "user@example.com",
     avatar: "/avatars/user.jpg",
   },
   navMain: [
@@ -59,12 +60,20 @@ const data = {
 }
 
 export default function Sidebar({ ...props }: React.ComponentProps<typeof SidebarUI>) {
+  const currentUser = useCurrentUser();
+
+  const user = currentUser ? {
+    name: currentUser.name,
+    username: currentUser.username,
+    avatar: currentUser.avatar,
+  } : data.user;
+
   return (
     <SidebarUI collapsible="offcanvas" {...props}>
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton 
+            <SidebarMenuButton
               asChild
               className="data-[slot=sidebar-menu-button]:p-1.5!"
               >
@@ -77,7 +86,7 @@ export default function Sidebar({ ...props }: React.ComponentProps<typeof Sideba
         <NavMain items={data.navMain} />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        <NavUser user={user} />
       </SidebarFooter>
     </SidebarUI>
   )

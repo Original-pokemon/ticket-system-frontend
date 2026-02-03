@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/tooltip"
 import { SidebarTrigger } from "@/components/ui/sidebar"
 import { Breadcrumbs } from "@/components/ui/breadcrumbs";
-import { ModeToggle } from "../ModeToggle/mode-toggle";
+import { ModeToggle } from "../ModeToggle/ModeToggle";
 
 type HeaderProperties = {
   className?: string;

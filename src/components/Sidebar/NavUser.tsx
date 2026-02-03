@@ -21,7 +21,6 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  useSidebar,
 } from "@/components/ui/sidebar"
 import { useAuthActions } from "@/store/slices/auth/auth-selectors"
 import { AppRoute } from "@/const"
@@ -31,7 +30,7 @@ export function NavUser({
 }: {
   user: {
     name: string
-    email: string
+    username?: string
     avatar: string
   }
 }) {
@@ -54,7 +53,7 @@ export function NavUser({
               <div className="grid flex-1 text-left leading-tight">
                 <span className="truncate font-medium">{user.name}</span>
                 <span className="text-muted-foreground truncate text-xs">
-                  {user.email}
+                  {user.username || 'Пользователь'}
                 </span>
               </div>
               <MoreVertical className="ml-auto size-4" />
@@ -74,7 +73,7 @@ export function NavUser({
                 <div className="grid flex-1 text-left leading-tight">
                   <span className="truncate font-medium">{user.name}</span>
                   <span className="text-muted-foreground truncate text-xs">
-                    {user.email}
+                    {user.username || 'Пользователь'}
                   </span>
                 </div>
               </div>
