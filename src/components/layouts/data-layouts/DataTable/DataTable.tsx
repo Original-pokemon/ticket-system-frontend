@@ -32,9 +32,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { useState } from 'react';
+import {
+  useState,
+  useEffect,
+} from 'react';
 import * as XLSX from 'xlsx';
 import dayjs from 'dayjs';
+import { useSearchParams } from 'react-router-dom';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -51,11 +55,18 @@ export function DataTable<TData, TValue>({
   dataType,
   pageName,
 }: DataTableProps<TData, TValue>) {
-  const [sorting, setSorting] = useState<SortingState>([])
-  const [pagination, setPagination] = useState<PaginationState>({
-    pageIndex: 0,
-    pageSize: 20,
-  })
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [sorting, setSorting] = useState<SortingState>([]);
+
+  const [pagination, setPagination] = useState<PaginationState>(() => {
+    const pageIndexParam = searchParams.get("pageIndex");
+    const pageSizeParam = searchParams.get("pageSize");
+
+    const pageIndex = pageIndexParam ? Number(pageIndexParam) - 1 : 0; // 0-based для таблицы
+    const pageSize = pageSizeParam ? Number(pageSizeParam) : 20;
+
+    return { pageIndex, pageSize };
+  });
 
   const table = useReactTable({
     data,
@@ -69,7 +80,16 @@ export function DataTable<TData, TValue>({
       sorting,
       pagination
     },
-  })
+    autoResetPageIndex: false,
+  });
+
+  useEffect(() => {
+    setSearchParams(prev => {
+      prev.set("pageIndex", String(pagination.pageIndex + 1));
+      prev.set("pageSize", String(pagination.pageSize));
+      return prev;
+    }, { replace: true });
+  }, [pagination, setSearchParams]);
 
   const formatDate = (value: string | Date | undefined) => {
     if (!value) return 'Не указано';

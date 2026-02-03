@@ -15,8 +15,12 @@ export function parseSearchParamsToFilters(
 
 
   for (const [filterId, rawValue] of searchParams.entries()) {
-    const values = rawValue.split(',');
 
+    if (!filterMeta[filterId]) {
+      continue;
+    }
+
+    const values = rawValue.split(',');
     const { title, options } = filterMeta[filterId];
 
     result[filterId] = {
@@ -40,9 +44,16 @@ export function parseSearchParamsToFilters(
  * @returns URLSearchParams для записи в URL
  */
 export function buildSearchParamsFromFilters(
-  filters: SelectedFiltersType
+  filters: SelectedFiltersType,
+  preserveParams?: URLSearchParams
 ): URLSearchParams {
   const searchParams = new URLSearchParams();
+
+  if (preserveParams) {
+    preserveParams.forEach((value, key) => {
+      searchParams.set(key, value);
+    });
+  }
 
   Object.entries(filters).forEach(([id, filterSection]) => {
     const commaSeparated = filterSection.options.map((opt) => opt.value).join(',');
