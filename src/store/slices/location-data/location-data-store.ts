@@ -4,7 +4,6 @@ import { BushType, PetrolStationType, StatusType } from '../../../types';
 import { Status } from '../../../const';
 import { APIRoute } from '../../../const';
 import { createSelectors } from '../../create-selectors';
-import { normalizeToArray } from '../../../utils/normalize-array';
 
 const api = createAPI();
 
@@ -43,12 +42,11 @@ const locationDataStore = create<State & Actions>((set, get) => ({
   },
   setPetrolStations: (data) =>
     set((state) => {
-      const safeData = normalizeToArray<PetrolStationType>(data);
-      const entities = safeData.reduce((acc, item) => {
+      const entities = (data || []).reduce((acc, item) => {
         acc[item.id] = item;
         return acc;
       }, {} as Record<string, PetrolStationType>);
-      const ids = safeData.map((item) => item.id);
+      const ids = (data || []).map((item) => item.id);
       return {
         petrolStations: {
           ...state.petrolStations,
@@ -66,12 +64,11 @@ const locationDataStore = create<State & Actions>((set, get) => ({
     })),
   setBushes: (data) =>
     set((state) => {
-      const safeData = normalizeToArray<BushType>(data);
-      const entities = safeData.reduce((acc, item) => {
+      const entities = (data || []).reduce((acc, item) => {
         acc[item.id] = item;
         return acc;
       }, {} as Record<string, BushType>);
-      const ids = safeData.map((item) => item.id);
+      const ids = (data || []).map((item) => item.id);
       return {
         bushes: {
           ...state.bushes,

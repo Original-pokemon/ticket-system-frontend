@@ -5,7 +5,6 @@ import { TaskPerformerType } from '../../../types/task-performer';
 import { Status } from '../../../const';
 import { APIRoute } from '../../../const';
 import { createSelectors } from '../../create-selectors';
-import { normalizeToArray } from '../../../utils/normalize-array';
 
 const api = createAPI();
 
@@ -62,8 +61,7 @@ const userManagementStore = create<State & Actions>((set, get) => ({
     set((state) => {
       const newEntities = { ...state.users.entities };
       const newIds = upsert ? [...state.users.ids] : [];
-      const safeData = normalizeToArray<UserType>(data);
-      safeData.forEach((item) => {
+      data.forEach((item) => {
         newEntities[item.id] = item;
         if (!newIds.includes(item.id)) {
           newIds.push(item.id);
@@ -88,8 +86,7 @@ const userManagementStore = create<State & Actions>((set, get) => ({
     set((state) => {
       const newEntities = { ...state.managers.entities };
       const newIds = upsert ? [...state.managers.ids] : [];
-      const safeData = normalizeToArray<ManagerType>(data);
-      safeData.forEach((item) => {
+      data.forEach((item) => {
         newEntities[item.id] = item;
         if (!newIds.includes(item.id)) {
           newIds.push(item.id);
@@ -114,8 +111,7 @@ const userManagementStore = create<State & Actions>((set, get) => ({
     set((state) => {
       const newEntities = { ...state.taskPerformers.entities };
       const newIds = upsert ? [...state.taskPerformers.ids] : [];
-      const safeData = normalizeToArray<TaskPerformerType>(data);
-      safeData.forEach((item) => {
+      data.forEach((item) => {
         newEntities[item.id] = item;
         if (!newIds.includes(item.id)) {
           newIds.push(item.id);
