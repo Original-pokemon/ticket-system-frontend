@@ -89,7 +89,7 @@ export function DataTable<TData, TValue>({
       prev.set("pageSize", String(pagination.pageSize));
       return prev;
     }, { replace: true });
-  }, [pagination, setSearchParams]);
+  }, [pagination, setSearchParams, searchParams]);
 
   const formatDate = (value: string | Date | undefined) => {
     if (!value) return 'Не указано';

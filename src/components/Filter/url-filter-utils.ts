@@ -45,15 +45,8 @@ export function parseSearchParamsToFilters(
  */
 export function buildSearchParamsFromFilters(
   filters: SelectedFiltersType,
-  preserveParams?: URLSearchParams
 ): URLSearchParams {
   const searchParams = new URLSearchParams();
-
-  if (preserveParams) {
-    preserveParams.forEach((value, key) => {
-      searchParams.set(key, value);
-    });
-  }
 
   Object.entries(filters).forEach(([id, filterSection]) => {
     const commaSeparated = filterSection.options.map((opt) => opt.value).join(',');
