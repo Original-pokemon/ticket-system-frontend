@@ -42,11 +42,11 @@ const locationDataStore = create<State & Actions>((set, get) => ({
   },
   setPetrolStations: (data) =>
     set((state) => {
-      const entities = (data || []).reduce((acc, item) => {
+      const entities = data.reduce((acc, item) => {
         acc[item.id] = item;
         return acc;
       }, {} as Record<string, PetrolStationType>);
-      const ids = (data || []).map((item) => item.id);
+      const ids = data.map((item) => item.id);
       return {
         petrolStations: {
           ...state.petrolStations,
@@ -64,11 +64,11 @@ const locationDataStore = create<State & Actions>((set, get) => ({
     })),
   setBushes: (data) =>
     set((state) => {
-      const entities = (data || []).reduce((acc, item) => {
+      const entities = data.reduce((acc, item) => {
         acc[item.id] = item;
         return acc;
       }, {} as Record<string, BushType>);
-      const ids = (data || []).map((item) => item.id);
+      const ids = data.map((item) => item.id);
       return {
         bushes: {
           ...state.bushes,

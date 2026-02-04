@@ -89,8 +89,7 @@ const referenceDataStore = create<State & Actions>((set, get) => ({
     setCategoriesStatus(Status.Loading);
     try {
       const { data } = await api.get<CategoryType[]>(APIRoute.CATEGORIES);
-      const response = await api.get<any>(APIRoute.CATEGORIES);
-      setCategories(response.data.data);
+      setCategories(data);
       setCategoriesStatus(Status.Success);
     } catch (error) {
       setCategoriesStatus(Status.Error);

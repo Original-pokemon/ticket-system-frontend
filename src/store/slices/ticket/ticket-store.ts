@@ -66,11 +66,11 @@ const ticketStore = create<State & Actions>((set, get) => ({
   },
   setTickets: (data) =>
     set((state) => {
-      const entities = (data || []).reduce((acc, item) => {
+      const entities = data.reduce((acc, item) => {
         acc[item.id] = item;
         return acc;
       }, {} as Record<string, TicketType>);
-      const ids = (data || []).map((item) => item.id).sort((a, b) => new Date(entities[b].created_at).getTime() - new Date(entities[a].created_at).getTime());
+      const ids = data.map((item) => item.id).sort((a, b) => new Date(entities[b].created_at).getTime() - new Date(entities[a].created_at).getTime());
       return {
         tickets: {
           ...state.tickets,
@@ -88,11 +88,11 @@ const ticketStore = create<State & Actions>((set, get) => ({
     })),
   setAttachments: (data) =>
     set((state) => {
-      const entities = (data || []).reduce((acc, item) => {
+      const entities = data.reduce((acc, item) => {
         acc[item.id] = item;
         return acc;
       }, {} as Record<string, AttachmentType>);
-      const ids = (data || []).map((item) => item.id);
+      const ids = data.map((item) => item.id);
       return {
         attachments: {
           ...state.attachments,
@@ -110,11 +110,11 @@ const ticketStore = create<State & Actions>((set, get) => ({
     })),
   setComments: (data) =>
     set((state) => {
-      const entities = (data || []).reduce((acc, item) => {
+      const entities = data.reduce((acc, item) => {
         acc[item.id] = item;
         return acc;
       }, {} as Record<string, CommentType>);
-      const ids = (data || []).map((item) => item.id);
+      const ids = data.map((item) => item.id);
       return {
         comments: {
           ...state.comments,
