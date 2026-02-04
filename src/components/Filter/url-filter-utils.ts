@@ -15,8 +15,12 @@ export function parseSearchParamsToFilters(
 
 
   for (const [filterId, rawValue] of searchParams.entries()) {
-    const values = rawValue.split(',');
 
+    if (!filterMeta[filterId]) {
+      continue;
+    }
+
+    const values = rawValue.split(',');
     const { title, options } = filterMeta[filterId];
 
     result[filterId] = {
@@ -40,7 +44,7 @@ export function parseSearchParamsToFilters(
  * @returns URLSearchParams для записи в URL
  */
 export function buildSearchParamsFromFilters(
-  filters: SelectedFiltersType
+  filters: SelectedFiltersType,
 ): URLSearchParams {
   const searchParams = new URLSearchParams();
 

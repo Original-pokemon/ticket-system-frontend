@@ -108,8 +108,13 @@ function Filter({ children, onChange, filterMeta }: FilterProperties) {
 
     debounceTimeout.current = setTimeout(() => {
       onChange(state);
-      const newSearchParams = buildSearchParamsFromFilters(state);
-      setSearchParams(newSearchParams);
+      setSearchParams((prev) => {
+        const newSearchParams = buildSearchParamsFromFilters(state);
+        newSearchParams.forEach((value, key) => {
+          prev.set(key, value);
+        });
+        return prev;
+      });
     }, 300);
   }, [state, onChange, setSearchParams]);
 
