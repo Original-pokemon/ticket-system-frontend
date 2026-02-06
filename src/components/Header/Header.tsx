@@ -18,7 +18,7 @@ import { Breadcrumbs } from "@/components/ui/breadcrumbs";
 import { ModeToggle } from "../ModeToggle/ModeToggle";
 import PageLayout from "../layouts/PageLayout/PageLayout";
 import { ChevronLeft } from "lucide-react";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 type HeaderProperties = {
   className?: string;
@@ -41,6 +41,15 @@ function Header({ className }: HeaderProperties) {
   }
 
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const handleBack = () => {
+    if (location.state?.returnTo) {
+      navigate(location.state.returnTo);
+    } else {
+      navigate(-1);
+    }
+  };
 
   return (
     <header className="flex h-(--header-height) shrink-0 items-center gap-2 border-b transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-(--header-height)">
@@ -58,7 +67,7 @@ function Header({ className }: HeaderProperties) {
               variant="outline"
               className="h-8 w-fit p-2"
               size="icon"
-              onClick={() => navigate(-1)}
+              onClick={handleBack}
             >
               <ChevronLeft />
               <div>back</div>

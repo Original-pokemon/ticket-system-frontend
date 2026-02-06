@@ -38,7 +38,7 @@ import {
 } from 'react';
 import * as XLSX from 'xlsx';
 import dayjs from 'dayjs';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useLocation, useNavigate } from 'react-router-dom';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -124,6 +124,10 @@ export function DataTable<TData, TValue>({
     const filename = `ticket_system_${dataType || 'data'}_${pageName || 'page'}_${currentDate}.xlsx`;
     XLSX.writeFile(wb, filename);
   }
+
+  const location = useLocation();
+  const navigate = useNavigate();
+
   return (
     <div>
       <div className="flex justify-end mb-4">
