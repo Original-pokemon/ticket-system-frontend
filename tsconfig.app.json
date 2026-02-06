@@ -21,6 +21,9 @@
       "@/*": ["./src/*"],
     },
     "types": ["vite/client"],
-    "noEmit": true,
+    "declaration": true,
+    "declarationMap": true,
+    "emitDeclarationOnly": true,
+    "outDir": "./dist",
   },
 }
