@@ -80,6 +80,7 @@ export const Ticket = () => {
 
   return (
     <PageLayout>
+      <PageLayout.BackButton />
       {
         uniqTicketStatus.isError ?
           <h6 className="text-lg text-red-500">
@@ -124,7 +125,7 @@ export const Ticket = () => {
                   {comments.length === 0 ? (
                     <span className="text-sm">No results found</span>
                   ) : (
-                      <div className="flex flex-col gap-1">
+                    <div className="flex flex-col gap-1">
                       {comments.map((comment) => (
                         <div key={comment.id} className="p-1 bg-white shadow">
                           <p className="text-sm">{comment.text}</p>
@@ -133,7 +134,7 @@ export const Ticket = () => {
                           </span>
                         </div>
                       ))}
-                      </div>
+                    </div>
                   )}
                 </Single.Comments>
               </Single.MainContent>
@@ -175,7 +176,6 @@ export const Ticket = () => {
             </Single>
           )
       }
-
     </PageLayout>
   );
 };

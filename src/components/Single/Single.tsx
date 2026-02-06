@@ -7,7 +7,7 @@ type SingleProps = {
 
 function Single({ className, children }: SingleProps) {
   return (
-    <div className={`grid grid-cols-12 gap-2 ${className || ''}`}>
+    <div className={`grid grid-cols-12 mt-6 gap-2 ${className || ''}`}>
       {children}
     </div>
   );
