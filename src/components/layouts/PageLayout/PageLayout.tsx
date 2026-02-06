@@ -1,4 +1,5 @@
 import React from 'react';
+import { LoginDeprecationNotice } from '../../LoginDeprecationNotice';
 
 type SubComponentProperties = {
   children: React.ReactNode;
@@ -9,11 +10,7 @@ function Breadcrumbs({ children }: SubComponentProperties) {
 }
 
 function Title({ children }: SubComponentProperties) {
-  return (
-    <h5 className="mb-6 text-4xl leading-tight">
-      {children}
-    </h5>
-  );
+  return <h5 className="mb-6 text-4xl leading-tight">{children}</h5>;
 }
 
 function Diagrams({ children }: SubComponentProperties) {
@@ -39,11 +36,7 @@ function Sorting({ children }: SubComponentProperties) {
 }
 
 function Toolbar({ children }: SubComponentProperties) {
-  return (
-    <div className="flex justify-between pb-2 gap-2">
-      {children}
-    </div>
-  );
+  return <div className="flex justify-between pb-2 gap-2">{children}</div>;
 }
 
 type PageLayoutProperties = {
@@ -52,7 +45,14 @@ type PageLayoutProperties = {
 };
 
 function PageLayout({ children, className }: PageLayoutProperties) {
-  return <div className={`p-6 ${className || ''}`}>{children}</div>;
+  return (
+    <div className={`p-6 ${className || ''}`}>
+      <div className="mb-6">
+        <LoginDeprecationNotice />
+      </div>
+      {children}
+    </div>
+  );
 }
 
 PageLayout.Breadcrumbs = Breadcrumbs;

@@ -9,13 +9,14 @@ import {
   FieldLegend,
   FieldSeparator,
   FieldSet,
-} from "@/components/ui/field"
+} from '@/components/ui/field';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Eye, EyeOff } from 'lucide-react';
 import { TelegramLoginButton } from '../TelegramLoginButton';
 import { TelegramUser } from '../../types/telegram';
+import { LoginDeprecationNotice } from '../LoginDeprecationNotice';
 
 type LoginFormData = {
   username: string;
@@ -41,7 +42,11 @@ interface LoginFormProps {
   isLoading: boolean;
 }
 
-export function LoginForm({ postAuthData, onTelegramAuth, isLoading }: LoginFormProps) {
+export function LoginForm({
+  postAuthData,
+  onTelegramAuth,
+  isLoading,
+}: LoginFormProps) {
   const [showPassword, setShowPassword] = useState(false);
 
   const {
@@ -72,6 +77,7 @@ export function LoginForm({ postAuthData, onTelegramAuth, isLoading }: LoginForm
           <FieldLegend className="text-center">
             <h1 className="text-4xl font-bold">Вход в аккаунт</h1>
           </FieldLegend>
+          <LoginDeprecationNotice />
           <Field>
             <FieldLabel htmlFor="username">Логин</FieldLabel>
             <Controller
@@ -90,9 +96,13 @@ export function LoginForm({ postAuthData, onTelegramAuth, isLoading }: LoginForm
                 />
               )}
             />
-            {errors.username && <FieldError className="text-sm text-red-500">{errors.username.message}</FieldError>}
+            {errors.username && (
+              <FieldError className="text-sm text-red-500">
+                {errors.username.message}
+              </FieldError>
+            )}
           </Field>
-          <Field >
+          <Field>
             <FieldLabel htmlFor="password">Пароль</FieldLabel>
             <div className="relative">
               <Controller
@@ -116,21 +126,33 @@ export function LoginForm({ postAuthData, onTelegramAuth, isLoading }: LoginForm
                 className="absolute right-0 top-0 h-full px-3"
                 onClick={togglePasswordVisibility}
               >
-                {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                {showPassword ? (
+                  <EyeOff className="h-4 w-4" />
+                ) : (
+                  <Eye className="h-4 w-4" />
+                )}
               </Button>
             </div>
-            {errors.password && <FieldError className="text-sm text-red-500">{errors.password.message}</FieldError>}
+            {errors.password && (
+              <FieldError className="text-sm text-red-500">
+                {errors.password.message}
+              </FieldError>
+            )}
           </Field>
           <Field>
-            <Button type="submit" className="w-full" disabled={isLoading || !isValid}>
+            <Button
+              type="submit"
+              className="w-full"
+              disabled={isLoading || !isValid}
+            >
               {isLoading ? 'Вход...' : 'Войти'}
             </Button>
           </Field>
         </FieldSet>
-        <FieldSeparator>Или продложите с</FieldSeparator>
+        <FieldSeparator>Или продолжите с</FieldSeparator>
         <Field className="items-center">
           <TelegramLoginButton
-            botUsername='Ticket_system_ortk_bot'
+            botUsername="Ticket_system_ortk_bot"
             onAuthCallback={onTelegramAuth}
             lang="ru"
             buttonSize="large"
