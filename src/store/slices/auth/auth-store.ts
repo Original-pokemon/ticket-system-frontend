@@ -16,6 +16,11 @@ export type AuthDataType = {
   password: string;
 };
 
+export type CheckAuthResponseType = {
+  username: string;
+  photo_url?: string;
+};
+
 interface State {
   status: StatusType;
   authData: boolean;
@@ -58,7 +63,7 @@ const authStore = create<State & Actions>((set, get) => ({
     try {
       const { data } = await api.post<AuthDataType>(APIRoute.LOGIN, {
         username,
-        password
+        password,
       });
       setStatus(Status.Success);
       setAuthData(true);
@@ -84,10 +89,14 @@ const authStore = create<State & Actions>((set, get) => ({
     const { setStatus, setAuthData, setCurrentUser } = get();
     setStatus(Status.Loading);
     try {
-      const { data } = await api.post<TelegramUser>(APIRoute.TELEGRAM_LOGIN, user);
+      const { data } = await api.post<TelegramUser>(
+        APIRoute.TELEGRAM_LOGIN,
+        user
+      );
       setStatus(Status.Success);
       setAuthData(true);
-      const userName = user.first_name + (user.last_name ? ' ' + user.last_name : '');
+      const userName =
+        user.first_name + (user.last_name ? ' ' + user.last_name : '');
       setCurrentUser({
         name: userName,
         username: user.username,
@@ -122,19 +131,28 @@ const authStore = create<State & Actions>((set, get) => ({
         const toastId = 'auth-error';
 
         if (!toast.isActive(toastId)) {
-          toast.warn('Не удалось выйти из аккаунта, попробуйте ещё раз', { toastId });
+          toast.warn('Не удалось выйти из аккаунта, попробуйте ещё раз', {
+            toastId,
+          });
         }
       }
       throw error;
     }
   },
   checkAuth: async () => {
-    const { setStatus, setAuthData } = get();
+    const { setStatus, setAuthData, setCurrentUser } = get();
     setStatus(Status.Loading);
     try {
-      await api.get<AuthDataType>(APIRoute.CHECK_AUTH);
+      const { data } = await api.get<CheckAuthResponseType>(
+        APIRoute.CHECK_AUTH
+      );
       setStatus(Status.Success);
       setAuthData(true);
+      setCurrentUser({
+        name: data.username,
+        username: data.username,
+        avatar: data.photo_url || '/avatars/user.jpg',
+      });
       return true;
     } catch (error) {
       setStatus(Status.Error);
