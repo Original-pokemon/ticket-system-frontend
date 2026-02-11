@@ -74,7 +74,7 @@ const Category = () => {
   ])
 
   const filteredTaskPerformers = useMemo(() => {
-    return taskPerformers.filter(({ category_id }) => category_id === id)
+    return taskPerformers.filter(({ id }) => id === id)
   }, [taskPerformers.length, id])
 
   const handleApplyFilters = useCallback((selectedFilters: SelectedFiltersType) => {
