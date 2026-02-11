@@ -4,7 +4,7 @@ import {
   ChevronsLeft,
   ChevronsRight,
   Download,
-} from "lucide-react"
+} from 'lucide-react';
 import {
   ColumnDef,
   flexRender,
@@ -15,7 +15,7 @@ import {
   PaginationState,
   getSortedRowModel,
   OnChangeFn,
-} from "@tanstack/react-table"
+} from '@tanstack/react-table';
 import {
   Table,
   TableBody,
@@ -23,24 +23,25 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
+} from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
-import { Label } from '@/components/ui/label'
+import { Label } from '@/components/ui/label';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
+} from '@/components/ui/select';
 import { useState, useMemo } from 'react';
 import * as XLSX from 'xlsx';
 import dayjs from 'dayjs';
-import { useSearchParams, useLocation, useNavigate } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
+import { usePageSize } from '@/hooks/use-page-size';
 
 interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[]
-  data: TData[]
+  columns: ColumnDef<TData, TValue>[];
+  data: TData[];
   onClick?: (id: string | number, event?: React.MouseEvent) => void;
   dataType?: string;
   pageName?: string;
@@ -55,26 +56,42 @@ export function DataTable<TData, TValue>({
 }: DataTableProps<TData, TValue>) {
   const [searchParams, setSearchParams] = useSearchParams();
   const [sorting, setSorting] = useState<SortingState>([]);
+  const [pageSize, setPageSize] = usePageSize();
 
   const pagination = useMemo<PaginationState>(() => {
-    const pageIndexFromUrl = parseInt(searchParams.get("pageIndex") ?? "1", 10); // URL 1-based
-    const pageSizeFromUrl = parseInt(searchParams.get("pageSize") ?? "20", 10);
+    const pageIndexFromUrl = parseInt(searchParams.get('pageIndex') ?? '1', 10);
 
     return {
-      pageIndex: pageIndexFromUrl - 1, // table 0-based
-      pageSize: pageSizeFromUrl,
+      pageIndex: pageIndexFromUrl - 1,
+      pageSize,
     };
-  }, [searchParams]);
+  }, [searchParams, pageSize]);
 
   const onPaginationChange: OnChangeFn<PaginationState> = (updater) => {
-    const nextPagination = (typeof updater === "function") ? updater(pagination) : updater;
+    const nextPagination =
+      typeof updater === 'function' ? updater(pagination) : updater;
 
-    setSearchParams((prev) => {
-      const newParams = new URLSearchParams(prev.toString());
-      newParams.set("pageIndex", String(nextPagination.pageIndex + 1));
-      newParams.set("pageSize", String(nextPagination.pageSize));
-      return newParams;
-    }, { replace: true });
+    if (nextPagination.pageSize !== pageSize) {
+      setPageSize(nextPagination.pageSize);
+      setSearchParams(
+        (prev) => {
+          const newParams = new URLSearchParams(prev.toString());
+          newParams.set('pageIndex', '1');
+          return newParams;
+        },
+        { replace: true }
+      );
+      return;
+    }
+
+    setSearchParams(
+      (prev) => {
+        const newParams = new URLSearchParams(prev.toString());
+        newParams.set('pageIndex', String(nextPagination.pageIndex + 1));
+        return newParams;
+      },
+      { replace: true }
+    );
   };
 
   const table = useReactTable({
@@ -87,7 +104,7 @@ export function DataTable<TData, TValue>({
     getSortedRowModel: getSortedRowModel(),
     state: {
       sorting,
-      pagination
+      pagination,
     },
     autoResetPageIndex: false,
   });
@@ -96,12 +113,14 @@ export function DataTable<TData, TValue>({
     if (!value) return 'Не указано';
     const date = typeof value === 'string' ? new Date(value) : value;
     return dayjs(date).format('DD.MM.YYYY');
-  }
+  };
 
   const exportToExcel = () => {
-    const headers = columns.map(col => typeof col.header === 'string' ? col.header : 'Header');
-    const rows = data.map(row => {
-      return columns.map(col => {
+    const headers = columns.map((col) =>
+      typeof col.header === 'string' ? col.header : 'Header'
+    );
+    const rows = data.map((row) => {
+      return columns.map((col) => {
         let value: any;
         const colAny = col as any;
         if (colAny.accessorFn) {
@@ -112,7 +131,13 @@ export function DataTable<TData, TValue>({
           value = '';
         }
         // Apply formatting for date columns
-        if (typeof col.header === 'string' && (col.header.includes('дата') || col.header.includes('Дата') || col.header.includes('date') || col.header.includes('Date'))) {
+        if (
+          typeof col.header === 'string' &&
+          (col.header.includes('дата') ||
+            col.header.includes('Дата') ||
+            col.header.includes('date') ||
+            col.header.includes('Date'))
+        ) {
           value = formatDate(value);
         }
         return value;
@@ -124,10 +149,7 @@ export function DataTable<TData, TValue>({
     const currentDate = dayjs().format('YYYY-MM-DD');
     const filename = `ticket_system_${dataType || 'data'}_${pageName || 'page'}_${currentDate}.xlsx`;
     XLSX.writeFile(wb, filename);
-  }
-
-  const location = useLocation();
-  const navigate = useNavigate();
+  };
 
   return (
     <div>
@@ -152,11 +174,11 @@ export function DataTable<TData, TValue>({
                       {header.isPlaceholder
                         ? null
                         : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
                     </TableHead>
-                  )
+                  );
                 })}
               </TableRow>
             ))}
@@ -166,19 +188,27 @@ export function DataTable<TData, TValue>({
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
-                  onClick={(event) => onClick?.((row.original as any).id, event)}
+                  data-state={row.getIsSelected() && 'selected'}
+                  onClick={(event) =>
+                    onClick?.((row.original as any).id, event)
+                  }
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
                     </TableCell>
                   ))}
                 </TableRow>
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={columns.length} className="h-26 text-center">
+                <TableCell
+                  colSpan={columns.length}
+                  className="h-26 text-center"
+                >
                   No results.
                 </TableCell>
               </TableRow>
@@ -195,7 +225,7 @@ export function DataTable<TData, TValue>({
             <Select
               value={`${table.getState().pagination.pageSize}`}
               onValueChange={(value) => {
-                table.setPageSize(Number(value))
+                table.setPageSize(Number(value));
               }}
             >
               <SelectTrigger className="w-20" id="rows-per-page">
@@ -213,7 +243,7 @@ export function DataTable<TData, TValue>({
             </Select>
           </div>
           <div className="flex w-fit items-center justify-center text-sm font-medium">
-            Page {table.getState().pagination.pageIndex + 1} of{" "}
+            Page {table.getState().pagination.pageIndex + 1} of{' '}
             {table.getPageCount()}
           </div>
           <div className="ml-auto flex items-center gap-2 lg:ml-0">
@@ -259,9 +289,8 @@ export function DataTable<TData, TValue>({
           </div>
         </div>
       </div>
-    </div >
-  )
+    </div>
+  );
 }
 
 export default DataTable;
-
