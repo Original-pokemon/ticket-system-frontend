@@ -1,26 +1,33 @@
-import { ReactElement, useReducer, useRef, useState } from 'react';
-import { Filter as FilterIcon } from "lucide-react"
-import AppliedFilters from './AppliedFilters/AppliedFilters';
-import FilterContent from './FilterContent/FilterContent';
-import MultipleChoice from './filter-elements/MultipleChoice/MultipleChoice';
-import SingleChoice from './filter-elements/SingleChoice/SingleChoice';
-import FilterTextField from './filter-elements/FilterTextField/FilterTextField';
-import { useEffectSkipMount } from './hooks';
-import Actions from './const';
-import type { ActionType, FilterSectionType, SelectedFiltersType } from './types';
-import { FilterDispatchContext, FilterStateContext } from './filter-context';
-import { useSearchParams } from 'react-router-dom';
-import { buildSearchParamsFromFilters, parseSearchParamsToFilters } from './url-filter-utils';
-import { Button } from '@/components/ui/button';
+import { ReactElement, useReducer, useRef, useState } from "react";
+import { Filter as FilterIcon } from "lucide-react";
+import AppliedFilters from "./AppliedFilters/AppliedFilters";
+import FilterContent from "./FilterContent/FilterContent";
+import MultipleChoice from "./filter-elements/MultipleChoice/MultipleChoice";
+import SingleChoice from "./filter-elements/SingleChoice/SingleChoice";
+import FilterTextField from "./filter-elements/FilterTextField/FilterTextField";
+import { useEffectSkipMount } from "./hooks";
+import Actions from "./const";
+import type {
+  ActionType,
+  FilterSectionType,
+  SelectedFiltersType,
+} from "./types";
+import { FilterDispatchContext, FilterStateContext } from "./filter-context";
+import { useSearchParams } from "react-router-dom";
+import {
+  buildSearchParamsFromFilters,
+  parseSearchParamsToFilters,
+} from "./url-filter-utils";
+import { Button } from "@/components/ui/button";
 
 export type FilterMetaType = {
-  [key: FilterSectionType['id']]: Omit<FilterSectionType, 'id'>;
-}
+  [key: FilterSectionType["id"]]: Omit<FilterSectionType, "id">;
+};
 
 type FilterProperties = {
   children: ReactElement | ReactElement[];
   onChange: ({ key, value }: SelectedFiltersType) => void;
-  filterMeta: FilterMetaType
+  filterMeta: FilterMetaType;
 };
 
 function filterReducer(
@@ -35,7 +42,7 @@ function filterReducer(
       if (
         existingFilter &&
         JSON.stringify(existingFilter.options) ===
-        JSON.stringify(filter.options)
+          JSON.stringify(filter.options)
       ) {
         return state;
       }
@@ -82,7 +89,9 @@ function filterReducer(
 }
 function Filter({ children, onChange, filterMeta }: FilterProperties) {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [state, dispatch] = useReducer(filterReducer, {}, () => parseSearchParamsToFilters(searchParams, filterMeta));
+  const [state, dispatch] = useReducer(filterReducer, {}, () =>
+    parseSearchParamsToFilters(searchParams, filterMeta),
+  );
   const [drawerOpen, setDrawerOpen] = useState(false);
   const debounceTimeout = useRef<NodeJS.Timeout | null>(null);
   const previousStateReference = useRef<SelectedFiltersType | null>(null);
@@ -109,11 +118,12 @@ function Filter({ children, onChange, filterMeta }: FilterProperties) {
     debounceTimeout.current = setTimeout(() => {
       onChange(state);
       setSearchParams((prev) => {
-        const newSearchParams = buildSearchParamsFromFilters(state);
-        newSearchParams.forEach((value, key) => {
-          prev.set(key, value);
+        const newSearchParams = new URLSearchParams(prev);
+        const updates = buildSearchParamsFromFilters(state);
+        updates.forEach((value, key) => {
+          newSearchParams.set(key, value);
         });
-        return prev;
+        return newSearchParams;
       });
     }, 300);
   }, [state, onChange, setSearchParams]);
@@ -128,7 +138,7 @@ function Filter({ children, onChange, filterMeta }: FilterProperties) {
           aria-label="Фильтры"
         >
           <FilterIcon className="mr-2 h-4 w-4" />
-          {`Фильтры${hasSelectedFilters ? ` (${Object.keys(state).length})` : ''}`}
+          {`Фильтры${hasSelectedFilters ? ` (${Object.keys(state).length})` : ""}`}
         </Button>
 
         {/* Выдвижная панель с фильтрами */}
