@@ -14,6 +14,7 @@ import {
   SortingState,
   PaginationState,
   getSortedRowModel,
+  OnChangeFn,
 } from "@tanstack/react-table"
 import {
   Table,
@@ -32,10 +33,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import {
-  useState,
-  useEffect,
-} from 'react';
+import { useState, useMemo } from 'react';
 import * as XLSX from 'xlsx';
 import dayjs from 'dayjs';
 import { useSearchParams, useLocation, useNavigate } from 'react-router-dom';
@@ -58,15 +56,26 @@ export function DataTable<TData, TValue>({
   const [searchParams, setSearchParams] = useSearchParams();
   const [sorting, setSorting] = useState<SortingState>([]);
 
-  const [pagination, setPagination] = useState<PaginationState>(() => {
-    const pageIndexParam = searchParams.get("pageIndex");
-    const pageSizeParam = searchParams.get("pageSize");
+  const pagination = useMemo<PaginationState>(() => {
+    const pageIndexFromUrl = parseInt(searchParams.get("pageIndex") ?? "1", 10); // URL 1-based
+    const pageSizeFromUrl = parseInt(searchParams.get("pageSize") ?? "20", 10);
 
-    const pageIndex = pageIndexParam ? Number(pageIndexParam) - 1 : 0; // 0-based для таблицы
-    const pageSize = pageSizeParam ? Number(pageSizeParam) : 20;
+    return {
+      pageIndex: pageIndexFromUrl - 1, // table 0-based
+      pageSize: pageSizeFromUrl,
+    };
+  }, [searchParams]);
 
-    return { pageIndex, pageSize };
-  });
+  const onPaginationChange: OnChangeFn<PaginationState> = (updater) => {
+    const nextPagination = (typeof updater === "function") ? updater(pagination) : updater;
+
+    setSearchParams((prev) => {
+      const newParams = new URLSearchParams(prev.toString());
+      newParams.set("pageIndex", String(nextPagination.pageIndex + 1));
+      newParams.set("pageSize", String(nextPagination.pageSize));
+      return newParams;
+    }, { replace: true });
+  };
 
   const table = useReactTable({
     data,
@@ -74,7 +83,7 @@ export function DataTable<TData, TValue>({
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     onSortingChange: setSorting,
-    onPaginationChange: setPagination,
+    onPaginationChange,
     getSortedRowModel: getSortedRowModel(),
     state: {
       sorting,
@@ -82,14 +91,6 @@ export function DataTable<TData, TValue>({
     },
     autoResetPageIndex: false,
   });
-
-  useEffect(() => {
-    setSearchParams(prev => {
-      prev.set("pageIndex", String(pagination.pageIndex + 1));
-      prev.set("pageSize", String(pagination.pageSize));
-      return prev;
-    }, { replace: true });
-  }, [pagination, setSearchParams, searchParams]);
 
   const formatDate = (value: string | Date | undefined) => {
     if (!value) return 'Не указано';
