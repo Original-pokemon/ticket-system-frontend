@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { AppRoute, Status } from "../../../const";
+import { AppRoute } from "../../../const";
 import { useCategoriesEntities, useCategoriesStatus, useReferenceDataActions, useTicketsEntities, useTicketsStatus, useTicketActions, useUserManagementActions, useTaskPerformersEntities, useTaskPerformersStatus } from "../../../store";
 import getCategoryRows from "./get-category-rows";
 import getCategoryColumns from "./get-category-columns";
@@ -37,7 +37,7 @@ const CategoryTable = () => {
       window.open(path, "_blank");
     } else {
       navigate(path);
-    } 
+    }
   }
 
   useEffect(() => {

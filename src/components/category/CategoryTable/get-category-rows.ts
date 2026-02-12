@@ -25,10 +25,14 @@ const getCategoryRows = ({
   const performersCountByCategory: Record<string, number> = {};
 
   for (const perf of Object.values(performers)) {
-    if (perf.category_id) {
-      performersCountByCategory[perf.category_id] = (performersCountByCategory[perf.category_id] || 0) + 1;
+    if (perf.category) {
+      for (const cat of perf.category) {
+        performersCountByCategory[cat.id] = (performersCountByCategory[cat.id] || 0) + 1;
+      };
     }
   }
+
+  console.log(performersCountByCategory)
 
   const tasksStatsByCategory: Record<string, CategoryStats> = {};
 
