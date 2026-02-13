@@ -32,8 +32,6 @@ const getCategoryRows = ({
     }
   }
 
-  console.log(performersCountByCategory)
-
   const tasksStatsByCategory: Record<string, CategoryStats> = {};
 
   for (const ticket of Object.values(tickets)) {
