@@ -1,11 +1,10 @@
-import { CategoryType, TicketStatusType, TicketType } from "../../../types";
+import { CategoryType, TicketType } from "../../../types";
 import { TaskPerformerType } from "../../../types/task-performer";
 import { CategoryTableRow } from "./get-category-columns";
 
 type CategoryColumnProperties = {
   categories: Record<string, CategoryType>;
   tickets: Record<string, TicketType>;
-  performers: Record<string, TaskPerformerType>;
   completedStatusId: string;
 };
 
@@ -15,20 +14,11 @@ type CategoryStats = {
   inProgress: number;
 };
 
-
 const getCategoryRows = ({
   categories,
   tickets,
-  performers,
   completedStatusId,
 }: CategoryColumnProperties): CategoryTableRow[] => {
-  const performersCountByCategory: Record<string, number> = {};
-
-  for (const perf of Object.values(performers)) {
-    if (perf.category_id) {
-      performersCountByCategory[perf.category_id] = (performersCountByCategory[perf.category_id] || 0) + 1;
-    }
-  }
 
   const tasksStatsByCategory: Record<string, CategoryStats> = {};
 
@@ -52,14 +42,13 @@ const getCategoryRows = ({
 
   return Object.values(categories).map((cat) => {
     const stats = tasksStatsByCategory[cat.id] || { total: 0, completed: 0, inProgress: 0 };
-    const perfCount = performersCountByCategory[cat.id] || 0;
     return {
       id: cat.id,
       description: cat.description,
       totalTasks: stats.total,
       inProgressTasks: stats.inProgress,
       completedTasks: stats.completed,
-      performersCount: perfCount,
+      performersCount: cat.task_performers?.length || 0,
     };
   });
 }

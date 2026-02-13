@@ -1,12 +1,11 @@
 import { useLocation } from "react-router-dom";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { useLocationDataActions, useBushes, usePetrolStationsEntities, useBushesEntities, useCategoryById, useStatuses, useReferenceDataStatus, useBushesStatus, useReferenceDataActions, useTickets, useTicketsStatus, useTicketActions, useTaskPerformers, useTaskPerformersStatus, useUserManagementActions } from "../../store";
+import { useLocationDataActions, useBushes, usePetrolStationsEntities, useBushesEntities, useCategoryById, useStatuses, useReferenceDataStatus, useBushesStatus, useReferenceDataActions, useTickets, useTicketsStatus, useTicketActions, useTaskPerformersStatus, useUserManagementActions, useTaskPerformersEntities } from "../../store";
 import Spinner from "../../components/Spinner/Spinner";
 import Single from "../../components/Single/Single";
 import { TicketTable } from "../../components/tickets/TicketTable";
 import { Table, TableBody, TableCell, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import dayjs from "dayjs";
 import filterTickets from "../../utils/filter-tickets";
 import PageLayout from "../../components/layouts/PageLayout/PageLayout";
 import FilterData from "../TicketsList/const";
@@ -28,7 +27,7 @@ const Category = () => {
   const statusesData = useStatuses()
   const bushesEntities = useBushesEntities();
   const bushesData = useBushes();
-  const taskPerformers = useTaskPerformers()
+  const tastPerformersEntities = useTaskPerformersEntities();
 
   const ticketsStatus = useTicketsStatus()
   const referenceDataStatus = useReferenceDataStatus()
@@ -73,10 +72,6 @@ const Category = () => {
     petrolStationsEntities,
   ])
 
-  const filteredTaskPerformers = useMemo(() => {
-    return taskPerformers.filter(({ id }) => id === id)
-  }, [taskPerformers.length, id])
-
   const handleApplyFilters = useCallback((selectedFilters: SelectedFiltersType) => {
     const { Bush: { id: bushId }, Status: { id: StatusId } } = FilterData
 
@@ -111,7 +106,6 @@ const Category = () => {
     if (busesStatus.isIdle) {
       fetchBushes()
     }
-
   }, [ticketsStatus.isIdle, fetchTicketsData, referenceDataStatus.isIdle, taskPerformersStatus.isIdle, busesStatus.isIdle, fetchCategoriesData, fetchStatusesData, fetchTaskPerformersData, fetchBushes]);
 
   if (isIdle) {
@@ -150,24 +144,18 @@ const Category = () => {
                 <TableRow>
                   <TableCell>Исполнитель</TableCell>
                   <TableCell>Куст</TableCell>
-                  <TableCell>Создан</TableCell>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {(filteredTaskPerformers || []).map(({ id, bush_id, user }) => (
+                {category.task_performers.map(({ id, bush_id }) => (
                   <TableRow key={id}>
                     <TableCell>
                       <span className="text-sm">
-                        {user.user_name}
+                        {tastPerformersEntities[id].user.user_name || 'Не указано'}
                       </span>
                     </TableCell>
                     <TableCell>
                       <Badge>{bushesEntities[bush_id || '']?.description || 'Не указано'}</Badge>
-                    </TableCell>
-                    <TableCell>
-                      <span className="text-sm">
-                        {dayjs(user.created_at).format('DD.MM.YYYY')}
-                      </span>
                     </TableCell>
                   </TableRow>
                 ))}
