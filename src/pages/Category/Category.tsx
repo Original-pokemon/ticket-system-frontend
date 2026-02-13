@@ -1,6 +1,6 @@
 import { useLocation } from "react-router-dom";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { useLocationDataActions, useBushes, usePetrolStationsEntities, useBushesEntities, useCategoryById, useStatuses, useReferenceDataStatus, useBushesStatus, useReferenceDataActions, useTickets, useTicketsStatus, useTicketActions, useTaskPerformersStatus, useUserManagementActions, useUsersStatus, useTaskPerformersEntities } from "../../store";
+import { useLocationDataActions, useBushes, usePetrolStationsEntities, useBushesEntities, useCategoryById, useStatuses, useReferenceDataStatus, useBushesStatus, useReferenceDataActions, useTickets, useTicketsStatus, useTicketActions, useTaskPerformersStatus, useUserManagementActions, useTaskPerformersEntities } from "../../store";
 import Spinner from "../../components/Spinner/Spinner";
 import Single from "../../components/Single/Single";
 import { TicketTable } from "../../components/tickets/TicketTable";
@@ -17,7 +17,6 @@ const Category = () => {
   const { fetchCategoriesData, fetchStatusesData } = useReferenceDataActions()
   const { fetchTicketsData } = useTicketActions()
   const { fetchTaskPerformersData } = useUserManagementActions()
-  const { fetchUsersData } = useUserManagementActions()
   const location = useLocation();
   const path = location.pathname.split('/');
   const id = path[2];
@@ -34,7 +33,6 @@ const Category = () => {
   const referenceDataStatus = useReferenceDataStatus()
   const taskPerformersStatus = useTaskPerformersStatus()
   const busesStatus = useBushesStatus()
-  const usersStatus = useUsersStatus()
 
   const isIdle = ticketsStatus.isIdle && referenceDataStatus.isIdle && taskPerformersStatus.isIdle && busesStatus.isIdle;
   const isLoading = ticketsStatus.isLoading || referenceDataStatus.isLoading || taskPerformersStatus.isLoading || busesStatus.isLoading;
@@ -108,11 +106,7 @@ const Category = () => {
     if (busesStatus.isIdle) {
       fetchBushes()
     }
-    if (usersStatus.isIdle) {
-      fetchUsersData()
-    }
-
-  }, [ticketsStatus.isIdle, fetchTicketsData, referenceDataStatus.isIdle, taskPerformersStatus.isIdle, busesStatus.isIdle, usersStatus.isIdle, fetchCategoriesData, fetchStatusesData, fetchTaskPerformersData, fetchBushes, fetchUsersData]);
+  }, [ticketsStatus.isIdle, fetchTicketsData, referenceDataStatus.isIdle, taskPerformersStatus.isIdle, busesStatus.isIdle, fetchCategoriesData, fetchStatusesData, fetchTaskPerformersData, fetchBushes]);
 
   if (isIdle) {
     return <Spinner fullscreen={true} />
