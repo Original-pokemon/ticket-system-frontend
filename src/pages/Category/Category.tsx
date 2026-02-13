@@ -1,6 +1,6 @@
 import { useLocation } from "react-router-dom";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { useLocationDataActions, useBushes, usePetrolStationsEntities, useBushesEntities, useCategoryById, useStatuses, useReferenceDataStatus, useBushesStatus, useReferenceDataActions, useTickets, useTicketsStatus, useTicketActions, useTaskPerformersStatus, useUserManagementActions, useUsersEntities, useUsersStatus, useTaskPerformersEntities } from "../../store";
+import { useLocationDataActions, useBushes, usePetrolStationsEntities, useBushesEntities, useCategoryById, useStatuses, useReferenceDataStatus, useBushesStatus, useReferenceDataActions, useTickets, useTicketsStatus, useTicketActions, useTaskPerformersStatus, useUserManagementActions, useUsersStatus, useTaskPerformersEntities } from "../../store";
 import Spinner from "../../components/Spinner/Spinner";
 import Single from "../../components/Single/Single";
 import { TicketTable } from "../../components/tickets/TicketTable";
@@ -28,7 +28,6 @@ const Category = () => {
   const statusesData = useStatuses()
   const bushesEntities = useBushesEntities();
   const bushesData = useBushes();
-  const userEntities = useUsersEntities();
   const tastPerformersEntities = useTaskPerformersEntities();
 
   const ticketsStatus = useTicketsStatus()
